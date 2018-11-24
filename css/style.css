@@ -1,7 +1,7 @@
 @charset "utf-8";
 @media (min-width: 1250px;){ }
 
-body{  
+body{
 	background:#EEEEEE;
 	letter-spacing:1px;
 	font-size: 16px;
@@ -19,8 +19,8 @@ footer{
 label {
     display: inline-block;
     max-width: 100%;
-    margin-bottom: 5px; 
-	
+    margin-bottom: 5px;
+
 }
 
 
@@ -38,7 +38,7 @@ label {
 .titreCal{
 	 text-align:center;
 	 display: block;
-    
+
 }
 
 .nomFormation{
@@ -65,8 +65,8 @@ img.imgUFC{
 	padding-top:10px;
 	width:90%;
 	display: block;
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -75,7 +75,10 @@ td.active{
 }
 
 table{
-    user-select: none;   
+	-webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 	border-collapse:collapse;
 	border: solid 1px #A3A3A3;
 	width:100%;
@@ -85,7 +88,7 @@ table{
 table td{
 	border:1px solid #A3A3A3;
 	width:13%;
-	height:25px; 
+	height:25px;
 	text-align: center;
 	padding: 0;
 }
@@ -94,16 +97,16 @@ table td.padding{
 	border:none;
 }
 
-table th{  
-	font-weight:bold;  
+table th{
+	font-weight:bold;
 	color:#A8A8A8;
 	text-align: center;
 	border-top: solid 2px;
-    border-left: solid 2px;
-    border-right: solid 2px;
+  border-left: solid 2px;
+  border-right: solid 2px;
 }
 
-table .day{  
+table .day{
 	position:relative;color:#8C8C8C;
 	font-weight:bold;
 	font-size:14pt;
@@ -114,17 +117,8 @@ table .day{
 	margin-top: 55px;
 }
 
-.halfDay{
-	color: #DDD;
-    background-color: white;
-}
-
-.halfDay:hover{
-	cursor:copy;
-}
-
 .month{
-	
+
 }
 
 .publicHoliday{
@@ -149,11 +143,11 @@ table .day{
 }
 
 .projetTutCoursCat{
-  background: #37BC9B;  
+  background: #37BC9B;
 }
 
 .examenCat{
-  background: #F6BB42;  
+  background: #F6BB42;
 }
 
 .entrepriseCat{
@@ -177,11 +171,11 @@ table .day{
 }
 
 .projetTutCoursCat:hover{
-  background: #37BC9B;  
+  background: #37BC9B;
 }
 
 .examenCat:hover{
-  background: #F6BB42;  
+  background: #F6BB42;
 }
 
 .entrepriseCat:hover{
@@ -287,21 +281,21 @@ table .day{
 /* Projets tut. Cours*/
 .c2{background: #37BC9B;}
 .dropdown-menu>li>a.c2:focus, .dropdown-menu>li>a.c2:hover{background-color: #37BC9B;}
-	
+
 /* Examen */
-.c3{background: #F6BB42;}
+.c3{background: #E9573F;}
 .dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #F6BB42;}
-	
+
 /* Entreprise*/
 .c4{background: #D770AD;}
  .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #D770AD;}
 
 /* Projet tut Entreprise */
 .c5{background: #AC92EC;}
-.dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #AC92EC;} 
+.dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #AC92EC;}
 
 /* Vacances*/
-.c6{background: #E9573F;}
+.c6{background: #F6BB42;}
 .dropdown-menu>li>a.c6:focus, .dropdown-menu>li>a.c6:hover{background-color: #ED5565;}
 
 .btnCategorie{

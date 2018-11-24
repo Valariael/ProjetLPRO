@@ -18,7 +18,7 @@ $( document ).ready(function() {
 
 	$.ajax({
         url: 'server.php',
-        type: 'POST',               
+        type: 'POST',
         data: function(){
             var data = new FormData();
             data.append('request', 'get');
@@ -40,23 +40,23 @@ $( document ).ready(function() {
 
 	        	// Add the option to the select.
 	        	for (var i = 0; i < calendars.length; i++) {
-	        		if(calendars[i] != null){	
+	        		if(calendars[i] != null){
 	        			var newOption = new Option (calendars[i][0], i);
 	    				select.options.add(newOption);
 	        		}else{
 						continue;
 	        		}
 	        	}
-	    		
+
 				// refresh the display
 				var choice = select.selectedIndex;
-	        	display(select.options[choice].value); 
+	        	display(select.options[choice].value);
 	        }
         },
         error: function (data) {
             console.log(data);
         },
-        complete: function () {                 
+        complete: function () {
 
         },
         cache: false,
@@ -76,12 +76,12 @@ function save(){
 
 	var select = document.getElementById('selectCal');
 	var choice = select.selectedIndex;
-	
+
 	// Get the name.
 	var title = document.getElementById('nomForm').value;
 
 	// Get the component and the place.
-	var compoAndPlace = document.getElementById('compoAndPlace').value;	
+	var compoAndPlace = document.getElementById('compoAndPlace').value;
 
 	// Create the data categories.
 	var dataCategories = createDataCategories();
@@ -106,29 +106,29 @@ function save(){
         type: 'POST',
         data: function(){
             var data = new FormData();
-            data.append('request', JSON.stringify(calendars));    
+            data.append('request', JSON.stringify(calendars));
             return data;
         }(),
         success: function () {
-                   
+
         },
         error: function (data) {
             console.log(data);
         },
-        complete: function () {                 
+        complete: function () {
 
         },
         cache: false,
         contentType: false,
         processData: false
     });
-	
+
 }
 
 /*-------------------------------- Buttons functions ------------------------------------*/
 
 function addCalendarBtn() {
-	
+
 	var title = "Calendrier vierge " + currentYear;
 
 	// Set the id calendar
@@ -141,7 +141,7 @@ function addCalendarBtn() {
 
     // Switch to the new calendar
     $("#selectCal").val(idCalendar);
-	
+
     // Add the option to the global table "calendars".
     addCalendarToArray(title);
 
@@ -179,12 +179,12 @@ function saveCalendarBtn(){
 /*-------------------------------- Calendars[] functions ------------------------------------*/
 
 function addCalendarToArray(title) {
-	
+
 	calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"]);
 }
 
 function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules) {
-	
+
 	calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules);
 }
 
@@ -218,7 +218,7 @@ function createDataCategories(){
 		}
 
 		dataCategories.push(codeCat);
-  	});	
+  	});
 
   	return dataCategories;
 }
@@ -231,12 +231,12 @@ function setDataCategories(dataCategories){
 		var element = dataCategories.shift();
 
 		switch (element) {
-			case 0:$(this).addClass('coursCat');break;	
-			case 1:$(this).addClass('projetTutCoursCat');break;		
-			case 2:$(this).addClass('examenCat');break;			
-			case 3:$(this).addClass('entrepriseCat');break;				
+			case 0:$(this).addClass('coursCat');break;
+			case 1:$(this).addClass('projetTutCoursCat');break;
+			case 2:$(this).addClass('examenCat');break;
+			case 3:$(this).addClass('entrepriseCat');break;
 			case 4:$(this).addClass('projetTutEntrepriseCat');break;
-			case 5:$(this).addClass('vacanceCat');break;	
+			case 5:$(this).addClass('vacanceCat');break;
 			default:$(this).addClass('libreCat');break;
 		}
   	});
@@ -245,7 +245,7 @@ function setDataCategories(dataCategories){
 /*-------------------------------- Schedules functions ------------------------------------*/
 
 function schedulesEvent(event) {
-	setDataSchedules(createDataSchedules(), createHourSchedules(), createWeekSchedules());	
+	setDataSchedules(createDataSchedules(), createHourSchedules(), createWeekSchedules());
 }
 
 function createDataSchedules(){
@@ -297,12 +297,7 @@ function createWeekSchedules(){
   	return hourSchedules = new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
 }
 
-function setDataSchedules(halfDaySchedules, hourSchedules, weekSchedules){
-	document.getElementById('demiJourneeCoursProjet').value = halfDaySchedules[0];
-	document.getElementById('demiJourneeExamen').value = halfDaySchedules[1];
-	document.getElementById('demiJourneeEntrepriseProjet').value = halfDaySchedules[2];
-	document.getElementById('demiJourneeVacance').value = halfDaySchedules[3];
-
+function setDataSchedules(hourSchedules, weekSchedules){
 	document.getElementById('heureCoursProjet').value = hourSchedules[0];
 	document.getElementById('heureExamen').value = hourSchedules[1];
 	document.getElementById('heureEntrepriseProjet').value = hourSchedules[2];
@@ -339,7 +334,7 @@ function display(value){
 
 	// The categories
 	$('.halfDay').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat libreCat');
-	
+
 	if(calendars[index][2] == null){
 		$('.halfDay').addClass('libreCat');
 	}else{
@@ -355,5 +350,3 @@ function display(value){
 		setDataSchedules(calendars[index][3], calendars[index][4], calendars[index][5]);
 	}
 }
-
-
