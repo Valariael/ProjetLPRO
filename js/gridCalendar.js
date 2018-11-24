@@ -66,11 +66,11 @@ function displayCalendar(year){
 	var display = "<table class=\"firstTable\"><thead><tr><th colspan=5>" + year + "</th><th colspan=2>" + (year+1) + "</th></tr></thead><tbody><tr>";
 
 	for (var i = 8; i < 13; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
-	for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year, i) + "</td>"; }
+	for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
 	display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1) + "</th></tr></thead>";
 
-	for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
+	for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
 	display += "</tr></tbody></table>";
 
@@ -93,7 +93,7 @@ function JoursFeries(an){
 	var Toussaint = new Date(an, "10", "01")
 	var Armistice = new Date(an, "10", "11")
 	var Noel = new Date(an, "11", "25")
-	
+
 	var G = an%19
 	var C = Math.floor(an/100)
 	var H = (C - Math.floor(C/4) - Math.floor((8*C+13)/25) + 19*G + 15)%30
@@ -107,6 +107,6 @@ function JoursFeries(an){
 	var Ascension = new Date(an, MoisPaques-1, JourPaques+39)
 	var Pentecote = new Date(an, MoisPaques-1, JourPaques+49)
 	var LundiPentecote = new Date(an, MoisPaques-1, JourPaques+50)
-	
+
 	return new Array(JourAn, LundiPaques, FeteTravail, Victoire1945, Ascension, LundiPentecote, FeteNationale, Assomption, Toussaint, Armistice, Noel);
 }
