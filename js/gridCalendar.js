@@ -45,7 +45,7 @@ function getCalendar(year, month){
 		}else if(table[i%7] == 7){
 			result += "<td colspan=2></td></tr>";
 		}else{
-			result += "<td class=\"halfDay libreCat\" ></td><td class=\"halfDay libreCat\" ></td></tr>";
+			result += "<td class=\"day libreCat\" ></td></tr>";
 		}
 
 	}

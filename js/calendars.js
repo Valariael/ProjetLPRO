@@ -200,7 +200,7 @@ function createDataCategories(){
 	var dataCategories = new Array();
 	var codeCat;
 
-	$('.halfDay').each(function() {
+	$('.day').each(function() {
   		if($(this).hasClass('coursCat')){
   			codeCat = 0;
 		}else if($(this).hasClass('projetTutCoursCat')){
@@ -226,7 +226,7 @@ function createDataCategories(){
 
 function setDataCategories(dataCategories){
 
-	$('.halfDay').each(function() {
+	$('.day').each(function() {
 
 		var element = dataCategories.shift();
 
@@ -257,7 +257,7 @@ function createDataSchedules(){
 	var ComptProjEntrep = 0;
 	var ComptVac = 0;
 
-	$('.halfDay').each(function() {
+	$('.day').each(function() {
   		if($(this).hasClass('coursCat')){
   			ComptCours++;
 		}else if($(this).hasClass('projetTutCoursCat')){
@@ -297,7 +297,12 @@ function createWeekSchedules(){
   	return hourSchedules = new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
 }
 
-function setDataSchedules(hourSchedules, weekSchedules){
+function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
+	document.getElementById('demiJourneeCoursProjet').value = daySchedules[0];
+	document.getElementById('demiJourneeExamen').value = daySchedules[1];
+	document.getElementById('demiJourneeEntrepriseProjet').value = daySchedules[2];
+	document.getElementById('demiJourneeVacance').value = daySchedules[3];
+
 	document.getElementById('heureCoursProjet').value = hourSchedules[0];
 	document.getElementById('heureExamen').value = hourSchedules[1];
 	document.getElementById('heureEntrepriseProjet').value = hourSchedules[2];
@@ -333,10 +338,10 @@ function display(value){
 	$("#compoAndPlace").val(calendars[index][1]);
 
 	// The categories
-	$('.halfDay').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat libreCat');
+	$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat libreCat');
 
 	if(calendars[index][2] == null){
-		$('.halfDay').addClass('libreCat');
+		$('.day').addClass('libreCat');
 	}else{
 		// The table of categories is duplicated to avoid modifying the orginial table.
 		var duplicatedCalendar1 = calendars[index][2].slice(0);

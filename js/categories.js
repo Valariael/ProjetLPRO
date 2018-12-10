@@ -7,7 +7,7 @@ var down = false;
 $(document).mousedown(function() {
     down = true;
 
-		 if(document.getElementById('selectid').value == "1") { colorClass = "coursCat"}	
+		 if(document.getElementById('selectid').value == "1") { colorClass = "coursCat"}
 	else if(document.getElementById('selectid').value == "2") { colorClass = "projetTutCoursCat"}
 	else if(document.getElementById('selectid').value == "3") { colorClass = "examenCat "}
 	else if(document.getElementById('selectid').value == "4") { colorClass = "entrepriseCat"}
@@ -16,7 +16,7 @@ $(document).mousedown(function() {
 	else{ colorClass = "libreCat"}
 
 }).mouseup(function() {
-    down = false;  
+    down = false;
 });
 
 /*----------------------------------- Fill Categories ----------------------------*/
@@ -28,12 +28,12 @@ function fillCat (select){
 
 function eventCategories(){
 
-	$('.halfDay').click(function() {
+	$('.day').click(function() {
 		fillCat(this);
 		schedulesEvent();
  	});
 
-	$('.halfDay').hover(function() {
+	$('.day').hover(function() {
     	if( (down && colorClass == "libreCat") || (down && $(this).hasClass("libreCat") ) ){
     		fillCat(this);
     	}
