@@ -41,8 +41,7 @@ if (isset($_REQUEST['logout'])) {
 					<label class="lblCat"> Sélectionner, créer ou supprimer un calendrier</label>
 					<div class="CalendarParam">
 						<div class="styled-select">
-							<select id="selectCal" onchange="displayData(event)">
-							</select>
+							<select id="selectCal" onchange="displayData(event)"></select>
 						</div>
 						<a href="javascript:addCalendarBtn()" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
 						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer le calendrier"></a>
@@ -62,16 +61,16 @@ if (isset($_REQUEST['logout'])) {
 					</select>
 				</div>
 				<div class="categories">
-					<label class="lblCat"> Générer un PDF du calendrier</label>
+					<label class="lblCat"> Génération du calendrier en PDF</label>
 					<div id="editor"></div>
 					<a class="btn btn-danger btn-lg btnCategorie" href="javascript:genPDF()" >PDF</a>
 				</div>
 				<div class="categories">
-					<label class="lblCat"> Aller directement au résumé</label>
-					<a class="btn btn-info btn-lg glyphicon glyphicon-arrow-down btnCategorie" href="#calculPart"></a>
+					<label class="lblCat"> Résumé</label>
+					<a class="btn btn-info btn-lg btnCategorie" href="#calculPart"><img class="arrow-down" src="content/warrow_down.png"/></a>
 				</div>
 				<div class="categories">
-					<a href="?logout=" class="btn btn-primary btnCategorie" >Déconnexion</a>
+					<a href="?logout=" class="btn btn-primary btnCategorie btnDeconnexion" >Déconnexion</a>
 				</div>
 			</div>
 		</div>
@@ -82,7 +81,7 @@ if (isset($_REQUEST['logout'])) {
 			<div class="row">
 				<div class="nomCalendrier">
 					<div class="col-xs-2 col-sm-offset-1">
-						<img src="content/logo-UFC-transparent.png" alt="Logo UFC" class="imgUFC">
+						<img src="content/logo_ufrst.png" alt="Logo UFC" class="imgUFC">
 					</div>
 					<div class="col-sm-4 col-sm-offset-1">
 						<center>
@@ -144,9 +143,6 @@ if (isset($_REQUEST['logout'])) {
 				<p>Maison des étudiants - 36 A avenue de l’Observatoire - 25030 BESANCON Cedex </p>
 				<p> Tél: 03 81 66 61 21 - Fax: 03 81 66 61 02 </p>
 				<a href="mailto:formation-continue@univ-fcomte.fr">formation-continue@univ-fcomte.fr</a> - <a href="http://formation-continue.univ-fcomte.fr">http://formation-continue.univ-fcomte.fr</a>
-			</div>
-			<div class=" col-sm-1 ">
-				<img src="content/qualite.png" alt="Logo Qualtié" class="imgQualite">
 			</div>
 		</div>
 	</footer>

@@ -54,9 +54,19 @@ label {
 }
 
 img.imgUFC{
-	width:100%;
+	height: 100%;
+	width: 100%;
 }
 
+.arrow-down {
+	height: 30px;
+	width: 40px;
+}
+
+.btnDeconnexion {
+	position: relative;
+	top: 25%;
+}
 
 /*------------------------------------ Calendrier ------------------------------------*/
 
