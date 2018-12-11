@@ -41,9 +41,9 @@ function getCalendar(year, month){
 		result	+= "<tr><td>" + days[table[i%7]-1].substr(0,3) + "</td><td>" + (i+1) + "</td>";
 
 		if(publicHoliday == 1){
-			result += "<td colspan=2>Férié</td></tr>"
+			result += "<td class=\"day ferieCat\" colspan=2>Férié</td></tr>"
 		}else if(table[i%7] == 7){
-			result += "<td colspan=2></td></tr>";
+			result += "<td class=\"day ferieCat\" colspan=2></td></tr>";
 		}else{
 			result += "<td class=\"day libreCat\" ></td></tr>";
 		}

@@ -213,8 +213,10 @@ function createDataCategories(){
 			codeCat = 4;
 		}else if($(this).hasClass('vacanceCat')){
 			codeCat = 5;
-		}else{
+		}else if($(this).hasClass('ferieCat')){
 			codeCat = 6;
+		}else{
+			codeCat = 7;
 		}
 
 		dataCategories.push(codeCat);
@@ -237,6 +239,7 @@ function setDataCategories(dataCategories){
 			case 3:$(this).addClass('entrepriseCat');break;
 			case 4:$(this).addClass('projetTutEntrepriseCat');break;
 			case 5:$(this).addClass('vacanceCat');break;
+			case 6:$(this).addClass('ferieCat');break;
 			default:$(this).addClass('libreCat');break;
 		}
   	});

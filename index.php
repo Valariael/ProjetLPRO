@@ -36,9 +36,9 @@ if (isset($_REQUEST['logout'])) {
 <body>
 	<header>
 		<div class="row">
-			<div class="col-sm-12 outils">
-				<div class="categories">
-					<label class="lblCat"> Sélectionner, créer ou supprimer un calendrier</label>
+			<div class="outils">
+				<div class="col-sm-4 col-xs-12 categories">
+					<label class="text-nowrap lblCat"> Sélectionner, créer ou supprimer un calendrier</label>
 					<div class="CalendarParam">
 						<div class="styled-select">
 							<select id="selectCal" onchange="displayData(event)"></select>
@@ -48,8 +48,8 @@ if (isset($_REQUEST['logout'])) {
 						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier"></a>
 					</div>
 				</div>
-				<div class="categories ">
-					<label class="lblCat"> Sélectionner une catégorie</label>
+				<div class="col-sm-4 col-xs-12 categories">
+					<label class="text-nowrap lblCat"> Sélectionner une catégorie</label>
 					<select id="selectid" class="selectpicker">
 						<option class="c1" value="1" id="1">Cours</option>
 						<option class="c2" value="2" id="2">Projet tut. Université</option>
@@ -57,19 +57,20 @@ if (isset($_REQUEST['logout'])) {
 						<option class="c4" value="4" id="4">Entreprise</option>
 						<option class="c5" value="5" id="5">Projet tut. Entreprise</option>
 						<option class="c6" value="6" id="6">Vacances</option>
-						<option class="c7" value="7" id="7">Libre</option>
+						<option class="c7" value="7" id="7">Férié</option>
+						<option class="c8" value="8" id="8">Libre</option>
 					</select>
 				</div>
-				<div class="categories">
-					<label class="lblCat"> Génération du calendrier en PDF</label>
+				<div class="col-sm-2 col-xs-12 categories">
+					<label class="text-nowrap lblCat"> Génération du calendrier en PDF</label>
 					<div id="editor"></div>
 					<a class="btn btn-danger btn-lg btnCategorie" href="javascript:genPDF()" >PDF</a>
 				</div>
-				<div class="categories">
+				<div class="col-sm-1 col-xs-12 categories">
 					<label class="lblCat"> Résumé</label>
 					<a class="btn btn-info btn-lg btnCategorie" href="#calculPart"><img class="arrow-down" src="content/warrow_down.png"/></a>
 				</div>
-				<div class="categories">
+				<div class="col-sm-1 col-xs-12 categories">
 					<a href="?logout=" class="btn btn-primary btnCategorie btnDeconnexion" >Déconnexion</a>
 				</div>
 			</div>
@@ -122,7 +123,7 @@ if (isset($_REQUEST['logout'])) {
 							<tr>
 								<td class="tdLabel c4"><label>Entreprise<br>+<br>Projets tutorés</label></td>
 								<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
-								<td class="tdDesc"><p><span class="glyphicon glyphicon-alert"></span><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
+								<td class="tdDesc"><p><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
 							</tr>
 							<tr>
 								<td class="tdLabel c6"><label>Vacances universitaires</label></td>

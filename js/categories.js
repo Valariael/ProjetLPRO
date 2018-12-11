@@ -13,6 +13,7 @@ $(document).mousedown(function() {
 	else if(document.getElementById('selectid').value == "4") { colorClass = "entrepriseCat"}
 	else if(document.getElementById('selectid').value == "5") { colorClass = "projetTutEntrepriseCat"}
 	else if(document.getElementById('selectid').value == "6") { colorClass = "vacanceCat"}
+	else if(document.getElementById('selectid').value == "7") { colorClass = "ferieCat"}
 	else{ colorClass = "libreCat"}
 
 }).mouseup(function() {
@@ -22,7 +23,7 @@ $(document).mousedown(function() {
 /*----------------------------------- Fill Categories ----------------------------*/
 
 function fillCat (select){
-	$(select).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat libreCat');
+	$(select).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
 	$(select).addClass(colorClass);
 }
 
