@@ -7,12 +7,23 @@ var calendars = new Array();
 
 // Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap]]
 
+/*-------------------------------- personalization ------------------------------------*/
+
+function displayPopup() {
+  document.getElementById("erreur_form").style.display = "none";
+  let popup = document.getElementById("connect_popup");
+  if(popup.style.display == "none") {
+    popup.style.display = "block";
+  } else {
+    popup.style.display = "none";
+  }
+}
+
 /*-------------------------------- initialization ------------------------------------*/
 
 $( document ).ready(function() {
 
 	displayCalendar(currentYear);
-
 	var select = document.getElementById('selectCal');
 	var index = select.selectedIndex;
 
@@ -149,6 +160,8 @@ function addCalendarBtn() {
     display(idCalendar);
     save();
 
+    console.log("about to display");
+		displayPopup();
 }
 
 function delCalendarBtn(){
@@ -301,10 +314,10 @@ function createWeekSchedules(){
 }
 
 function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
-	document.getElementById('demiJourneeCoursProjet').value = daySchedules[0];
-	document.getElementById('demiJourneeExamen').value = daySchedules[1];
-	document.getElementById('demiJourneeEntrepriseProjet').value = daySchedules[2];
-	document.getElementById('demiJourneeVacance').value = daySchedules[3];
+	/*document.getElementById('journeeCoursProjet').value = daySchedules[0];
+	document.getElementById('journeeExamen').value = daySchedules[1];
+	document.getElementById('journeeEntrepriseProjet').value = daySchedules[2];
+	document.getElementById('journeeVacance').value = daySchedules[3];*/ //unused
 
 	document.getElementById('heureCoursProjet').value = hourSchedules[0];
 	document.getElementById('heureExamen').value = hourSchedules[1];
@@ -330,7 +343,7 @@ function displayData(event){
 }
 
 function display(value){
-
+  console.log("display : " + value);
 	var index = value;
 	//console.log(calendars);
 
@@ -341,7 +354,7 @@ function display(value){
 	$("#compoAndPlace").val(calendars[index][1]);
 
 	// The categories
-	$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat libreCat');
+	$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
 
 	if(calendars[index][2] == null){
 		$('.day').addClass('libreCat');

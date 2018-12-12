@@ -33,11 +33,6 @@ function getCalendar(year, month){
 			}
 		}
 
-		if(table[i%7] == 7 || publicHoliday == 1){
-			result	+= "<tr class=\"publicHoliday\">";
-		}else{
-			result	+= "<tr>";
-		}
 		result	+= "<tr><td>" + days[table[i%7]-1].substr(0,3) + "</td><td>" + (i+1) + "</td>";
 
 		if(publicHoliday == 1){
@@ -68,14 +63,14 @@ function displayCalendar(year){
 	for (var i = 8; i < 13; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
 	for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
-	display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1) + "</th></tr></thead>";
+	display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1) + "</th></tr></thead><tbody><tr>";
 
 	for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
 	display += "</tr></tbody></table>";
 
+	console.log(display);
    	$("#calendar").html(display);
-
    	// Call the categories script
    	eventCategories();
 }

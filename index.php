@@ -9,7 +9,7 @@ phpCAS::setVerbose(true);
 phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 phpCAS::setNoCasServerValidation();
 phpCAS::forceAuthentication();
-$user = phpCAS::getUser();
+$user = phpCAS::getUser(); // contient username cas ex: alederma
 if (isset($_REQUEST['logout'])) {
 	phpCAS::logout();
 }
@@ -43,7 +43,7 @@ if (isset($_REQUEST['logout'])) {
 						<div class="styled-select">
 							<select id="selectCal" onchange="displayData(event)"></select>
 						</div>
-						<a href="javascript:addCalendarBtn()" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
+						<a onclick="addCalendarBtn();" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
 						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer le calendrier"></a>
 						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier"></a>
 					</div>
@@ -78,59 +78,95 @@ if (isset($_REQUEST['logout'])) {
 	</header>
 
 	<main>
-		<div id="cal">
-			<div class="row">
-				<div class="nomCalendrier">
-					<div class="col-xs-2 col-sm-offset-1">
-						<img src="content/logo_ufrst.png" alt="Logo UFC" class="imgUFC">
+		<div class="container-fluid">
+			<div id="cal">
+				<div class="row">
+					<div class="nomCalendrier">
+						<div class="col-xs-2 col-sm-offset-1">
+							<img src="content/logo_ufrst.png" alt="Logo UFC" class="imgUFC">
+						</div>
+						<div class="col-sm-4 col-sm-offset-1">
+							<center>
+								<h2 id="mainTitle"> Calendrier prévisionnel</h2>
+								<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" size="40" value="" />
+								<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" size="40" />
+							</center>
+						</div>
 					</div>
-					<div class="col-sm-4 col-sm-offset-1">
-						<center>
-							<h2 id="mainTitle"> Calendrier prévisionnel</h2>
-							<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" size="40" value="" />
-							<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" size="40" />
-						</center>
+				</div>
+				<div class="row">
+					<h4 class="MsgPrecaution" > Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.</h4>
+				</div>
+				<div class="row">
+					<div class="col-sm-12 col-xs-12">
+						<div id="calendar"></div>
+					</div>
+				</div>
+				<div class="row" >
+					<div id="calculPart">
+						<div class=" col-sm-10 col-sm-offset-1">
+							<table class="resume">
+								<tr>
+									<td class="tdLabel"><label>Catégories</label></td>
+									<td class="tdLabel"><label>Nombre d'heures totales</label></td>
+									<td class="tdDesc"></td>
+								</tr>
+								<tr>
+									<td class="tdLabel c1"><label>Cours<br>+<br>Projets tutorés</label></td>
+									<td class="tdInput"><input type="text" id="heureCoursProjet" size="3" value="0"/></td>
+									<td class="tdDesc"><p>Cours répartis sur <input type="text" id="semaineCours" size="3" value="0"/> semaines.</p><p>Projets tutorés répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
+								</tr>
+								<tr>
+									<td class="tdLabel c3"><label>Examen </label></td>
+									<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
+									<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="text" id="semaineDate" size="15" value="00 / 00 / 0000"/> ou selon la date de fin du contrat.</p></td>
+								</tr>
+								<tr>
+									<td class="tdLabel c4"><label>Entreprise<br>+<br>Projets tutorés</label></td>
+									<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
+									<td class="tdDesc"><p><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
+								</tr>
+								<tr>
+									<td class="tdLabel c6"><label>Vacances universitaires</label></td>
+									<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
+									<td class="tdDesc"><p>Les salariés en <strong>contrat de professionnalisation </strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<h4 class="MsgPrecaution" > Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.</h4>
-			</div>
-			<div class="row">
-				<div class="col-lg-12 ">
-					<div id="calendar"></div>
-				</div>
-			</div>
-			<div class="row" >
-				<div id="calculPart">
-					<div class=" col-sm-10 col-sm-offset-1">
-						<table class="resume">
-							<tr>
-								<td class="tdLabel"><label>Catégories</label></td>
-								<td class="tdLabel"><label>Nombre d'heures totales</label></td>
-								<td class="tdDesc"></td>
-							</tr>
-							<tr>
-								<td class="tdLabel c1"><label>Cours<br>+<br>Projets tutorés</label></td>
-								<td class="tdInput"><input type="text" id="heureCoursProjet" size="3" value="0"/></td>
-								<td class="tdDesc"><p>Cours répartis sur <input type="text" id="semaineCours" size="3" value="0"/> semaines.</p><p>Projets tutorés répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
-							</tr>
-							<tr>
-								<td class="tdLabel c3"><label>Examen </label></td>
-								<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
-								<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="text" id="semaineDate" size="15" value="00 / 00 / 0000"/> ou selon la date de fin du contrat.</p></td>
-							</tr>
-							<tr>
-								<td class="tdLabel c4"><label>Entreprise<br>+<br>Projets tutorés</label></td>
-								<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
-								<td class="tdDesc"><p><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
-							</tr>
-							<tr>
-								<td class="tdLabel c6"><label>Vacances universitaires</label></td>
-								<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
-								<td class="tdDesc"><p>Les salariés en <strong>contrat de professionnalisation </strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
-							</tr>
-						</table>
+			<div id="connect_popup" class="container-fluid" style="display: none;">
+				<span class="to_center"></span>
+				<div>
+					<div id="fermer_popup" onclick="displayPopup();">X</div>
+					<div class="row">
+						<div class="col">
+							<h4 class="text-nowrap">Quelques informations avant de commencer :</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<label id="label_vacances" class="text-nowrap">Périodes de vacances : </label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<ul class="list-group" id="liste_vacances">
+							  <li class="list-group-item vacances">Du <input type="date" id="debutVac0" class=""/> au <input type="date" id="finVac0" class=""/>.</li>
+							</ul>
+							<a id="btn_add_vacances" class="btn btn-info" onclick="addVacancesItem();">Ajouter une période</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<a id="btn_co_valider" class="btn btn-success" onclick="connexion();">Valider</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<p id="erreur_form" class="text-nowrap" style="display: none;">Champ manquant.</p>
+						</div>
 					</div>
 				</div>
 			</div>

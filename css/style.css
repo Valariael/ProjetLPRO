@@ -1,5 +1,4 @@
 @charset "utf-8";
-@media (min-width: 1250px;){ }
 
 body{
 	background:#EEEEEE;
@@ -29,6 +28,54 @@ label {
     margin-left: 0px;
 }
 
+/* POPUP CONNEXION **************************************************/
+
+#connect_popup{
+    background:rgba(0,0,0,.4);
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+}
+#connect_popup .to_center{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+#connect_popup > div {
+    background-color: #f2f2f2;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 800px;
+    min-height: 500px;
+    vertical-align: middle;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+#fermer_popup {
+    background-color: #d9d9d9;
+    border: 3px solid #808080;
+		border-radius: 3px 8px 3px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    position: absolute;
+		top: 0px;
+		right: 0px;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+}
+#fermer_popup:hover {
+	background-color: #b3b3b3;
+}
+
 /*------------------------------------ titre ------------------------------------*/
 
 .nomCalendrier{
@@ -37,7 +84,7 @@ label {
 
 .titreCal{
 	 text-align:center;
-	 display: block;
+ 	/*display: block;*/
 
 }
 
@@ -53,7 +100,7 @@ label {
 	font-weight: bold;
 }
 
-img.imgUFC{
+.imgUFC{
 	height: 100%;
 	width: 100%;
 }
@@ -74,7 +121,7 @@ img.imgUFC{
 #calendar{
 	padding-top:10px;
 	width:90%;
-	display: block;
+	/*display: block;*/
   margin-left: auto;
   margin-right: auto;
 }
@@ -130,11 +177,6 @@ table .day{
 .month{
 
 }
-
-.publicHoliday{
-	background-color: #CCC;
-}
-
 
 .firstTable{
 	margin-top: 25px;
@@ -240,13 +282,13 @@ table .day{
 
 .lblCat{
 	text-align:center;
-	display:block;
+ /*display: block;*/
 }
 
 .CalendarParam{
 	text-align:center;
 	margin: auto;
-	display:block;
+ /*display: block;*/
 }
 
 .btn-group>.btn:first-child{
@@ -255,7 +297,7 @@ table .day{
 }
 
 .dropdown-menu>li>a{
-    display: block;
+/*display: block;*/
     padding: 11px 5px;
     clear: both;
     font-weight: 400;
@@ -323,10 +365,6 @@ table .day{
 .btnCategorie{
 	margin-top:0;
 	text-align:center;
-}
-
-.icons{
-	display:inline-block;
 }
 
 .styled-select select{
@@ -398,8 +436,4 @@ table .day{
 	margin-bottom: 180px;
 	text-align:center;
 
-}
-
-img.imgQualite{
-	width:80%;
 }

@@ -1,4 +1,3 @@
-- jquery...min.js utile ???
 - orthographe
 - rm unused comms
 - trou a la fin de calendar.js
@@ -8,11 +7,11 @@ TODO:
 
 - responsivité
 - css adapter aux nomres ent
-- ajout possibilité de mettre des cases férié sur le calendrier
 - menu a la creation du calendrier : periodes de vacances, etc
 - droit de vision des calendrier (chaque personne de la FC a ses calendrier, superuser, profs peuvent voir les calendriers)
 - possibilité pour le prof de venir entrer les vacances (menu bloquant à l'arrivée sur le calendrier avec champs)
-- check css hover menu categories
+
+- creer page pour choisir entre log cas ou log visiteur
 
 DB:
 
