@@ -48,7 +48,7 @@ if (isset($_REQUEST['logout'])) {
 						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier"></a>
 					</div>
 				</div>
-				<div class="col-sm-4 col-xs-12 categories">
+				<div class="col-sm-3 col-xs-12 categories">
 					<label class="text-nowrap lblCat"> Sélectionner une catégorie</label>
 					<select id="selectid" class="selectpicker">
 						<option class="c1" value="1" id="1">Cours</option>
@@ -60,6 +60,9 @@ if (isset($_REQUEST['logout'])) {
 						<option class="c7" value="7" id="7">Férié</option>
 						<option class="c8" value="8" id="8">Libre</option>
 					</select>
+				</div>
+				<div class="col-sm-1 col-xs-12 categories">
+					<a class="btn btn-info btn-lg btnCategorie btnPlus" onclick="displayPopup();"><span class="plus-lg">+</span></a>
 				</div>
 				<div class="col-sm-2 col-xs-12 categories">
 					<label class="text-nowrap lblCat"> Génération du calendrier en PDF</label>
@@ -153,14 +156,14 @@ if (isset($_REQUEST['logout'])) {
 					<div class="row">
 						<div class="col">
 							<ul class="list-group" id="liste_vacances">
-							  <li class="list-group-item vacances">Du <input type="date" id="debutVac0" class=""/> au <input type="date" id="finVac0" class=""/>.</li>
+							  <li class="list-group-item vacances">Du <input type="date" id="debutVac0" min="2018-01-01" class="form-control dateInput"/> au <input type="date" id="finVac0" min="2018-01-01" class="form-control dateInput"/>. <a class="btn btn-danger" onclick="deleteVacancesItem('debutVac0');">suppr</a></li>
 							</ul>
 							<a id="btn_add_vacances" class="btn btn-info" onclick="addVacancesItem();">Ajouter une période</a>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
-							<a id="btn_co_valider" class="btn btn-success" onclick="connexion();">Valider</a>
+							<a id="btn_form_valid" class="btn btn-success" onclick="validateForm();">Valider</a>
 						</div>
 					</div>
 					<div class="row">

@@ -19,6 +19,70 @@ function displayPopup() {
   }
 }
 
+function addVacancesItem() {
+  let list = document.getElementById("liste_vacances");
+  let vacances = list.getElementsByClassName("vacances");
+  let idVac;
+  if(vacances.length == 0) {
+    idVac = 0;
+  } else {
+    let inputs = vacances[vacances.length - 1].getElementsByTagName("input");
+    let id = inputs[0].id;
+    idVac = parseInt(id.substr(8,id.length));
+  }
+  let li = document.createElement("li");
+  li.className = "list-group-item vacances";
+  li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\">suppr</a>";/*TODO improve*/
+  list.appendChild(li);
+}
+
+function deleteVacancesItem(idItem) {
+  document.getElementById(idItem).parentNode.remove();
+}
+
+function validateForm() {
+  let list = document.getElementById("liste_vacances");
+  let vacances = list.getElementsByClassName("vacances");
+  let errors = [];
+  let id;
+  let finVac = "", debutVac = "";
+
+  for (let vac of vacances) {
+    let inputs = document.querySelectorAll(".vacances input");
+    for (let input of inputs) {
+      id = input.id;
+      if(id.includes("debutVac")) {
+        debutVac = document.getElementById(id).value;
+        if(debutVac == "" || !debutVac.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(id);
+      }
+      if(id.includes("finVac")) {
+        finVac = document.getElementById(id).value;
+        if(finVac == "" || !finVac.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(id);
+      }
+    }
+  }
+
+  let inputs = document.querySelectorAll(".vacances input");
+  for (let input of inputs) {
+    document.getElementById(input.id).style.backgroundColor = "inherit";
+  }
+
+  document.getElementById("erreur_form").style.display = "none";
+  for (let error of errors) {
+    document.getElementById(error).style.backgroundColor = "#ffcccc";
+  }
+  if(errors.length > 0){
+    document.getElementById("erreur_form").style.display = "block";
+  } else {
+    putVacances();
+    displayPopup();
+  }
+}
+
+function putVacances() {
+
+}
+
 /*-------------------------------- initialization ------------------------------------*/
 
 $( document ).ready(function() {
@@ -160,7 +224,6 @@ function addCalendarBtn() {
     display(idCalendar);
     save();
 
-    console.log("about to display");
 		displayPopup();
 }
 

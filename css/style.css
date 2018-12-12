@@ -75,6 +75,17 @@ label {
 #fermer_popup:hover {
 	background-color: #b3b3b3;
 }
+#erreur_form {
+	margin-top: 20px;
+	font-size: 10pt;
+	font-weight: bold;
+	background-color: #ffcccc;
+	max-width: 200px;
+	text-align: center;
+	position: relative;
+	left: 30%;
+}
+
 
 /*------------------------------------ titre ------------------------------------*/
 
@@ -393,6 +404,18 @@ table .day{
 
 .btnCal{
 	margin-bottom: 25px;
+}
+
+.plus-lg {
+	font-size: 20pt;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+}
+
+.btnPlus {
+	position: relative;
+	top: 10%;
 }
 
 /*-------------------------------------- Calcul --------------------------------------*/
