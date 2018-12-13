@@ -22,9 +22,9 @@ $(document).mousedown(function() {
 
 /*----------------------------------- Fill Categories ----------------------------*/
 
-function fillCat (select){
-	$(select).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
-	$(select).addClass(colorClass);
+function fillCat (element){
+	$(element).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
+	$(element).addClass(colorClass);
 }
 
 function eventCategories(){

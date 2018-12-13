@@ -69,7 +69,6 @@ function displayCalendar(year){
 
 	display += "</tr></tbody></table>";
 
-	console.log(display);
    	$("#calendar").html(display);
    	// Call the categories script
    	eventCategories();

@@ -11,12 +11,15 @@ var calendars = new Array();
 
 function displayPopup() {
   document.getElementById("erreur_form").style.display = "none";
-  let popup = document.getElementById("connect_popup");
+  let popup = document.getElementById("more_popup");
   if(popup.style.display == "none") {
     popup.style.display = "block";
   } else {
     popup.style.display = "none";
   }
+  let list = document.getElementById("liste_vacances");
+  list.innerHTML = "";
+  addVacancesItem();
 }
 
 function addVacancesItem() {
@@ -80,7 +83,21 @@ function validateForm() {
 }
 
 function putVacances() {
+  addVacancesColor(01,01,2019);
+}
 
+function addVacancesColor(day, month, year) {
+  let calendar = document.getElementById("calendar");
+  let tables = calendar.childNodes();
+  console.log(tables);
+  let yearsTH;
+  yearsTH = document.querySelectorAll("#calendar table thead tr th");
+  console.log(yearsTH);
+  let yearTable;
+  for(let th of yearsTH) {
+    if(th.innerHTML == year) year = th.parentNode().parentNode().parentNode().tbody.tr;
+  }
+  console.log(year);
 }
 
 /*-------------------------------- initialization ------------------------------------*/
@@ -205,26 +222,28 @@ function save(){
 function addCalendarBtn() {
 
 	var title = "Calendrier vierge " + currentYear;
+  console.log("starting add new cal : " + title);
 
 	// Set the id calendar
 	idCalendar = calendars.length;
 
 	// Add the option to the select.
 	var select = document.getElementById('selectCal');
-    var newOption = new Option (title, idCalendar);
-    select.options.add(newOption);
+  var newOption = new Option (title, idCalendar);
+  select.options.add(newOption);
 
-    // Switch to the new calendar
-    $("#selectCal").val(idCalendar);
+  // Switch to the new calendar
+  $("#selectCal").val(idCalendar);
 
-    // Add the option to the global table "calendars".
-    addCalendarToArray(title);
+  // Add the option to the global table "calendars".
+  addCalendarToArray(title);
+  calendars[calendars.length-1][2];
 
-    // Display the new calendar.
-    display(idCalendar);
-    save();
+  // Display the new calendar.
+  displayCalendar(currentYear);
+  save(); // add displayAddedCalendar
 
-		displayPopup();
+	displayPopup();
 }
 
 function delCalendarBtn(){
@@ -406,9 +425,11 @@ function displayData(event){
 }
 
 function display(value){
-  console.log("display : " + value);
+  console.log("display id : " + value);
+
+
 	var index = value;
-	//console.log(calendars);
+	console.log("calendars " + calendars);
 
 	// The name
 	$("#nomForm").val(calendars[index][0]);
@@ -419,7 +440,7 @@ function display(value){
 	// The categories
 	$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
 
-	if(calendars[index][2] == null){
+	if(calendars[index][2] == null || calendars[index][2] == "" || calendars[index][2] == undefined){
 		$('.day').addClass('libreCat');
 	}else{
 		// The table of categories is duplicated to avoid modifying the orginial table.
