@@ -1,7 +1,7 @@
 
 // Generate the grid of the calendar.
 
-var days	 = new Array('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche');
+var days	 = new Array('Lun','Mar','Mer','Jeu','Ven','Sam','Dim');
 var months	 = new Array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
 
 function getCalendar(year, month){
@@ -12,7 +12,7 @@ function getCalendar(year, month){
 	var table = new Array();
 
 	for (var i = 0; i < nbDays; i++) {
-		table[i] = date.getDay()+1; // day of the week
+		table.push(date.getDay()+1); // day of the week
 		date.setTime(date.getTime() + 24*3600*1000); // Day + 1
 	}
 
@@ -33,14 +33,14 @@ function getCalendar(year, month){
 			}
 		}
 
-		result	+= "<tr><td>" + days[table[i%7]-1].substr(0,3) + "</td><td>" + (i+1) + "</td>";
+		result	+= "<tr><td>" + days[table[i%7]-1] + "</td><td>" + (i+1) + "</td>";
 
 		if(publicHoliday == 1){
 			result += "<td class=\"day ferieCat\" colspan=2>Férié</td></tr>"
 		}else if(table[i%7] == 7){
 			result += "<td class=\"day ferieCat\" colspan=2></td></tr>";
 		}else{
-			result += "<td class=\"day libreCat\" ></td></tr>";
+			result += "<td class=\"day libreCat\" colspan=2></td></tr>";
 		}
 
 	}

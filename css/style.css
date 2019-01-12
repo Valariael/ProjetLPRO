@@ -30,7 +30,7 @@ label {
 
 /* POPUP CONNEXION **************************************************/
 
-#connect_popup{
+#more_popup{
     background:rgba(0,0,0,.4);
     display:none;
     height:100%;
@@ -40,12 +40,12 @@ label {
     width:100%;
     z-index:10000;
 }
-#connect_popup .to_center{
+#more_popup .to_center{
     display:inline-block;
     height:100%;
     vertical-align:middle;
 }
-#connect_popup > div {
+#more_popup > div {
     background-color: #f2f2f2;
     box-shadow: 10px 10px 60px #555;
     display: inline-block;
@@ -60,7 +60,7 @@ label {
 }
 #fermer_popup {
     background-color: #d9d9d9;
-    border: 3px solid #808080;
+    border: 2px solid #e6e6e6;
 		border-radius: 3px 8px 3px;
     cursor: pointer;
     display: inline-block;
@@ -85,6 +85,30 @@ label {
 	position: relative;
 	left: 30%;
 }
+.dateInput {
+	max-width: 200px;
+	display: inline;
+}
+#titreInput {
+	width: 300px;
+	max-width: 400px;
+	display: inline;
+}
+#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates {
+	margin-top: 20px;
+}
+#titreInput {
+	display: block;
+	position: relative;
+	left: 23%;
+}
+#titreInput {
+	margin-top: 10px;
+}
+.champ_date {
+	margin-top: 10px;
+	display: block;
+}
 
 
 /*------------------------------------ titre ------------------------------------*/
@@ -96,7 +120,6 @@ label {
 .titreCal{
 	 text-align:center;
  	/*display: block;*/
-
 }
 
 .nomFormation{
@@ -105,6 +128,7 @@ label {
 }
 
 .MsgPrecaution{
+	float:center;
 	color:red;
 	padding-top: 50px;
 	text-align:center;
@@ -112,8 +136,8 @@ label {
 }
 
 .imgUFC{
-	height: 100%;
-	width: 100%;
+	height: 30%;
+	width: 30%;
 }
 
 .arrow-down {
@@ -422,8 +446,9 @@ table .day{
 
 .resume{
 	color: black;
-	margin-top:30px;
+	margin: auto;
 	margin-bottom: 100px;
+	width: 70%;
 }
 
 .btnHeures{

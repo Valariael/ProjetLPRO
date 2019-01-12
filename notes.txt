@@ -2,6 +2,18 @@
 - rm unused comms
 - trou a la fin de calendar.js
 
+- en train de regarder pour bien mettre les jours feries a la creation du calendrier
+
+changer titre : selectCal.options.edit option selected
+                calendars[index][0]
+
+
+A FAIRE (nouveau)
+css
+export + import
+pdf
+pop up amelirations
+bug jours
 
 TODO:
 
@@ -13,6 +25,10 @@ TODO:
 
 - creer page pour choisir entre log cas ou log visiteur
 
+- pdf : reformer paysage
+          cadre bas de page plus petit
+          table sur une largeur
+          titre a cote de recap
 DB:
 
 rechercher comment heberger la bdd, quel format ?
@@ -30,3 +46,20 @@ rechercher comment heberger la bdd, quel format ?
 BUG:
 
 - curseur clignotant sur la composante
+
+
+<?php
+
+require_once 'php/config.php';
+require_once $phpcas_path . '/CAS.php';
+phpCAS::setDebug();
+phpCAS::setVerbose(true);
+phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+phpCAS::setNoCasServerValidation();
+phpCAS::forceAuthentication();
+$user = phpCAS::getUser(); // contient username cas ex: alederma
+if (isset($_REQUEST['logout'])) {
+	phpCAS::logout();
+}
+
+?>
