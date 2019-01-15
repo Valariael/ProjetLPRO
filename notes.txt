@@ -1,27 +1,40 @@
-- orthographe
+
 - rm unused comms
 - trou a la fin de calendar.js
 
-- en train de regarder pour bien mettre les jours feries a la creation du calendrier
+// mettre les jours feries a la creation du calendrier
 
 changer titre : selectCal.options.edit option selected
                 calendars[index][0]
 
 
-A FAIRE (nouveau)
+(A FAIRE)
 css
 export + import
 pdf
 pop up amelirations
-bug jours
+//bug jours
+
+popup : vacances : default date in agenda when selecting set to calendar start
+popup : set titre + empty nom formation quand creation
+schema de donnees : add start + end dates
+popup : set start + end
+calendars order in select ?
+export + import ?
+pdf reorganisation
+manuel d'utilisation
+archive propre avec raccourci
+persistence des calendriers ???
+coloriage vacances > bug 31 quand un seul mois ???
+nom du calendrier = nom de la formation > ok ?
 
 TODO:
 
 - responsivité
-- css adapter aux nomres ent
+/- css adapter aux nomres ent
 - menu a la creation du calendrier : periodes de vacances, etc
-- droit de vision des calendrier (chaque personne de la FC a ses calendrier, superuser, profs peuvent voir les calendriers)
-- possibilité pour le prof de venir entrer les vacances (menu bloquant à l'arrivée sur le calendrier avec champs)
+/- droit de vision des calendrier (chaque personne de la FC a ses calendrier, superuser, profs peuvent voir les calendriers)
+/- possibilité pour le prof de venir entrer les vacances (menu bloquant à l'arrivée sur le calendrier avec champs)
 
 - creer page pour choisir entre log cas ou log visiteur
 
@@ -29,6 +42,8 @@ TODO:
           cadre bas de page plus petit
           table sur une largeur
           titre a cote de recap
+
+// OUTDATED
 DB:
 
 rechercher comment heberger la bdd, quel format ?

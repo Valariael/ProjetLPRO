@@ -151,6 +151,40 @@ label {
 
 /*------------------------------------ Calendrier ------------------------------------*/
 
+#resume {
+	margin-top: 40px;
+	margin-right: 100px;
+	position: relative;
+	right: 50px;
+}
+
+#resume td {
+	min-width: 50px;
+}
+
+#labelJCours{
+  background: #4FC1E9;
+}
+
+#labelJProjetTutUniv{
+  background: #37BC9B;
+}
+
+#labelJExamen{
+  background: #F6BB42;
+}
+
+#labelJEntreprise{
+  background: #D770AD;
+}
+
+#labelJProjetTutEts{
+  background: #AC92EC;
+}
+
+#labelJVacances{
+  background: #ED5565;
+}
 
 #calendar{
 	padding-top:10px;
@@ -449,6 +483,8 @@ table .day{
 	margin-bottom: 100px;
 	width: 70%;
 }
+
+.nomCalendrier,
 
 .btnHeures{
 	margin-left:20px;
