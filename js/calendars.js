@@ -29,6 +29,7 @@ function displayPopup() {
     labelDates.style.display = "inherit";
     champsDate[0].style.display = "block";
     champsDate[1].style.display = "block";
+    started = true;
   }
 
   let list = document.getElementById("liste_vacances");

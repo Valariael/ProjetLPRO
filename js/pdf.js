@@ -60,13 +60,17 @@ function genPDF() {
     let src = canvas.getAttribute('src');
 		canvas.src = src;
 
-		let doc = new jsPDF('l', 'mm', "a4"); // using defaults: orientation=portrait, unit=mm, size=A4
+		let doc = new jsPDF('l', 'mm', "a4");
+
+			let largeur = screen.width / doc.internal.pageSize.width;
+			let hauteur = screen.height / doc.internal.pageSize.height;
+				console.log("l : " + screen.width / doc.internal.pageSize.width);
+					console.log("h : " + screen.height / doc.internal.pageSize.height);
 
 //ajout annee
 		doc.text(title, (doc.internal.pageSize.width/2 - (((title.length-1)*1.333*0.264583)/2)), 8);
-		doc.addImage(canvas.toDataURL('image/png', 1.0), 'PNG', 4, 8, canvas.width*0.264583*0.54, canvas.height*0.264583*0.43);
+		doc.addImage(canvas.toDataURL('image/png', 1.0 ), 'PNG', 4, 8, canvas.width*0.264583*1.3/largeur*2.3, canvas.height*0.264583*1.05/hauteur*2);
 		doc.output("save", "Calendrier "+title+".pdf"); // date ?
-
 		calendar.style.paddingRight = "0px";
 		calculPart.style.display = "block";
 		div.remove();
