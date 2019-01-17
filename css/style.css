@@ -90,24 +90,24 @@ label {
 	display: inline;
 }
 #titreInput {
+	margin-top: 10px;
 	width: 300px;
 	max-width: 400px;
-	display: inline;
-}
-#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates {
-	margin-top: 20px;
-}
-#titreInput {
 	display: block;
 	position: relative;
 	left: 23%;
 }
-#titreInput {
-	margin-top: 10px;
+#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances {
+	margin-top: 20px;
 }
-.champ_date {
-	margin-top: 10px;
+#champ_annees {
+	width: 300px;
 	display: block;
+	position: relative;
+	left: 23%;
+	margin-top: 10px;
+	text-align: center;
+	font-weight: bold;
 }
 
 
@@ -136,7 +136,7 @@ label {
 }
 
 .imgUFC{
-	width: 28%;
+	width: 40%;
 }
 
 .arrow-down {

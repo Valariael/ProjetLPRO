@@ -6,7 +6,7 @@
 
 changer titre : selectCal.options.edit option selected
                 calendars[index][0]
-
+NAVIGATEUR RECOMMANDE : chrome
 
 (A FAIRE)
 css
@@ -21,12 +21,15 @@ schema de donnees : add start + end dates
 popup : set start + end
 calendars order in select ?
 export + import ?
-pdf reorganisation
+pdf reformat
 manuel d'utilisation
 archive propre avec raccourci
 persistence des calendriers ???
 coloriage vacances > bug 31 quand un seul mois ???
 nom du calendrier = nom de la formation > ok ?
+bug suppression de tous les calendriers
+animation chargement quand generation pdf
+drag n drop
 
 TODO:
 

@@ -8,28 +8,61 @@ var calendars = new Array();
 // Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap]]
 
 var started = true;
+var starting = false;
+
+/*-------------------------------- import/export --------------------------------------*/
+
+function exportCalendar(id) {
+
+}
 
 /*-------------------------------- personalization ------------------------------------*/
 
-function displayPopup() {
+function displayPopup() { // remanier pour titre, passer boolean en param
   document.getElementById("erreur_form").style.display = "none";
+  var select = document.getElementById('selectCal');
+  var choice = select.selectedIndex;
+  var compoAndPlace = document.getElementById('compoAndPlace').value;
+  var dataCategories = createDataCategories();
+  var dataSchedules = createDataSchedules();
+  var hourSchedules = createHourSchedules();
+  var weekSchedules = createWeekSchedules();
+  var nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
   let popup = document.getElementById("more_popup");
+  if(starting) {
+
+    if(isNaN(nbAnnees)) {
+      editCalendarArray(parseInt(select.options[choice].value, 10), calendars[parseInt(select.options[choice].value, 10)][0], compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, 1);
+    } else {
+      editCalendarArray(parseInt(select.options[choice].value, 10), calendars[parseInt(select.options[choice].value, 10)][0], compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, nbAnnees);
+    }
+
+    displayCalendar(currentYear, nbAnnees);
+    save();
+  }
   if(popup.style.display == "none") {
     popup.style.display = "block";
+    document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
   } else {
+    document.getElementById('nomForm').value = document.getElementById("titreInput").value;
+    editCalendarArray(document.getElementById("titreInput").value, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, nbAnnees);
+    save();
     popup.style.display = "none";
   }
 
   let labelDates = document.getElementById("label_dates");
-  let champsDate = document.getElementsByClassName("champ_date");
+  // let champsDate = document.getElementsByClassName("champ_date");
+  let champAnnees = document.getElementById("champ_annees");
   labelDates.style.display = "none";
-  champsDate[0].style.display = "none";
-  champsDate[1].style.display = "none";
+  // champsDate[0].style.display = "none";
+  // champsDate[1].style.display = "none";
+  champAnnees.style.display = "none";
   if(!started) {
     labelDates.style.display = "inherit";
-    champsDate[0].style.display = "block";
-    champsDate[1].style.display = "block";
-    started = true;
+    // champsDate[0].style.display = "block";
+    // champsDate[1].style.display = "block";
+    champAnnees.style.display = "block";
+    starting = true;
   }
 
   let list = document.getElementById("liste_vacances");
@@ -46,7 +79,7 @@ function addVacancesItem() {
   } else {
     let inputs = vacances[vacances.length - 1].getElementsByTagName("input");
     let id = inputs[0].id;
-    idVac = parseInt(id.substr(8,id.length));
+    idVac = parseInt(id.substr(8,id.length), 10);
   }
   let li = document.createElement("li");
   li.className = "list-group-item vacances";
@@ -64,16 +97,21 @@ function validateForm() {
   let errors = [];
   let id;
   let finVac = "", debutVac = "";
-  let dateDebut = document.getElementById("dateDebut").value;
-  let dateFin = document.getElementById("dateFin").value;
-  console.log(dateDebut);
+  let champAnnees = document.getElementById("champ_annees").value;
+  let champTitre = document.getElementById("titreInput");
+  // let dateDebut = document.getElementById("dateDebut").value;
+  // let dateFin = document.getElementById("dateFin").value;
+  //console.log(champAnnees);
 
   if(!started) {
-    if(dateDebut == "" || !dateDebut.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateDebut);
-    if(dateFin == "" || !dateFin.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateFin);
+    if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
+    // if(dateDebut == "" || !dateDebut.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateDebut);
+    // if(dateFin == "" || !dateFin.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateFin);
   }
 
-  for (let vac of vacances) {
+  if(champTitre.value==null || champTitre.value=="") errors.push("titreInput");
+
+  for (let vac of vacances) { //traiter cas premiere date inferieure a seconde TODO
     let inputs = document.querySelectorAll(".vacances input");
     for (let input of inputs) {
       id = input.id;
@@ -113,9 +151,7 @@ function putVacances() {
   let debut, fin, anneeDebut, anneeFin;
   for(let v of vacances) { // TODO:improve
     debut = new Date($("#debutVac"+nVac).val());
-    console.log(debut);
     fin = new Date($("#finVac"+nVac).val());
-    console.log(fin);
     nVac++;
 
     anneeDebut = debut.getFullYear();
@@ -125,10 +161,8 @@ function putVacances() {
 
     let calendar = document.getElementById("calendar");
     let tables = calendar.childNodes;
-    console.log(tables);
     let yearsTH, years = [];
     yearsTH = document.querySelectorAll("#calendar table thead th");
-    console.log(yearsTH);
 
     for(let y of yearsTH) {
       let o = {
@@ -136,10 +170,6 @@ function putVacances() {
         n: parseInt(y.colSpan, 10)
       };
       years.push(o);
-    }
-    console.log("years :" + years);
-    for(let y of yearsTH) {
-      console.log(y);
     }
 
     let yBool = false;
@@ -149,7 +179,6 @@ function putVacances() {
     if(!yBool) return;
 
     for(let d = debut; debut<=fin; d.setDate(d.getDate()+1)) {
-      console.log(d);
       addVacancesColor(years, d.getDate(), d.getMonth()+1, d.getFullYear());
     }
   }
@@ -157,7 +186,6 @@ function putVacances() {
 
 function addVacancesColor(years, day, month, year) {
   let monthTABLE = document.querySelectorAll("#calendar table tbody tr td table");
-  console.log(monthTABLE);
   let currentMonth, index = -1;
   for(let y of years) {
     for(let i=0; i<y.n; i++) {
@@ -189,6 +217,7 @@ function addVacancesColor(years, day, month, year) {
         case "Août":
         if(month != 8) continue;
         break;
+        case "Septembre":
         if(month != 9) continue;
         break;
         case "Octobre":
@@ -206,10 +235,7 @@ function addVacancesColor(years, day, month, year) {
       }
 
       let days = monthTABLE[index].querySelectorAll("tbody tr");
-      console.log("day : " + day + " days[day] : ");
-      console.log(days[day]);
       let cells = days[day].querySelectorAll("td");
-      console.log(cells);
       cells[2].className = "day vacanceCat";
     }
   }
@@ -219,38 +245,30 @@ function addVacancesColor(years, day, month, year) {
 
 $( document ).ready(function() {
 
-  displayCalendar(currentYear);
-  var select = document.getElementById('selectCal');
-  var index = select.selectedIndex;
-
   let data = window.localStorage.getItem("calendars");
-  if(data == null){
+  if(data == null  || data == undefined || data == "" || data.length < 2 || data == "null"){
     addCalendarBtn();
   }else{
     console.log(data);
     calendars = JSON.parse(data);
-    /*
-    var select = document.getElementById('selectCal');
-    data = data.substring(1, data.length-1);
-    data = data.replace(/\\/g,"");
-    var edit = " " + data + " ";
 
-    // Get the server data
-    var obj = JSON.parse(edit.substring(1, edit.length-1));
-    calendars = obj;*/
+    let select = document.getElementById('selectCal');
 
     // Add the option to the select.
-    for (var i = 0; i < calendars.length; i++) {
+    for (let i = 0; i < calendars.length; i++) {
       if(calendars[i] != null){
-        var newOption = new Option (calendars[i][0], i);
+        let newOption = new Option (calendars[i][0], i);
         select.options.add(newOption);
       }else{
         continue;
       }
     }
 
+    displayCalendar(currentYear, calendars[parseInt(select.options[select.options.length-1].value, 10)][6]);
     // refresh the display
-    var choice = select.selectedIndex;
+
+    select.selectedIndex = select.options.length-1;
+    let choice = select.selectedIndex;
     display(select.options[choice].value);
 
   }
@@ -263,31 +281,31 @@ $('#selectCal').click(function() {
   save();
 });
 
-function save(){
+function save(){ // ajout decalage des calendriers quand espace vide TODO
 
-  var select = document.getElementById('selectCal');
-  var choice = select.selectedIndex;
+  let select = document.getElementById('selectCal');
+  let choice = select.selectedIndex;
 
   // Get the name.
-  var title = document.getElementById('nomForm').value;
+  let title = document.getElementById('nomForm').value;
 
   // Get the component and the place.
-  var compoAndPlace = document.getElementById('compoAndPlace').value;
+  let compoAndPlace = document.getElementById('compoAndPlace').value;
 
   // Create the data categories.
-  var dataCategories = createDataCategories();
+  let dataCategories = createDataCategories();
 
   // Get the data schedules.
-  var dataSchedules = createDataSchedules();
+  let dataSchedules = createDataSchedules();
 
   // Get the hour schedules.
-  var hourSchedules = createHourSchedules();
+  let hourSchedules = createHourSchedules();
 
   // Get the week schedules.
-  var weekSchedules = createWeekSchedules();
+  let weekSchedules = createWeekSchedules();
 
   // Edit the global table "calendars".
-  editCalendarArray(parseInt(select.options[choice].value), title, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules);
+  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, calendars[parseInt(select.options[choice].value, 10)][6]);
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -297,29 +315,29 @@ function save(){
 
 }
 
-/*-------------------------------- Buttons functions ------------------------------------*/
+/*-------------------------------- Buttons functions -----------------------------------*/
 
 function addCalendarBtn() {
 
-  var title = "Calendrier vierge " + currentYear;
+  let title = "Calendrier vierge " + currentYear;
 
   // Set the id calendar
   idCalendar = calendars.length;
 
   // Add the option to the select.
-  var select = document.getElementById('selectCal');
-  var newOption = new Option (title, idCalendar);
+  let select = document.getElementById('selectCal');
+  let newOption = new Option (title, idCalendar);
   select.options.add(newOption);
 
   // Switch to the new calendar
   $("#selectCal").val(idCalendar); // chanegr dates en années et creer les calendriers
 
   // Add the option to the global table "calendars".
-  addCalendarToArray(title);
-  calendars[calendars.length-1][2];
+  addCalendarToArray(title, 1);
+  calendars[calendars.length-1][2] = title;
 
   // Display the new calendar.
-  displayCalendar(currentYear);
+  displayCalendar(currentYear, 1);
   save(); // add displayAddedCalendar
 
   started = false;
@@ -328,20 +346,21 @@ function addCalendarBtn() {
 
 function delCalendarBtn(){
 
-  var select = document.getElementById('selectCal');
-  var index = select.selectedIndex;
+  let select = document.getElementById('selectCal');
+  let index = select.selectedIndex;
 
   // Delete the option of the global table "calendars".
-  delCalendarOfArray(parseInt(select.options[index].value));
+  delCalendarOfArray(parseInt(select.options[index].value, 10));
 
   // Delete the option of the select.
   select.remove(index);
 
   // Display the precedent calendar (if it exist).
-  if($("#selectCal option").size() == 0 ){
+  if($("#selectCal option").length == 0 ){
     addCalendarBtn();
+    save();
   }else{
-    display(parseInt(select.options[0].value));
+    display(parseInt(select.options[0].value, 10));
     save();
   }
 }
@@ -353,28 +372,28 @@ function saveCalendarBtn(){
 
 /*-------------------------------- Calendars[] functions ------------------------------------*/
 
-function addCalendarToArray(title) {
+function addCalendarToArray(title, nAnnees) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"], today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate());
+  calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/,nAnnees);
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules) {
+function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules);
+  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees);
 }
 
 function delCalendarOfArray(id) {
   //console.log(calendars[id], id);
-  calendars[id] = null;
+  calendars.splice(id, 1);
 }
 
 /*-------------------------------- Categories functions  ------------------------------------*/
 
 function createDataCategories(){
 
-  var dataCategories = new Array();
-  var codeCat;
+  let dataCategories = new Array();
+  let codeCat;
 
   $('.day').each(function() {
     if($(this).hasClass('coursCat')){
@@ -404,13 +423,12 @@ function createDataCategories(){
 
 function setDataCategories(dataCategories){
 
+  $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
-
-    var element = dataCategories.shift();
+    let element = dataCategories.shift();
 
     let date = ""; // prendre la date de debut du cal et incrementer chaque jour,
     // check que la date est dans les periodes de vacances
-
     switch (element) {
       case 0:$(this).addClass('coursCat');break;
       case 1:$(this).addClass('projetTutCoursCat');break;
@@ -432,12 +450,12 @@ function schedulesEvent(event) {
 
 function createDataSchedules(){
 
-  var ComptCours = 0;
-  var ComptProjCours = 0;
-  var ComptExam = 0;
-  var ComptEntrep = 0;
-  var ComptProjEntrep = 0;
-  var ComptVac = 0;
+  let ComptCours = 0;
+  let ComptProjCours = 0;
+  let ComptExam = 0;
+  let ComptEntrep = 0;
+  let ComptProjEntrep = 0;
+  let ComptVac = 0;
 
   $('.day').each(function() {
     if($(this).hasClass('coursCat')){
@@ -460,21 +478,21 @@ function createDataSchedules(){
 
 function createHourSchedules(){
 
-  var heureCoursProjet = document.getElementById('heureCoursProjet').value;
-  var heureExamen = document.getElementById('heureExamen').value;
-  var heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
-  var heureVacance = document.getElementById('heureVacance').value;
+  let heureCoursProjet = document.getElementById('heureCoursProjet').value;
+  let heureExamen = document.getElementById('heureExamen').value;
+  let heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
+  let heureVacance = document.getElementById('heureVacance').value;
 
   return hourSchedules = new Array(heureCoursProjet, heureExamen, heureEntrepriseProjet, heureVacance);
 }
 
 function createWeekSchedules(){
 
-  var semaineCours = document.getElementById('semaineCours').value;
-  var semaineCoursProjet = document.getElementById('semaineCoursProjet').value;
-  var semaineExamen = document.getElementById('semaineExamen').value;
-  var semaineDate = document.getElementById('semaineDate').value;
-  var semaineEntrepriseProjet = document.getElementById('semaineEntrepriseProjet').value;
+  let semaineCours = document.getElementById('semaineCours').value;
+  let semaineCoursProjet = document.getElementById('semaineCoursProjet').value;
+  let semaineExamen = document.getElementById('semaineExamen').value;
+  let semaineDate = document.getElementById('semaineDate').value;
+  let semaineEntrepriseProjet = document.getElementById('semaineEntrepriseProjet').value;
 
   return hourSchedules = new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
 }
@@ -502,18 +520,16 @@ function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
 
 // From the select
 function displayData(event){
-  var select = document.getElementById('selectCal');
-  var index = event.target.selectedIndex;
+  let select = document.getElementById('selectCal');
+  let index = event.target.selectedIndex;
   display(parseInt(select.options[index].value));
   schedulesEvent();
 }
 
-function display(value, hollidays){
+function display(value){
   console.log("display id : " + value);
-
-
-  var index = value;
-  console.log("calendars " + calendars);
+  console.log("ici");
+  let index = value;
 
   // The name
   $("#nomForm").val(calendars[index][0]);
@@ -522,13 +538,14 @@ function display(value, hollidays){
   $("#compoAndPlace").val(calendars[index][1]);
 
   // The categories
-  $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
+  //$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
 
   if(calendars[index][2] == null || calendars[index][2] == "" || calendars[index][2] == undefined){
-    $('.day').addClass('libreCat');
+    displayCalendar(currentYear, calendars[index][6]);
   }else{
+    displayCalendar(currentYear, calendars[index][6]);
     // The table of categories is duplicated to avoid modifying the orginial table.
-    var duplicatedCalendar1 = calendars[index][2].slice(0);
+    let duplicatedCalendar1 = calendars[index][2].slice(0);
     setDataCategories(duplicatedCalendar1);
   }
 

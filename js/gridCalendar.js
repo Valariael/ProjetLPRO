@@ -56,22 +56,45 @@ function getCalendar(year, month){
 	return result;
 }
 
-function displayCalendar(year){
+function displayCalendar(year, n){
 
-	var display = "<table class=\"firstTable\"><thead><tr><th colspan=5>" + year + "</th><th colspan=2>" + (year+1) + "</th></tr></thead><tbody><tr>";
+	let displays = [];
+	for(let j=0; j<n; j++) {
+		if(j == 0) {
+			let display = "<table class=\"firstTable\"><thead><tr><th colspan=5>" + year + "</th><th colspan=2>" + (year+1) + "</th></tr></thead><tbody><tr>";
 
-	for (var i = 8; i < 13; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
-	for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
+			for (var i = 8; i < 13; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
+			for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
-	display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1) + "</th></tr></thead><tbody><tr>";
+			display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1) + "</th></tr></thead><tbody><tr>";
 
-	for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
+			for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
 
-	display += "</tr></tbody></table>";
+			display += "</tr></tbody></table>";
 
-   	$("#calendar").html(display);
-   	// Call the categories script
-   	eventCategories();
+			displays.push(display);
+		} else {
+			let display = "<table class=\"firstTable\"><thead><tr><th colspan=3>" + (year+j) + "</th><th colspan=4>" + (year+1+j) + "</th></tr></thead><tbody><tr>";
+
+			for (var i = 10; i < 13; i++) { display += "<td>" + getCalendar(year+j, i) + "</td>"; }
+			for (var i = 1; i < 5; i++)  { display += "<td>" + getCalendar(year+1+j, i) + "</td>"; }
+
+			display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=7>" + (year+1+j) + "</th></tr></thead><tbody><tr>";
+
+			for (var i = 4; i < 10; i++) { display += "<td>" + getCalendar(year+1+j, i) + "</td>"; }
+
+			display += "</tr></tbody></table>";
+			displays.push(display);
+		}
+	}
+
+	let calendar = document.getElementById("calendar");
+	calendar.innerHTML = "";
+	displays.forEach(function(element) {
+		calendar.innerHTML += element;
+	});
+	// Call the categories script
+	eventCategories();
 }
 
 function getNbJours(date){
