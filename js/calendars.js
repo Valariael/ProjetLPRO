@@ -9,16 +9,90 @@ var calendars = new Array();
 
 var started = true;
 var starting = false;
-
 /*-------------------------------- import/export --------------------------------------*/
 
 function exportCalendar(id) {
+  let blob = JSON.stringify(calendars[id]);
+  let filename = "export_"+calendars[id][0]; //replace spaces !!
+  let elem = window.document.createElement('a');
+  elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
+  elem.download = filename;
+  document.body.appendChild(elem);
+  elem.click();
+  document.body.removeChild(elem);
+}
 
+function importCalendar(data) {
+  let cal = JSON.parse(decodeURIComponent(data));
+  calendars.push(cal);
+  let index = calendars.indexOf(cal);
+
+  // Set the id calendar
+  idCalendar = calendars.length;
+
+  // Add the option to the select.
+  let select = document.getElementById('selectCal');
+  let newOption = new Option (cal[0], index);
+  select.options.add(newOption);
+
+  // Switch to the new calendar
+  $("#selectCal").val(index); // chanegr dates en années et creer les calendriers
+
+  // Display the imported calendar.
+  display(index);
+  save();
+
+  started = false;
+}
+
+/*---------------------------------- drag n drop --------------------------------------*/
+
+function dropHandler(ev) {
+  console.log('File(s) dropped');
+
+  // Prevent default behavior (Prevent file from being opened)
+  ev.preventDefault();
+
+  let fr = new FileReader();
+
+
+  if (ev.dataTransfer.items) {
+    // Use DataTransferItemList interface to access the file(s)
+    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+      // If dropped items aren't files, reject them
+      if (ev.dataTransfer.items[i].kind === 'file') {
+
+        let file = ev.dataTransfer.items[i].getAsFile();
+        if (file) {
+          let r = new FileReader();
+          r.onload = function(e) {
+            let contents = e.target.result;
+            importCalendar(contents);
+          }
+        }
+        r.readAsText(file);
+      } else {
+        alert("Échec de l'import du calendrier.");
+      }
+    }
+  }
+} else {
+  // Use DataTransfer interface to access the file(s)
+  for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+    console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+    console.log("LOST datatransfer");
+  }
+}
+}
+
+function dragOverHandler(ev) {
+  // Prevent default behavior (Prevent file from being opened)
+  ev.preventDefault();
 }
 
 /*-------------------------------- personalization ------------------------------------*/
 
-function displayPopup() { // remanier pour titre, passer boolean en param
+function displayPopup() { // remanier pour titre, passer boolean en param : 2 fonctions
   document.getElementById("erreur_form").style.display = "none";
   var select = document.getElementById('selectCal');
   var choice = select.selectedIndex;
@@ -282,7 +356,6 @@ $('#selectCal').click(function() {
 });
 
 function save(){ // ajout decalage des calendriers quand espace vide TODO
-
   let select = document.getElementById('selectCal');
   let choice = select.selectedIndex;
 
