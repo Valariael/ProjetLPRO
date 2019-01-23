@@ -10,7 +10,6 @@ NAVIGATEUR RECOMMANDE : chrome
 
 (A FAIRE)
 css
-export + import
 pdf
 pop up amelirations
 //bug jours
@@ -20,7 +19,7 @@ popup : set titre + empty nom formation quand creation
 schema de donnees : add start + end dates
 popup : set start + end
 calendars order in select ?
-export + import ?
+//export + import ?
 pdf reformat
 manuel d'utilisation
 archive propre avec raccourci
@@ -29,17 +28,23 @@ coloriage vacances > bug 31 quand un seul mois ???
 nom du calendrier = nom de la formation > ok ?
 bug suppression de tous les calendriers
 animation chargement quand generation pdf
-drag n drop
+//drag n drop
+
+1 tag pour canvas autour de calendriers +
+1 tag autour de resume et coordonnees +
+> genPDF : ajout titre, nom formation et logo manuellement, pareil pour les autre slogos s'ils spnt necessaires
+
+COLONNES EN PDF = PAS BON va du double au simple
 
 TODO:
 
 - responsivité
 /- css adapter aux nomres ent
-- menu a la creation du calendrier : periodes de vacances, etc
+//- menu a la creation du calendrier : periodes de vacances, etc
 /- droit de vision des calendrier (chaque personne de la FC a ses calendrier, superuser, profs peuvent voir les calendriers)
 /- possibilité pour le prof de venir entrer les vacances (menu bloquant à l'arrivée sur le calendrier avec champs)
 
-- creer page pour choisir entre log cas ou log visiteur
+/- creer page pour choisir entre log cas ou log visiteur
 
 - pdf : reformer paysage
           cadre bas de page plus petit
