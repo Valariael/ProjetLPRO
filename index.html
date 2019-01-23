@@ -30,6 +30,7 @@
 						<a onclick="addCalendarBtn();" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
 						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer le calendrier"></a>
 						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier"></a>
+						<a href="javascript:exportThis()" ><img src="content/download.png" alt="Exporter"  id="expCal" class="btnCal" title="Télécharger les données du calendrier"></a>
 					</div>
 				</div>
 				<div class="col-sm-4 col-12 categories">
@@ -46,11 +47,10 @@
 					</select>
 				</div>
 				<div class="col-sm-1 col-12 categories">
-					<a class="btn btn-info btn-lg btnCategorie btnPlus" onclick="displayPopup();"><span class="plus-lg">+</span></a>
+					<a class="btn btn-info btn-lg btnSettings" onclick="displayPopup();"><img src="content/settings.png" alt="Réglages"  id="regCal" title="Réglages du calendrier"></a>
 				</div>
 				<div class="col-sm-2 col-12 categories">
 					<label class="text-nowrap lblCat"> Génération du calendrier en PDF</label>
-					<div id="editor"></div>
 					<a class="btn btn-danger btn-lg btnCategorie" onclick="genPDF();" >PDF</a>
 				</div>
 				<div class="col-sm-1 col-12 categories">
@@ -61,15 +61,15 @@
 		</div>
 	</header>
 
-	<div id="cal">
-		<div class="nomCalendrier row">
-			<div class="col-sm-6 col-6">
-				<center>
-					<img src="content/logo_ufrst.png" alt="Logo UFC" class="imgUFC">
-				</center>
-			</div>
-			<div class="col-sm-6 col-6">
-				<center>
+	<div class="nomCalendrier row">
+		<div class="col-sm-6 col-6">
+			<center>
+				<img src="content/logo_ufrst.png" alt="Logo UFC" class="imgUFC">
+			</center>
+		</div>
+		<div class="col-sm-6 col-6">
+			<center>
+				<div id="top_pdf">
 					<h2> Calendrier prévisionnel</h2>
 					<div class="col-sm-12 col-12">
 						<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" size="40" value="" />
@@ -77,8 +77,8 @@
 					<div class="col-sm-12 col-12">
 						<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" size="40" />
 					</div>
-				</center>
-			</div>
+				</div>
+			</center>
 		</div>
 	</div>
 	<div class="row">
@@ -86,11 +86,57 @@
 			<h4 class="MsgPrecaution" > Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.</h4>
 		</div>
 	</div>
-	<div class="row" id="to_pdf">
-		<div class="col" id="div_calendar">
+	<div class="row">
+		<div class="col">
 			<div id="calendar"></div>
 		</div>
 	</div>
+
+	<div id="bottom_pdf">
+		<div id="calculPart">
+			<div class="">
+				<table class="resume">
+					<tr>
+						<td class="tdLabel"><label>Catégories</label></td>
+						<td class="tdLabel"><label>Nombre d'heures totales</label></td>
+						<td class="tdDesc"></td>
+					</tr>
+					<tr>
+						<td class="tdLabel c1"><label>Cours<br>+<br>Projets tutorés</label></td>
+						<td class="tdInput"><input type="text" id="heureCoursProjet" size="3" value="0"/></td>
+						<td class="tdDesc"><p>Cours répartis sur <input type="text" id="semaineCours" size="3" value="0"/> semaines.</p><p>Projets tutorés répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
+					</tr>
+					<tr>
+						<td class="tdLabel c3"><label>Examen </label></td>
+						<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
+						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="text" id="semaineDate" size="15" value="00 / 00 / 0000"/> ou selon la date de fin du contrat.</p></td>
+					</tr>
+					<tr>
+						<td class="tdLabel c4"><label>Entreprise<br>+<br>Projets tutorés</label></td>
+						<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
+						<td class="tdDesc"><p><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
+					</tr>
+					<tr>
+						<td class="tdLabel c6"><label>Vacances universitaires</label></td>
+						<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
+						<td class="tdDesc"><p>Les salariés en <strong>contrat de professionnalisation </strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<footer>
+			<div class="row">
+				<div class="col-sm-6 offset-sm-3 adresse">
+					<h3>Université de Franche-Comté - Service Formation Continue</h3><br>
+					<p>Maison des étudiants - 36 A avenue de l’Observatoire - 25030 BESANCON Cedex </p>
+					<p> Tél: 03 81 66 61 21 - Fax: 03 81 66 61 02 </p>
+					<a href="mailto:formation-continue@univ-fcomte.fr">formation-continue@univ-fcomte.fr</a> - <a href="http://formation-continue.univ-fcomte.fr">http://formation-continue.univ-fcomte.fr</a>
+				</div>
+			</div>
+		</footer>
+	</div>
+
 
 	<div id="more_popup" class="container-fluid" style="display: none;">
 		<span class="to_center"></span>
@@ -137,7 +183,7 @@
 			<div class="row">
 				<div class="col">
 					<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
-					  <p>Faites glisser ici le fichier du calendrier à importer ...</p>
+						<p>Faites glisser ici le fichier du calendrier à importer ...</p>
 					</div>
 				</div>
 			</div>
@@ -153,49 +199,6 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="calculPart">
-		<div class="">
-			<table class="resume">
-				<tr>
-					<td class="tdLabel"><label>Catégories</label></td>
-					<td class="tdLabel"><label>Nombre d'heures totales</label></td>
-					<td class="tdDesc"></td>
-				</tr>
-				<tr>
-					<td class="tdLabel c1"><label>Cours<br>+<br>Projets tutorés</label></td>
-					<td class="tdInput"><input type="text" id="heureCoursProjet" size="3" value="0"/></td>
-					<td class="tdDesc"><p>Cours répartis sur <input type="text" id="semaineCours" size="3" value="0"/> semaines.</p><p>Projets tutorés répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
-				</tr>
-				<tr>
-					<td class="tdLabel c3"><label>Examen </label></td>
-					<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
-					<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="text" id="semaineDate" size="15" value="00 / 00 / 0000"/> ou selon la date de fin du contrat.</p></td>
-				</tr>
-				<tr>
-					<td class="tdLabel c4"><label>Entreprise<br>+<br>Projets tutorés</label></td>
-					<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
-					<td class="tdDesc"><p><strong> Si contrat de professionnalisation</strong>: le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
-				</tr>
-				<tr>
-					<td class="tdLabel c6"><label>Vacances universitaires</label></td>
-					<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
-					<td class="tdDesc"><p>Les salariés en <strong>contrat de professionnalisation </strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-
-	<footer>
-		<div class="row">
-			<div class="col-sm-6 offset-sm-3 adresse">
-				<h3>Université de Franche-Comté - Service Formation Continue</h3><br>
-				<p>Maison des étudiants - 36 A avenue de l’Observatoire - 25030 BESANCON Cedex </p>
-				<p> Tél: 03 81 66 61 21 - Fax: 03 81 66 61 02 </p>
-				<a href="mailto:formation-continue@univ-fcomte.fr">formation-continue@univ-fcomte.fr</a> - <a href="http://formation-continue.univ-fcomte.fr">http://formation-continue.univ-fcomte.fr</a>
-			</div>
-		</div>
-	</footer>
 
 	<!-- ***** SCRIPS ***** -->
 

@@ -11,9 +11,14 @@ var started = true;
 var starting = false;
 /*-------------------------------- import/export --------------------------------------*/
 
+function exportThis() {
+  let select = document.getElementById("selectCal");
+  exportCalendar(select.selectedIndex);
+}
+
 function exportCalendar(id) {
   let blob = JSON.stringify(calendars[id]);
-  let filename = "export_"+calendars[id][0]; //replace spaces !!
+  let filename = "export_"+calendars[id][0]; //replace spaces TODO!!
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
   elem.download = filename;
@@ -69,20 +74,20 @@ function dropHandler(ev) {
             let contents = e.target.result;
             importCalendar(contents);
           }
+          r.readAsText(file);
+          alert("Calendrier importé.")
         }
-        r.readAsText(file);
       } else {
         alert("Échec de l'import du calendrier.");
       }
     }
+  } else {
+    // Use DataTransfer interface to access the file(s)
+    for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+      console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+      console.log("LOST datatransfer");
+    }
   }
-} else {
-  // Use DataTransfer interface to access the file(s)
-  for (var i = 0; i < ev.dataTransfer.files.length; i++) {
-    console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
-    console.log("LOST datatransfer");
-  }
-}
 }
 
 function dragOverHandler(ev) {
@@ -355,10 +360,10 @@ $('#selectCal').click(function() {
   save();
 });
 
-function save(){ // ajout decalage des calendriers quand espace vide TODO
+function save(){
   let select = document.getElementById('selectCal');
   let choice = select.selectedIndex;
-
+  console.log(calendars);
   // Get the name.
   let title = document.getElementById('nomForm').value;
 

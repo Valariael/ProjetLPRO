@@ -22,7 +22,6 @@ label {
 
 }
 
-
 .row{
     margin-right: 0px;
     margin-left: 0px;
@@ -110,9 +109,23 @@ label {
 	font-weight: bold;
 }
 #drop_zone {
-  border: 5px solid blue;
-  width:  200px;
-  height: 100px;
+  background-color: #cceeff;
+  outline: 2px dashed rgba(0, 51, 77, 0.5);
+  outline-offset: -10px;
+	border-radius: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+  width: 400px;
+  height: 150px;
+}
+#drop_zone p {
+	width: 300px;
+	margin: auto;
+	top: 20%;
+	position: relative;
+	font-weight: bold;
+	color: rgba(0, 51, 77, 0.7);
 }
 
 /*------------------------------------ titre ------------------------------------*/
@@ -239,6 +252,11 @@ table .day{
 	position:relative;
 	color:#595959;
 	font-size:13pt;
+	min-width: 100px; /* a modifier quand division TODO */
+}
+
+table table td {
+	max-height: 25px;
 }
 
 .wrapCalendar{
@@ -467,11 +485,13 @@ table .day{
 	margin-bottom: 25px;
 }
 
-.plus-lg {
-	font-size: 20pt;
-	height: 50px;
-	width: 50px;
-	text-align: center;
+#expCal, #regCal{
+	width: 40px;
+	height: 40px;
+}
+
+.btnSettings {
+	margin-top:15px;
 }
 
 .btnPlus {
