@@ -23,8 +23,16 @@ $(document).mousedown(function() {
 /*----------------------------------- Fill Categories ----------------------------*/
 
 function fillCat (element){
+  if($(element).hasClass("ferieCat") && colorClass == "libreCat") {
+      $(element).siblings("td.day").removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
+      $(element).siblings("td.day").addClass(colorClass);
+  }
 	$(element).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
-	$(element).addClass(colorClass);
+  if(colorClass == "ferieCat") {
+    $(element).siblings("td.day").removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
+    $(element).siblings("td.day").addClass(colorClass);
+  }
+  $(element).addClass(colorClass);
 }
 
 function eventCategories(){
