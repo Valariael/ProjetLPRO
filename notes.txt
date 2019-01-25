@@ -4,7 +4,7 @@
 
 // mettre les jours feries a la creation du calendrier
 
-changer titre : selectCal.options.edit option selected
+//changer titre : selectCal.options.edit option selected
                 calendars[index][0]
 NAVIGATEUR RECOMMANDE : chrome
 
@@ -15,9 +15,9 @@ pop up amelirations
 //bug jours
 
 popup : vacances : default date in agenda when selecting set to calendar start
-popup : set titre + empty nom formation quand creation
-schema de donnees : add start + end dates
-popup : set start + end
+//popup : set titre + empty nom formation quand creation
+schema de donnees : add start date
+popup : set start
 calendars order in select ?
 //export + import ?
 pdf reformat
@@ -30,11 +30,14 @@ bug suppression de tous les calendriers
 animation chargement quand generation pdf
 //drag n drop
 
-1 tag pour canvas autour de calendriers +
-1 tag autour de resume et coordonnees +
+enlever totalement la case jour ferie
+//clique ravec ferie > toute la journee ferie
+
+//1 tag pour canvas autour de calendriers +
+//1 tag autour de resume et coordonnees +
 > genPDF : ajout titre, nom formation et logo manuellement, pareil pour les autre slogos s'ils spnt necessaires
 
-COLONNES EN PDF = PAS BON va du double au simple
+//COLONNES EN PDF = PAS BON va du double au simple: fixed minwidth
 
 TODO:
 

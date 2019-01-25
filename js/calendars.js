@@ -8,7 +8,6 @@ var calendars = new Array();
 // Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap]]
 
 var started = true;
-var starting = false;
 /*-------------------------------- import/export --------------------------------------*/
 
 function exportThis() {
@@ -47,7 +46,7 @@ function importCalendar(data) {
   display(index);
   save();
 
-  started = false;
+  started = true;
 }
 
 /*---------------------------------- drag n drop --------------------------------------*/
@@ -97,56 +96,58 @@ function dragOverHandler(ev) {
 
 /*-------------------------------- personalization ------------------------------------*/
 
-function displayPopup() { // remanier pour titre, passer boolean en param : 2 fonctions
+function displayPopup(start) {
   document.getElementById("erreur_form").style.display = "none";
-  var select = document.getElementById('selectCal');
-  var choice = select.selectedIndex;
-  var compoAndPlace = document.getElementById('compoAndPlace').value;
-  var dataCategories = createDataCategories();
-  var dataSchedules = createDataSchedules();
-  var hourSchedules = createHourSchedules();
-  var weekSchedules = createWeekSchedules();
-  var nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
+  let select = document.getElementById('selectCal');
+  let choice = select.selectedIndex;
   let popup = document.getElementById("more_popup");
-  if(starting) {
-
-    if(isNaN(nbAnnees)) {
-      editCalendarArray(parseInt(select.options[choice].value, 10), calendars[parseInt(select.options[choice].value, 10)][0], compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, 1);
-    } else {
-      editCalendarArray(parseInt(select.options[choice].value, 10), calendars[parseInt(select.options[choice].value, 10)][0], compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, nbAnnees);
-    }
-
-    displayCalendar(currentYear, nbAnnees);
-    save();
-  }
-  if(popup.style.display == "none") {
-    popup.style.display = "block";
-    document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
-  } else {
-    document.getElementById('nomForm').value = document.getElementById("titreInput").value;
-    editCalendarArray(document.getElementById("titreInput").value, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, nbAnnees);
-    save();
-    popup.style.display = "none";
-  }
-
   let labelDates = document.getElementById("label_dates");
-  // let champsDate = document.getElementsByClassName("champ_date");
   let champAnnees = document.getElementById("champ_annees");
-  labelDates.style.display = "none";
-  // champsDate[0].style.display = "none";
-  // champsDate[1].style.display = "none";
-  champAnnees.style.display = "none";
-  if(!started) {
+  if(start) {
+    document.getElementById("titreInput").value = "";
     labelDates.style.display = "inherit";
-    // champsDate[0].style.display = "block";
-    // champsDate[1].style.display = "block";
     champAnnees.style.display = "block";
-    starting = true;
+    champAnnees.value = "";
+  } else {
+    document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
+    labelDates.style.display = "none";
+    champAnnees.style.display = "none";
+    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][6];
   }
+  popup.style.display = "block";
 
   let list = document.getElementById("liste_vacances");
   list.innerHTML = "";
-  addVacancesItem();
+  if(start) {
+    addVacancesItem();
+  }
+}
+
+function validatePopup() { // TODO setter nbAnnees
+  let nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
+  let popup = document.getElementById("more_popup");
+  let select = document.getElementById('selectCal');
+  let choice = select.selectedIndex;
+  if(isNaN(nbAnnees)) {
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], 1);
+  } else {
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], nbAnnees);
+  }
+
+  if(started) {
+    save();
+    display(select.options[choice].value);
+  } else {
+    displayCalendar(currentYear, nbAnnees);
+    started = true;
+    save();
+  }
+  popup.style.display = "none";
+}
+
+function closePopup() {
+  let popup = document.getElementById("more_popup");
+  popup.style.display = "none";
 }
 
 function addVacancesItem() {
@@ -219,7 +220,7 @@ function validateForm() {
     }
   } else {
     putVacances();
-    displayPopup();
+    validatePopup();
   }
 }
 
@@ -331,6 +332,13 @@ $( document ).ready(function() {
     console.log(data);
     calendars = JSON.parse(data);
 
+    // Suppression des éventuels null apparut dans la liste des calendriers (BUGFIX)
+    for (let i = calendars.length - 1; i >= 0; i--) {
+      if(calendars[i] == null) {
+        calendars.splice(i, 1);
+      }
+    }
+
     let select = document.getElementById('selectCal');
 
     // Add the option to the select.
@@ -398,7 +406,7 @@ function save(){
 function addCalendarBtn() {
 
   let title = "Calendrier vierge " + currentYear;
-
+  document.getElementById("nomForm").value = title;
   // Set the id calendar
   idCalendar = calendars.length;
 
@@ -412,14 +420,13 @@ function addCalendarBtn() {
 
   // Add the option to the global table "calendars".
   addCalendarToArray(title, 1);
-  calendars[calendars.length-1][2] = title;
 
   // Display the new calendar.
   displayCalendar(currentYear, 1);
   save(); // add displayAddedCalendar
 
   started = false;
-  displayPopup();
+  displayPopup(true);
 }
 
 function delCalendarBtn(){
@@ -551,11 +558,12 @@ function createDataSchedules(){
     }
   });
 
-  return dataSchedules = new Array(ComptCours+ComptProjCours, ComptExam, ComptEntrep+ComptProjEntrep, ComptVac);
+  return dataSchedules = new Array(ComptCours, ComptProjCours, ComptExam, ComptEntrep+ComptProjEntrep, ComptVac);
 }
 
 function createHourSchedules(){
 
+    let heureCours = document.getElementById('heureCours').value;
   let heureCoursProjet = document.getElementById('heureCoursProjet').value;
   let heureExamen = document.getElementById('heureExamen').value;
   let heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
@@ -581,6 +589,7 @@ function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
   document.getElementById('journeeEntrepriseProjet').value = daySchedules[2];
   document.getElementById('journeeVacance').value = daySchedules[3];*/ //unused
 
+    document.getElementById('heureCours').value = hourSchedules[0];
   document.getElementById('heureCoursProjet').value = hourSchedules[0];
   document.getElementById('heureExamen').value = hourSchedules[1];
   document.getElementById('heureEntrepriseProjet').value = hourSchedules[2];

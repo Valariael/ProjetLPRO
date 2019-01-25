@@ -2,9 +2,33 @@
 // Generate a PDF.
 
 function genPDF() {
+  let spinner = document.createElement("div");
+  spinner.innerHTML = "<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>";
+  spinner.className = "lds-roller";
+  spinner.id = "loadingAnimation";
+  spinner.style.position = "fixed";
+  spinner.style.top = "50%";
+  spinner.style.left = "50%";
+  spinner.style.width = "100px";
+  spinner.style.height = "100px";
+  document.body.appendChild(spinner);
 
   // set size manually to mms for each element then html2canvas
-
+  var descs = document.getElementsByClassName("tdDesc");
+  for(let d of descs) {
+    d.style.padding = "4px";
+    let ps = d.getElementsByTagName("p");
+    for(let p of ps) {
+      p.style.padding = "4px";
+      p.style.margin = "3px";
+    }
+  }
+  var labels = document.getElementsByClassName("tdLabel");
+  for(let l of labels) {
+    l.style.padding = "4px";
+  }
+  var resume = document.getElementsByClassName("resume")[0];
+  resume.style.marginBottom = "15px";
   var calendar = document.getElementById('calendar');
   calendar.style.height = "2000px";
   calendar.style.width = "2000px";
@@ -85,7 +109,7 @@ function genPDF() {
         //Ajout des éléments au PDF
         doc.addImage(imgDataTop, 'PNG', 30, 4, widthTop, heightTop);
         doc.addImage(imgDataCalendrier, 'PNG', 5, 20, width-10, height);
-        doc.addImage(imgDataBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+30, widthBottom, heightBottom);
+        doc.addImage(imgDataBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
         doc.output("save", "Calendrier "+title+".pdf");
 
         //Réinitialisation du style
@@ -93,12 +117,27 @@ function genPDF() {
           el.style.fontSize = "";
           el.style.fontWeight = "";
         });
+        for(let d of descs) {
+          d.style.padding = "";
+          let ps = d.getElementsByTagName("p");
+          for(let p of ps) {
+            p.style.padding = "";
+            p.style.margin = "";
+          }
+        }
+        var labels = document.getElementsByClassName("tdLabel");
+        for(let l of labels) {
+          l.style.padding = "";
+        }
+        resume.style.marginBottom = "";
         calendar.style.height = "";
         calendar.style.width = "";
         top_pdf.style.height = "";
         top_pdf.style.width = "";
         bottom_pdf.style.height = "";
         bottom_pdf.style.width = "";
+
+        document.body.removeChild(spinner);
       });
     });
   });

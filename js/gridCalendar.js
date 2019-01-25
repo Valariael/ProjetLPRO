@@ -36,11 +36,11 @@ function getCalendar(year, month){
 		result	+= "<tr><td>" + days[table[i%7]-1] + "</td><td>" + (i+1) + "</td>";
 
 		if(publicHoliday == 1){
-			result += "<td class=\"day ferieCat\">Férié</td></tr>"
+			result += "<td class=\"day ferieCat\">Férié</td><td class=\"day ferieCat\"></td></tr>"
 		}else if(table[i%7] == 7){
-			result += "<td class=\"day ferieCat\"></td></tr>";
+			result += "<td class=\"day ferieCat\"></td><td class=\"day ferieCat\"></td></tr>";
 		}else{
-			result += "<td class=\"day libreCat\"></td></tr>";
+			result += "<td class=\"day libreCat\"></td><td class=\"day libreCat\"></td></tr>";
 		}
 
 	}
