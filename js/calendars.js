@@ -17,7 +17,8 @@ function exportThis() {
 
 function exportCalendar(id) {
   let blob = JSON.stringify(calendars[id]);
-  let filename = "export_"+calendars[id][0]; //replace spaces TODO!!
+  let filename = "export_"+calendars[id][0];
+  filename = filename.replace(" ", "_");
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
   elem.download = filename;
@@ -43,6 +44,54 @@ function importCalendar(data) {
   $("#selectCal").val(index); // chanegr dates en années et creer les calendriers
 
   // Display the imported calendar.
+  display(index);
+  save();
+
+  started = true;
+}
+
+function exportAll() {
+  // Suppression des éventuels null apparut dans la liste des calendriers (BUGFIX)
+  for (let i = calendars.length - 1; i >= 0; i--) {
+    if(calendars[i] == null) {
+      calendars.splice(i, 1);
+    }
+  }
+
+  let date = new Date();
+  let blob = JSON.stringify(calendars);
+  let filename = "export_complet_"+toLocaleDateString('fr-FR');
+  filename = filename.replace("/", "_");
+  let elem = window.document.createElement('a');
+  elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
+  elem.download = filename;
+  document.body.appendChild(elem);
+  elem.click();
+  document.body.removeChild(elem);
+}
+
+function importAll(override) {
+  let cal = JSON.parse(decodeURIComponent(data));
+  let index;
+  if(override) {
+    index = 0;
+    calendars = cal;
+  } else {
+    index = calendars.length;
+    calendars = calendars.concat(cal);
+  }
+
+  let select = document.getElementById('selectCal');
+  let newOption;
+  for(let c of cal) {
+      newOption = new Option (c[0], index);
+      select.options.add(newOption);
+      index++;
+  }
+
+  index--;
+  $("#selectCal").val(index); // chanegr dates en années et creer les calendriers
+
   display(index);
   save();
 
