@@ -25,7 +25,7 @@
 					<label class="text-nowrap lblCat"> Sélectionner, créer ou supprimer un calendrier</label>
 					<div class="CalendarParam">
 						<div class="styled-select">
-							<select id="selectCal" onchange="displayData(event)"></select>
+							<select id="selectCal" onchange="displayData()"></select>
 						</div>
 						<a onclick="addCalendarBtn();" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
 						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer le calendrier"></a>
@@ -36,7 +36,7 @@
 				<div class="col-sm-4 col-12 categories">
 					<label class="text-nowrap lblCat"> Sélectionner une catégorie</label>
 					<select id="selectid" class="selectpicker">
-						<option class="c1" value="1" id="1">Cours</option>
+						<option class="c1" value="1" id="1">Cours</option><!--TODO inconsistent id-->
 						<option class="c2" value="2" id="2">Projet tut. Université</option>
 						<option class="c3" value="3" id="3">Examen</option>
 						<option class="c4" value="4" id="4">Entreprise</option>
@@ -188,6 +188,7 @@
 			<div class="row">
 				<div class="col">
 					<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+						<a id="btn_import" class="btn btn-info">Sélectionner un fichier</a><input type="file" id="file_input" onchange="importFile();"/>
 						<p>Faites glisser ici le fichier du calendrier à importer ...</p>
 					</div>
 				</div>

@@ -53,6 +53,8 @@ function getCalendar(year, month){
 
 	result += "</tbody></table>";
 
+	result += "<table id=\"recapMonth" + (month-1) + "\" class=\"recap\"><tr><td class=\"recapCours\">0</td><td class=\"recapProjetTutUniv\">0</td><td class=\"recapProjetTutEts\">0</td><td class=\"recapEntreprise\">0</td></tr></table>";
+
 	return result;
 }
 

@@ -27,6 +27,22 @@ function exportCalendar(id) {
   document.body.removeChild(elem);
 }
 
+function importFile() {
+  let file = document.getElementById("file_input").files[0];
+  if (file) {
+    let r = new FileReader();
+    r.onload = function(e) {
+      let contents = e.target.result;
+      importCalendar(contents);
+    }
+    r.readAsText(file);
+    alert("Calendrier importé.");
+  } else {
+    alert("Échec de l'importation.");
+  }
+  document.getElementById("file_input").value = "";
+}
+
 function importCalendar(data) {
   let cal = JSON.parse(decodeURIComponent(data));
   calendars.push(cal);
@@ -101,8 +117,6 @@ function importAll(override) {
 /*---------------------------------- drag n drop --------------------------------------*/
 
 function dropHandler(ev) {
-  console.log('File(s) dropped');
-
   // Prevent default behavior (Prevent file from being opened)
   ev.preventDefault();
 
@@ -123,7 +137,7 @@ function dropHandler(ev) {
             importCalendar(contents);
           }
           r.readAsText(file);
-          alert("Calendrier importé.")
+          alert("Calendrier importé.");
         }
       } else {
         alert("Échec de l'import du calendrier.");
@@ -142,6 +156,11 @@ function dragOverHandler(ev) {
   // Prevent default behavior (Prevent file from being opened)
   ev.preventDefault();
 }
+
+$("#btn_import").click(function(e){
+       e.preventDefault();
+       $("#file_input").trigger('click');
+});
 
 /*-------------------------------- personalization ------------------------------------*/
 
@@ -182,6 +201,8 @@ function validatePopup() { // TODO setter nbAnnees
   } else {
     editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], nbAnnees);
   }
+
+  if(document.getElementById("titreInput").value != document.getElementById("nomForm").value) document.getElementById("nomForm").value = document.getElementById("titreInput").value;
 
   if(started) {
     save();
@@ -561,14 +582,20 @@ function setDataCategories(dataCategories){
   $('.day').each(function() {
     let element = dataCategories.shift();
 
-    let date = ""; // prendre la date de debut du cal et incrementer chaque jour,
-    // check que la date est dans les periodes de vacances
     switch (element) {
-      case 0:$(this).addClass('coursCat');break;
-      case 1:$(this).addClass('projetTutCoursCat');break;
-      case 2:$(this).addClass('examenCat');break;
-      case 3:$(this).addClass('entrepriseCat');break;
-      case 4:$(this).addClass('projetTutEntrepriseCat');break;
+      case 0: $(this).addClass('coursCat');
+              $(this).closest('table').next('table').find('.recapCours').html(""+(parseInt($(this).closest('table').next('table').find('.recapCours').html())+4));
+              break;
+      case 1: $(this).addClass('projetTutCoursCat');
+              $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+4));
+              break;
+      case 2: $(this).addClass('examenCat');break;
+      case 3: $(this).addClass('entrepriseCat');
+              $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(this).closest('table').next('table').find('.recapEntreprise').html())+4));
+              break;
+      case 4: $(this).addClass('projetTutEntrepriseCat');
+              $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutEts').html())+4));
+              break;
       case 5:$(this).addClass('vacanceCat');break;
       case 6:$(this).addClass('ferieCat');break;
       default:$(this).addClass('libreCat');break;
@@ -655,40 +682,38 @@ function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
 /*-------------------------------- Display functions ------------------------------------*/
 
 // From the select
-function displayData(event){
+function displayData(){
   let select = document.getElementById('selectCal');
-  let index = event.target.selectedIndex;
+  let index = select.selectedIndex;
   display(parseInt(select.options[index].value));
   schedulesEvent();
 }
 
 function display(value){
   console.log("display id : " + value);
-  console.log("ici");
-  let index = value;
 
   // The name
-  $("#nomForm").val(calendars[index][0]);
+  $("#nomForm").val(calendars[value][0]);
 
   // The component and the place
-  $("#compoAndPlace").val(calendars[index][1]);
+  $("#compoAndPlace").val(calendars[value][1]);
 
   // The categories
   //$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
 
-  if(calendars[index][2] == null || calendars[index][2] == "" || calendars[index][2] == undefined){
-    displayCalendar(currentYear, calendars[index][6]);
+  if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
+    displayCalendar(currentYear, calendars[value][6]);
   }else{
-    displayCalendar(currentYear, calendars[index][6]);
+    displayCalendar(currentYear, calendars[value][6]);
     // The table of categories is duplicated to avoid modifying the orginial table.
-    let duplicatedCalendar1 = calendars[index][2].slice(0);
+    let duplicatedCalendar1 = calendars[value][2].slice(0);
     setDataCategories(duplicatedCalendar1);
   }
 
   // The recap of schedules
-  if(calendars[index][3] == null || calendars[index][4] == null || calendars[index][5] == null){
+  if(calendars[value][3] == null || calendars[value][4] == null || calendars[value][5] == null){
     // code here ..
   }else{
-    setDataSchedules(calendars[index][3], calendars[index][4], calendars[index][5]);
+    setDataSchedules(calendars[value][3], calendars[value][4], calendars[value][5]);
   }
 }

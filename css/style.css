@@ -27,7 +27,7 @@ label {
     margin-left: 0px;
 }
 
-/* POPUP CONNEXION **************************************************/
+/* POPUP **************************************************/
 
 #more_popup{
     background:rgba(0,0,0,.4);
@@ -126,6 +126,10 @@ label {
 	position: relative;
 	font-weight: bold;
 	color: rgba(0, 51, 77, 0.7);
+}
+
+#file_input {
+	opacity: 0;
 }
 
 /*------------------------------------ spinner loading animation -----------------*/
@@ -279,7 +283,7 @@ label {
 }
 
 #labelJEntreprise{
-  background: #D770AD;
+  background: #d9b38c;
 }
 
 #labelJProjetTutEts{
@@ -380,7 +384,7 @@ table table td {
 }
 
 .entrepriseCat{
-  background: #D770AD;
+  background: #d9b38c;
 }
 
 .projetTutEntrepriseCat{
@@ -520,7 +524,7 @@ table table td {
 .dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #f5af24;}
 
 /* Entreprise*/
-.c4{background: #D770AD;}
+.c4{background: #d9b38c;}
  .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #cd4c99;}
 
 /* Projet tut Entreprise */
@@ -542,6 +546,10 @@ table table td {
 .btnCategorie{
 	margin-top:0;
 	text-align:center;
+}
+
+.dropdown-item.active {
+	border: dashed 3px rgba(217, 217, 217, 0.5);
 }
 
 .styled-select select{
@@ -587,6 +595,19 @@ table table td {
 }
 
 /*-------------------------------------- Calcul --------------------------------------*/
+
+.recapCours {
+	background: #4FC1E9;
+}
+.recapProjetTutUniv {
+	background: #37BC9B;
+}
+.recapProjetTutEts {
+	background: #AC92EC;
+}
+.recapEntreprise {
+	background: #d9b38c;
+}
 
 .resume{
 	color: black;
