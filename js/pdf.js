@@ -13,7 +13,6 @@ function genPDF() {
   spinner.style.height = "100px";
   document.body.appendChild(spinner);
 
-  // set size manually to mms for each element then html2canvas
   var descs = document.getElementsByClassName("tdDesc");
   for(let d of descs) {
     d.style.padding = "4px";
@@ -29,6 +28,17 @@ function genPDF() {
   }
   var resume = document.getElementsByClassName("resume")[0];
   resume.style.marginBottom = "15px";
+  var recaps = document.getElementsByClassName("recap");
+  for(let r of recaps) {
+    r.style.display = "none";
+  }
+  var secondTables = document.getElementsByClassName("secondTable");
+  for(let s of secondTables) {
+    s.style.marginTop = "20px";
+  }
+  var btnResume = document.getElementById("btnResume");
+  btnResume.style.display = "none";
+
   var calendar = document.getElementById('calendar');
   calendar.style.height = "2000px";
   calendar.style.width = "2000px";
@@ -130,6 +140,14 @@ function genPDF() {
           l.style.padding = "";
         }
         resume.style.marginBottom = "";
+        for(let r of recaps) {
+          r.style.display = "table";
+        }
+        for(let s of secondTables) {
+          s.style.marginTop = "";
+        }
+        btnResume.style.display = "block";
+
         calendar.style.height = "";
         calendar.style.width = "";
         top_pdf.style.height = "";

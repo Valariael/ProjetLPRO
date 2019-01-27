@@ -96,7 +96,7 @@ label {
 	position: relative;
 	left: 23%;
 }
-#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances {
+#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances, #label_contrat {
 	margin-top: 20px;
 }
 #champ_annees {
@@ -127,7 +127,10 @@ label {
 	font-weight: bold;
 	color: rgba(0, 51, 77, 0.7);
 }
-
+#radio_pro, #radio_nonpro {
+	height: 30px;
+	width: 30px;
+}
 #file_input {
 	opacity: 0;
 }
@@ -259,6 +262,13 @@ label {
 
 /*------------------------------------ Calendrier ------------------------------------*/
 
+#btnResume {
+	margin-left: 10px;
+	height: 60px;
+	width: 120px;
+	position: absolute;
+}
+
 #resume {
 	margin-top: 40px;
 	margin-right: 100px;
@@ -267,7 +277,7 @@ label {
 }
 
 #resume td {
-	min-width: 50px;
+	min-width: 45px;
 }
 
 #labelJCours{
@@ -283,7 +293,7 @@ label {
 }
 
 #labelJEntreprise{
-  background: #d9b38c;
+  background: #cc9966;
 }
 
 #labelJProjetTutEts{
@@ -291,7 +301,7 @@ label {
 }
 
 #labelJVacances{
-  background: #ff8533;
+  background: #ff751a;
 }
 
 #calendar{
@@ -384,7 +394,7 @@ table table td {
 }
 
 .entrepriseCat{
-  background: #d9b38c;
+  background: #cc9966;
 }
 
 .projetTutEntrepriseCat{
@@ -392,7 +402,7 @@ table table td {
 }
 
 .vacanceCat{
-  background: #ff8533;
+  background: #ff751a;
 }
 
 .ferieCat{
@@ -416,7 +426,7 @@ table table td {
 }
 
 .entrepriseCat:hover{
-  background: #cd4c99;
+  background: #bf8040;
 }
 
 .projetTutEntrepriseCat:hover{
@@ -524,15 +534,15 @@ table table td {
 .dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #f5af24;}
 
 /* Entreprise*/
-.c4{background: #d9b38c;}
- .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #cd4c99;}
+.c4{background: #cc9966;}
+ .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #bf8040;}
 
 /* Projet tut Entreprise */
 .c5{background: #AC92EC;}
 .dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #8b67e4;}
 
 /* Vacances*/
-.c6{background: #ff8533;}
+.c6{background: #ff751a;}
 .dropdown-menu>li>a.c6:focus, .dropdown-menu>li>a.c6:hover{background-color: #e65c00;}
 
 /* Ferie */
@@ -581,12 +591,23 @@ table table td {
 }
 
 #expCal, #regCal{
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
+}
+
+#btn_import {
+	left: 20%;
+	top: 35px;
+	position: absolute;
+}
+
+#uploadCal{
+	width: 15px;
+	height: 15px;
 }
 
 .btnSettings {
-	margin-top:15px;
+	margin-top: 15px;
 }
 
 .btnPlus {
@@ -606,7 +627,7 @@ table table td {
 	background: #AC92EC;
 }
 .recapEntreprise {
-	background: #d9b38c;
+	background: #cc9966;
 }
 
 .resume{

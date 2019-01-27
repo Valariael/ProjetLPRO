@@ -5,7 +5,7 @@ var currentDate = new Date();
 var currentYear = currentDate.getFullYear();
 var calendars = new Array();
 
-// Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap]]
+// Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap],nbAnnees, contratPro, anneeDebut]
 
 var started = true;
 /*-------------------------------- import/export --------------------------------------*/
@@ -18,7 +18,7 @@ function exportThis() {
 function exportCalendar(id) {
   let blob = JSON.stringify(calendars[id]);
   let filename = "export_"+calendars[id][0];
-  filename = filename.replace(" ", "_");
+  filename = filename.replace(/[`\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "_");
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
   elem.download = filename;
@@ -100,9 +100,9 @@ function importAll(override) {
   let select = document.getElementById('selectCal');
   let newOption;
   for(let c of cal) {
-      newOption = new Option (c[0], index);
-      select.options.add(newOption);
-      index++;
+    newOption = new Option (c[0], index);
+    select.options.add(newOption);
+    index++;
   }
 
   index--;
@@ -158,8 +158,8 @@ function dragOverHandler(ev) {
 }
 
 $("#btn_import").click(function(e){
-       e.preventDefault();
-       $("#file_input").trigger('click');
+  e.preventDefault();
+  $("#file_input").trigger('click');
 });
 
 /*-------------------------------- personalization ------------------------------------*/
@@ -171,35 +171,71 @@ function displayPopup(start) {
   let popup = document.getElementById("more_popup");
   let labelDates = document.getElementById("label_dates");
   let champAnnees = document.getElementById("champ_annees");
+  let fermer = document.getElementById("fermer_popup");
+  let importer = document.getElementById("drop_zone");
+  let contratPro = document.getElementById("contrat_pro");
+
   if(start) {
+    document.getElementById("titre_popup").innerHTML = "Quelques informations avant de commencer :";
     document.getElementById("titreInput").value = "";
+    if(calendars.length > 1) fermer.style.display = "none"; //QUICK FIX
+    importer.style.display = "none";
     labelDates.style.display = "inherit";
     champAnnees.style.display = "block";
+    contratPro.style.display = "block";
+    document.getElementById("radio_pro").checked = false;
+    document.getElementById("radio_nonpro").checked = false;
     champAnnees.value = "";
   } else {
+    document.getElementById("titre_popup").innerHTML = "Paramètres";
     document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
+    fermer.style.display = "inline-block";
+    importer.style.display = "block";
     labelDates.style.display = "none";
     champAnnees.style.display = "none";
+    contratPro.style.display = "none";
     champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][6];
   }
-  popup.style.display = "block";
 
   let list = document.getElementById("liste_vacances");
   list.innerHTML = "";
   if(start) {
     addVacancesItem();
   }
+
+  popup.style.display = "block";
 }
 
-function validatePopup() { // TODO setter nbAnnees
+function validatePopup() {
   let nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
   let popup = document.getElementById("more_popup");
   let select = document.getElementById('selectCal');
   let choice = select.selectedIndex;
+  let radios = document.getElementsByName("contratInput");
+  let contratPro = null;
+  for(let r of radios) {
+    if(r.checked) {
+      switch(r.value) {
+        case "oui":
+        contratPro = true;
+        break;
+        case "non":
+        contratPro = false;
+        break;
+      }
+    }
+  }
+
   if(isNaN(nbAnnees)) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], 1);
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], 1, calendars[parseInt(select.options[choice].value, 10)][7]);
+    if(calendars[parseInt(select.options[choice].value, 10)][7] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][7] = contratPro;
+    }
   } else {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], nbAnnees);
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][7]);
+    if(calendars[parseInt(select.options[choice].value, 10)][7] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][7] = contratPro;
+    }
   }
 
   if(document.getElementById("titreInput").value != document.getElementById("nomForm").value) document.getElementById("nomForm").value = document.getElementById("titreInput").value;
@@ -211,6 +247,14 @@ function validatePopup() { // TODO setter nbAnnees
     displayCalendar(currentYear, nbAnnees);
     started = true;
     save();
+    let infosPro = document.getElementsByClassName("contrat_pro_info");
+    for(let i of infosPro) {
+      if(contratPro) {
+        i.style.display = "block";
+      } else {
+        i.style.display = "none";
+      }
+    }
   }
   popup.style.display = "none";
 }
@@ -249,11 +293,17 @@ function validateForm() {
   let finVac = "", debutVac = "";
   let champAnnees = document.getElementById("champ_annees").value;
   let champTitre = document.getElementById("titreInput");
+  let radios = document.getElementsByName("contratInput");
   // let dateDebut = document.getElementById("dateDebut").value;
   // let dateFin = document.getElementById("dateFin").value;
   //console.log(champAnnees);
 
   if(!started) {
+    let divContrat = "contrat_pro";
+    for(let r of radios) {
+      if(r.checked) divContrat = null;
+    }
+    if(divContrat != null) errors.push(divContrat);
     if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
     // if(dateDebut == "" || !dateDebut.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateDebut);
     // if(dateFin == "" || !dateFin.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateFin);
@@ -461,7 +511,7 @@ function save(){
   let weekSchedules = createWeekSchedules();
 
   // Edit the global table "calendars".
-  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, calendars[parseInt(select.options[choice].value, 10)][6]);
+  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, calendars[parseInt(select.options[choice].value, 10)][6], calendars[parseInt(select.options[choice].value, 10)][7]);
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -489,7 +539,7 @@ function addCalendarBtn() {
   $("#selectCal").val(idCalendar); // chanegr dates en années et creer les calendriers
 
   // Add the option to the global table "calendars".
-  addCalendarToArray(title, 1);
+  addCalendarToArray(title);
 
   // Display the new calendar.
   displayCalendar(currentYear, 1);
@@ -503,12 +553,16 @@ function delCalendarBtn(){
 
   let select = document.getElementById('selectCal');
   let index = select.selectedIndex;
+  let valueToDelete = parseInt(select.options[index].value, 10);
 
   // Delete the option of the global table "calendars".
-  delCalendarOfArray(parseInt(select.options[index].value, 10));
+  delCalendarOfArray(valueToDelete);
 
   // Delete the option of the select.
   select.remove(index);
+  for(let o of select.options) {
+    if(o.value > valueToDelete) o.value = parseInt(o.value)-1;
+  }
 
   // Display the precedent calendar (if it exist).
   if($("#selectCal option").length == 0 ){
@@ -518,6 +572,7 @@ function delCalendarBtn(){
     display(parseInt(select.options[0].value, 10));
     save();
   }
+  select.selectedIndex = 0;
 }
 
 function saveCalendarBtn(){
@@ -527,15 +582,15 @@ function saveCalendarBtn(){
 
 /*-------------------------------- Calendars[] functions ------------------------------------*/
 
-function addCalendarToArray(title, nAnnees) {
+function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/,nAnnees);
+  calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null);
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees) {
+function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees, contratPro) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees);
+  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees, contratPro);
 }
 
 function delCalendarOfArray(id) {
@@ -575,8 +630,33 @@ function createDataCategories(){
   return dataCategories;
 }
 
+function updateResume() {
+  let select = document.getElementById("selectCal");
+  let index = select.selectedIndex;
+  save();
+  setDataCategories(calendars[parseInt(select.options[index].value)][2].slice(0));
+}
 
 function setDataCategories(dataCategories){
+$("#heureCours").val('0');
+$("#heureCoursProjet").val('0');
+$("#heureExamen").val('0');
+$("#heureEntrepriseProjet").val('0');
+$("#heureVacance").val('0');
+let nCours = 0, nCoursP = 0, nExamen = 0, nEtsP = 0, nVac = 0;
+
+for(let r of document.getElementsByClassName("recapCours")) {
+  r.innerHTML = "0";
+}
+for(let r of document.getElementsByClassName("recapProjetTutUniv")) {
+  r.innerHTML = "0";
+}
+for(let r of document.getElementsByClassName("recapEntreprise")) {
+  r.innerHTML = "0";
+}
+for(let r of document.getElementsByClassName("recapProjetTutEts")) {
+  r.innerHTML = "0";
+}
 
   $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
@@ -584,29 +664,43 @@ function setDataCategories(dataCategories){
 
     switch (element) {
       case 0: $(this).addClass('coursCat');
-              $(this).closest('table').next('table').find('.recapCours').html(""+(parseInt($(this).closest('table').next('table').find('.recapCours').html())+4));
-              break;
+      $(this).closest('table').next('table').find('.recapCours').html(""+(parseInt($(this).closest('table').next('table').find('.recapCours').html())+4));
+      nCours += 4;
+      break;
       case 1: $(this).addClass('projetTutCoursCat');
-              $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+4));
-              break;
-      case 2: $(this).addClass('examenCat');break;
+      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+4));
+      nCoursP += 4;
+      break;
+      case 2: $(this).addClass('examenCat');
+      nExamen += 4;
+      break;
       case 3: $(this).addClass('entrepriseCat');
-              $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(this).closest('table').next('table').find('.recapEntreprise').html())+4));
-              break;
+      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(this).closest('table').next('table').find('.recapEntreprise').html())+4));
+      nEtsP += 4;
+      break;
       case 4: $(this).addClass('projetTutEntrepriseCat');
-              $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutEts').html())+4));
-              break;
-      case 5:$(this).addClass('vacanceCat');break;
+      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutEts').html())+4));
+      nEtsP += 4;
+      break;
+      case 5:$(this).addClass('vacanceCat');
+      nVac += 4;
+      break;
       case 6:$(this).addClass('ferieCat');break;
       default:$(this).addClass('libreCat');break;
     }
   });
+
+  $("#heureCours").val(nCours);
+  $("#heureCoursProjet").val(nCoursP);
+  $("#heureExamen").val(nExamen);
+  $("#heureEntrepriseProjet").val(nEtsP);
+  $("#heureVacance").val(nVac);
 }
 
 /*-------------------------------- Schedules functions ------------------------------------*/
 
 function schedulesEvent(event) {
-  setDataSchedules(createDataSchedules(), createHourSchedules(), createWeekSchedules());
+  //setDataSchedules(createDataSchedules(), createHourSchedules(), createWeekSchedules());
 }
 
 function createDataSchedules(){
@@ -639,7 +733,7 @@ function createDataSchedules(){
 
 function createHourSchedules(){
 
-    let heureCours = document.getElementById('heureCours').value;
+  let heureCours = document.getElementById('heureCours').value;
   let heureCoursProjet = document.getElementById('heureCoursProjet').value;
   let heureExamen = document.getElementById('heureExamen').value;
   let heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
@@ -665,7 +759,7 @@ function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
   document.getElementById('journeeEntrepriseProjet').value = daySchedules[2];
   document.getElementById('journeeVacance').value = daySchedules[3];*/ //unused
 
-    document.getElementById('heureCours').value = hourSchedules[0];
+  document.getElementById('heureCours').value = hourSchedules[0];
   document.getElementById('heureCoursProjet').value = hourSchedules[0];
   document.getElementById('heureExamen').value = hourSchedules[1];
   document.getElementById('heureEntrepriseProjet').value = hourSchedules[2];
@@ -701,6 +795,13 @@ function display(value){
   // The categories
   //$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
 
+  // The recap of schedules
+  if(calendars[value][3] == null || calendars[value][4] == null || calendars[value][5] == null){
+    // code here ..
+  }else{
+    //setDataSchedules(calendars[value][3], calendars[value][4], calendars[value][5]);
+  }
+
   if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
     displayCalendar(currentYear, calendars[value][6]);
   }else{
@@ -710,10 +811,13 @@ function display(value){
     setDataCategories(duplicatedCalendar1);
   }
 
-  // The recap of schedules
-  if(calendars[value][3] == null || calendars[value][4] == null || calendars[value][5] == null){
-    // code here ..
-  }else{
-    setDataSchedules(calendars[value][3], calendars[value][4], calendars[value][5]);
+  let infosPro = document.getElementsByClassName("contrat_pro_info");
+  for(let i of infosPro) {
+    if(calendars[value][7]) {
+      i.style.display = "block";
+    } else {
+      i.style.display = "none";
+    }
   }
+
 }
