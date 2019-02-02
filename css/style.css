@@ -135,6 +135,33 @@ label {
 	opacity: 0;
 }
 
+/* menu avancé */
+.dropdownAdvanced {
+  position: absolute;
+  right: 10px;
+	top: 50px;
+}
+.dropdownAdvanced-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdownAdvanced-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+	cursor: pointer;
+}
+.dropdownAdvanced-content a:hover {background-color: #ddd}
+.show {display:block;}
+#full_import_input {
+	display: none;
+}
+
 /*------------------------------------ spinner loading animation -----------------*/
 
 .lds-roller {

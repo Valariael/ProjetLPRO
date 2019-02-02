@@ -148,6 +148,13 @@
 		<span class="to_center"></span>
 		<div>
 			<div id="fermer_popup" onclick="closePopup();">X</div>
+			<div class="dropdownAdvanced">
+		  	<a onclick="switchAdvancedMenu()" class="btn btn-info">Avancé</a>
+			  <div id="dropdownAdvanced" class="dropdownAdvanced-content">
+			    <a onclick="exportAll()">Tout exporter</a>
+			    <a id="fullImportButton">Tout importer</a><input type="file" id="full_import_input" onchange="importFullFile();"/>
+			  </div>
+			</div>
 			<div class="row">
 				<div class="col">
 					<h4 id="titre_popup" class="text-nowrap">Quelques informations avant de commencer :</h4>
@@ -242,5 +249,7 @@
 	<script type="text/javascript" src="js/gridCalendar.js"></script>
 	<script type="text/javascript" src="js/categories.js"></script>
 	<script type="text/javascript" src="js/pdf.js"></script>
+
+	<script type="text/javascript" src="js/data-strings.js"></script>
 </body>
 </html>
