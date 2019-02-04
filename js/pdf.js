@@ -1,6 +1,8 @@
 
 // Generate a PDF.
 
+var imgParts = [];
+
 function genPDF() {
   let spinner = document.createElement("div");
   spinner.innerHTML = "<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>";
@@ -12,6 +14,9 @@ function genPDF() {
   spinner.style.width = "100px";
   spinner.style.height = "100px";
   document.body.appendChild(spinner);
+
+  let select = document.getElementById("selectCal");
+  let nbAnnees = calendars[select.selectedIndex][4];
 
   var descs = document.getElementsByClassName("tdDesc");
   for(let d of descs) {
@@ -40,7 +45,7 @@ function genPDF() {
   btnResume.style.display = "none";
 
   var calendar = document.getElementById('calendar');
-  calendar.style.height = "2000px";
+  calendar.style.height = (nbAnnees*2000)+"px";
   calendar.style.width = "2000px";
   var top_pdf = document.getElementById("top_pdf");
   top_pdf.style.height = "1000px";
@@ -116,46 +121,166 @@ function genPDF() {
         let heightBottom;// = doc.internal.pageSize.height
         heightBottom = ratio * widthBottom;
 
+        //Création des logos
+        let logosQualite = new Image();
+        let logoFC = new Image();
+        logosQualite.src = dataLogosQualite;
+        logoFC.src = dataLogoFC;
+
         //Ajout des éléments au PDF
-        doc.addImage(imgDataTop, 'PNG', 30, 4, widthTop, heightTop);
-        doc.addImage(imgDataCalendrier, 'PNG', 5, 20, width-10, height);
-        doc.addImage(imgDataBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
-        doc.output("save", "Calendrier "+title+".pdf");
+        if(nbAnnees == 1) {
+          doc.addImage(imgTop, 'PNG', 25, 4, widthTop, heightTop);
+          doc.addImage(img, 'PNG', 5, 20, width-10, height);
+          doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
+          doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+          doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
 
-        //Réinitialisation du style
-        document.querySelectorAll("#calendar table table").forEach(function(el) {
-          el.style.fontSize = "";
-          el.style.fontWeight = "";
-        });
-        for(let d of descs) {
-          d.style.padding = "";
-          let ps = d.getElementsByTagName("p");
-          for(let p of ps) {
-            p.style.padding = "";
-            p.style.margin = "";
+
+          //appliquer le remplacement des cars TODO x2
+          doc.output("save", "Calendrier_"+title+".pdf");
+
+          //Réinitialisation du style
+          document.querySelectorAll("#calendar table table").forEach(function(el) {
+            el.style.fontSize = "";
+            el.style.fontWeight = "";
+          });
+          for(let d of descs) {
+            d.style.padding = "";
+            let ps = d.getElementsByTagName("p");
+            for(let p of ps) {
+              p.style.padding = "";
+              p.style.margin = "";
+            }
           }
-        }
-        var labels = document.getElementsByClassName("tdLabel");
-        for(let l of labels) {
-          l.style.padding = "";
-        }
-        resume.style.marginBottom = "";
-        for(let r of recaps) {
-          r.style.display = "table";
-        }
-        for(let s of secondTables) {
-          s.style.marginTop = "";
-        }
-        btnResume.style.display = "block";
+          var labels = document.getElementsByClassName("tdLabel");
+          for(let l of labels) {
+            l.style.padding = "";
+          }
+          resume.style.marginBottom = "";
+          for(let r of recaps) {
+            r.style.display = "table";
+          }
+          for(let s of secondTables) {
+            s.style.marginTop = "";
+          }
+          btnResume.style.display = "block";
 
-        calendar.style.height = "";
-        calendar.style.width = "";
-        top_pdf.style.height = "";
-        top_pdf.style.width = "";
-        bottom_pdf.style.height = "";
-        bottom_pdf.style.width = "";
+          calendar.style.height = "";
+          calendar.style.width = "";
+          top_pdf.style.height = "";
+          top_pdf.style.width = "";
+          bottom_pdf.style.height = "";
+          bottom_pdf.style.width = "";
 
-        document.body.removeChild(spinner);
+          document.body.removeChild(spinner);
+        } else {
+          //Division des calendriers
+          // let imgToSplit = new Image();
+          // imgToSplit.onload = function() {
+
+          imgParts = [];
+
+          let hSplit = img.height/nbAnnees;
+          console.log("h split :" + hSplit + " h tot :" + img.height + " divHeight : " + divHeight);
+
+          for(let i=0; i<nbAnnees; i++) {
+            let canvas = document.createElement("canvas");
+            canvas.height = hSplit*2;
+            canvas.width = img.width*2;
+            let ctx = canvas.getContext("2d");
+            let y = hSplit*i;
+            console.log("y:" + y+ " nexty: " + (hSplit+y));
+
+            ctx.drawImage(img, 0, y, img.width, hSplit*nbAnnees, 0, 0, canvas.width, canvas.height);
+
+            //soit decouper le canvas ensuite, soit refaire la production des images de calendriers
+
+            doc.addImage(imgTop, 'PNG', 25, 4, widthTop, heightTop);
+            doc.addImage(canvas.toDataURL(), 'PNG', 5, 20, width-10, height);
+            if(i == nbAnnees-1) {
+              doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
+              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+              doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
+            } else {
+              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+              doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
+              doc.addPage();
+            }
+          }
+
+          // for(let i=0; i<nbAnnees; i++) {
+          //   let canvas = document.createElement("canvas");
+          //   canvas.height = divHeight/nbAnnees;
+          //   canvas.width = divWidth;
+          //   let ctx = canvas.getContext('2d');
+          //
+          //   let y = hSplit*i;
+          //   console.log("y:" + y);
+          //   // canvas.width = imgToSplit.width;
+          //   // canvas.height = hSplit;
+          //
+          //   ctx.drawImage(img, 0, y, img.width, hSplit+y, 0, 0, canvas.width, canvas.height);
+          //   imgParts.push(canvas.toDataURL());
+          // }
+          //
+          // for(let i=0; i<nbAnnees; i++) {
+          //   doc.addImage(imgTop, 'PNG', 25, 4, widthTop, heightTop);
+          //   doc.addImage(imgParts[i], 'PNG', 5, 20, width-10, height);
+          //   if(i == nbAnnees-1) {
+          //     doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
+          //     doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+          //     doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
+          //   } else {
+          //     doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+          //     doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
+          //     doc.addPage();
+          //   }
+          // }
+
+
+          //appliquer le remplacement des cars
+          doc.output("save", "Calendrier_"+title+".pdf");
+
+          //Réinitialisation du style
+          document.querySelectorAll("#calendar table table").forEach(function(el) {
+            el.style.fontSize = "";
+            el.style.fontWeight = "";
+          });
+          for(let d of descs) {
+            d.style.padding = "";
+            let ps = d.getElementsByTagName("p");
+            for(let p of ps) {
+              p.style.padding = "";
+              p.style.margin = "";
+            }
+          }
+          var labels = document.getElementsByClassName("tdLabel");
+          for(let l of labels) {
+            l.style.padding = "";
+          }
+          resume.style.marginBottom = "";
+          for(let r of recaps) {
+            r.style.display = "table";
+          }
+          for(let s of secondTables) {
+            s.style.marginTop = "";
+          }
+          btnResume.style.display = "block";
+
+          calendar.style.height = "";
+          calendar.style.width = "";
+          top_pdf.style.height = "";
+          top_pdf.style.width = "";
+          bottom_pdf.style.height = "";
+          bottom_pdf.style.width = "";
+
+          document.body.removeChild(spinner);
+
+          // }
+          // imgToSplit.src = imgDataCalendrier;
+
+        }
+
       });
     });
   });

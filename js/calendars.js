@@ -18,6 +18,7 @@ function exportThis() {
 function exportCalendar(id) {
   let blob = JSON.stringify(calendars[id]);
   let filename = "export_"+calendars[id][0];
+  //On remplace tous les caractères interdits dans les noms de fichiers
   filename = filename.replace(/[`\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "_");
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
@@ -66,6 +67,19 @@ function importCalendar(data) {
   started = true;
 }
 
+function switchAdvancedMenu() {
+  if($("#dropdownAdvanced").hasClass("show")) {
+    $("#dropdownAdvanced").removeClass("show");
+  } else {
+    $("#dropdownAdvanced").addClass("show");
+  }
+}
+
+$("#fullImportButton").click(function(e){
+  e.preventDefault();
+  $("#full_import_input").trigger('click');
+});
+
 function exportAll() {
   // Suppression des éventuels null apparut dans la liste des calendriers (BUGFIX)
   for (let i = calendars.length - 1; i >= 0; i--) {
@@ -76,7 +90,7 @@ function exportAll() {
 
   let date = new Date();
   let blob = JSON.stringify(calendars);
-  let filename = "export_complet_"+toLocaleDateString('fr-FR');
+  let filename = "export_complet_"+date.toLocaleDateString('fr-FR');
   filename = filename.replace("/", "_");
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
@@ -86,7 +100,26 @@ function exportAll() {
   document.body.removeChild(elem);
 }
 
-function importAll(override) {
+function importFullFile() {
+  let file = document.getElementById("full_import_input").files[0];
+  if (file) {
+    let r = new FileReader();
+    r.onload = function(e) {
+      let contents = e.target.result;
+      if(confirm("Voulez-vous remplacer les calendriers existants ?\n(Cette opération est irréversible)")) {
+        importAll(true, contents);
+      } else {
+        importAll(false, contents);
+      }
+    }
+    r.readAsText(file);
+  } else {
+    alert("Échec de l'importation.");
+  }
+  document.getElementById("full_import_input").value = "";
+}
+
+function importAll(override, data) {
   let cal = JSON.parse(decodeURIComponent(data));
   let index;
   if(override) {
@@ -121,7 +154,6 @@ function dropHandler(ev) {
   ev.preventDefault();
 
   let fr = new FileReader();
-
 
   if (ev.dataTransfer.items) {
     // Use DataTransferItemList interface to access the file(s)
@@ -174,11 +206,13 @@ function displayPopup(start) {
   let fermer = document.getElementById("fermer_popup");
   let importer = document.getElementById("drop_zone");
   let contratPro = document.getElementById("contrat_pro");
+  if($("#dropdownAdvanced").hasClass("show")) {
+    $("#dropdownAdvanced").removeClass("show");
+  }
 
   if(start) {
     document.getElementById("titre_popup").innerHTML = "Quelques informations avant de commencer :";
-    document.getElementById("titreInput").value = "";
-    if(calendars.length > 1) fermer.style.display = "none"; //QUICK FIX
+    fermer.style.display = "none"; //QUICK FIX
     importer.style.display = "none";
     labelDates.style.display = "inherit";
     champAnnees.style.display = "block";
@@ -194,7 +228,7 @@ function displayPopup(start) {
     labelDates.style.display = "none";
     champAnnees.style.display = "none";
     contratPro.style.display = "none";
-    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][6];
+    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][4];
   }
 
   let list = document.getElementById("liste_vacances");
@@ -227,14 +261,14 @@ function validatePopup() {
   }
 
   if(isNaN(nbAnnees)) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], 1, calendars[parseInt(select.options[choice].value, 10)][7]);
-    if(calendars[parseInt(select.options[choice].value, 10)][7] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][7] = contratPro;
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5]);
+    if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
   } else {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][7]);
-    if(calendars[parseInt(select.options[choice].value, 10)][7] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][7] = contratPro;
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5]);
+    if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
   }
 
@@ -471,7 +505,7 @@ $( document ).ready(function() {
       }
     }
 
-    displayCalendar(currentYear, calendars[parseInt(select.options[select.options.length-1].value, 10)][6]);
+    displayCalendar(currentYear, calendars[parseInt(select.options[select.options.length-1].value, 10)][4]);
     // refresh the display
 
     select.selectedIndex = select.options.length-1;
@@ -502,7 +536,7 @@ function save(){
   let dataCategories = createDataCategories();
 
   // Get the data schedules.
-  let dataSchedules = createDataSchedules();
+  let dataSchedules = createDataSchedules(); //to delete TODO
 
   // Get the hour schedules.
   let hourSchedules = createHourSchedules();
@@ -511,7 +545,13 @@ function save(){
   let weekSchedules = createWeekSchedules();
 
   // Edit the global table "calendars".
-  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, dataSchedules, hourSchedules, weekSchedules, calendars[parseInt(select.options[choice].value, 10)][6], calendars[parseInt(select.options[choice].value, 10)][7]);
+  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, new Array(
+    document.getElementById("semaineCours").value,
+    document.getElementById("semaineCoursProjet").value,
+    document.getElementById("semaineExamen").value,
+    document.getElementById("semaineDate").value,
+    document.getElementById("semaineEntrepriseProjet").value
+  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5]);
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -543,6 +583,14 @@ function addCalendarBtn() {
 
   // Display the new calendar.
   displayCalendar(currentYear, 1);
+
+  updateResume();
+  document.getElementById("semaineCours").value = "0";
+  document.getElementById("semaineCoursProjet").value = "0";
+  document.getElementById("semaineExamen").value = "0";
+  document.getElementById("semaineDate").value = "";
+  document.getElementById("semaineEntrepriseProjet").value = "0";
+
   save(); // add displayAddedCalendar
 
   started = false;
@@ -585,12 +633,12 @@ function saveCalendarBtn(){
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, [0,0,0,0], ["0","0","0","0"], ["0","0","0","00 / 00 / 0000","0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null);
+  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null);
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees, contratPro) {
+function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, schedulesRecap, hourSchedules, weekSchedules, nAnnees, contratPro);
+  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro);
 }
 
 function delCalendarOfArray(id) {
@@ -695,6 +743,14 @@ for(let r of document.getElementsByClassName("recapProjetTutEts")) {
   $("#heureExamen").val(nExamen);
   $("#heureEntrepriseProjet").val(nEtsP);
   $("#heureVacance").val(nVac);
+
+  let select = document.getElementById("selectCal")
+  let index = select.selectedIndex;
+  $("#semaineCours").val(calendars[index][3][0]);
+  $("#semaineCoursProjet").val(calendars[index][3][1]);
+  $("#semaineExamen").val(calendars[index][3][2]);
+  $("#semaineDate").val(calendars[index][3][3]);
+  $("#semaineEntrerpise").val(calendars[index][3][4]);
 }
 
 /*-------------------------------- Schedules functions ------------------------------------*/
@@ -739,7 +795,7 @@ function createHourSchedules(){
   let heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
   let heureVacance = document.getElementById('heureVacance').value;
 
-  return hourSchedules = new Array(heureCoursProjet, heureExamen, heureEntrepriseProjet, heureVacance);
+  return new Array(heureCoursProjet, heureExamen, heureEntrepriseProjet, heureVacance);
 }
 
 function createWeekSchedules(){
@@ -750,7 +806,7 @@ function createWeekSchedules(){
   let semaineDate = document.getElementById('semaineDate').value;
   let semaineEntrepriseProjet = document.getElementById('semaineEntrepriseProjet').value;
 
-  return hourSchedules = new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
+  return new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
 }
 
 function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
@@ -803,9 +859,9 @@ function display(value){
   }
 
   if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
-    displayCalendar(currentYear, calendars[value][6]);
+    displayCalendar(currentYear, calendars[value][4]);
   }else{
-    displayCalendar(currentYear, calendars[value][6]);
+    displayCalendar(currentYear, calendars[value][4]);
     // The table of categories is duplicated to avoid modifying the orginial table.
     let duplicatedCalendar1 = calendars[value][2].slice(0);
     setDataCategories(duplicatedCalendar1);
@@ -813,7 +869,7 @@ function display(value){
 
   let infosPro = document.getElementsByClassName("contrat_pro_info");
   for(let i of infosPro) {
-    if(calendars[value][7]) {
+    if(calendars[value][5]) {
       i.style.display = "block";
     } else {
       i.style.display = "none";
