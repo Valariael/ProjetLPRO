@@ -149,11 +149,11 @@
 		<div>
 			<div id="fermer_popup" onclick="closePopup();">X</div>
 			<div class="dropdownAdvanced">
-		  	<a onclick="switchAdvancedMenu()" class="btn btn-info">Avancé</a>
-			  <div id="dropdownAdvanced" class="dropdownAdvanced-content">
-			    <a onclick="exportAll()">Tout exporter</a>
-			    <a id="fullImportButton">Tout importer</a><input type="file" id="full_import_input" onchange="importFullFile();"/>
-			  </div>
+				<a onclick="switchAdvancedMenu()" class="btn btn-info">Avancé</a>
+				<div id="dropdownAdvanced" class="dropdownAdvanced-content">
+					<a onclick="exportAll()">Tout exporter</a>
+					<a id="fullImportButton">Tout importer</a><input type="file" id="full_import_input" onchange="importFullFile();"/>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col">
@@ -168,6 +168,25 @@
 			<div class="row">
 				<div class="col">
 					<input type="text" id="titreInput" class="text-nowrap form-control" placeholder="Votre titre">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<label id="label_start" class="text-nowrap">Année et mois de début : </label>
+				</div>
+			</div>
+			<div class="row" id="divStart">
+				<div class="col-sm-2 col-12">
+					<label id="label_annee" for="selectAnnee" class="text-nowrap">Année : </label>
+				</div>
+				<div class="col-sm-4 col-12">
+					<select id="selectAnnee" class="text-nowrap form-control" placeholder="Année"></select>
+				</div>
+				<div class="col-sm-2 col-12">
+					<label id="label_mois" for="selectMois" class="text-nowrap">Mois : </label>
+				</div>
+				<div class="col-sm-4 col-12">
+					<select id="selectMois" class="text-nowrap form-control"></select>
 				</div>
 			</div>
 			<div class="row">

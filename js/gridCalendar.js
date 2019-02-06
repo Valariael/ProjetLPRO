@@ -6,6 +6,7 @@ var months	 = new Array('Janvier','Février','Mars','Avril','Mai','Juin','Juille
 
 function getCalendar(year, month){
 
+	console.log("year colonne:" + year  + " year mois :" + month);
 	// Process
 	var date = new Date(year, month-1, 0);
 	var nbDays = getNbJours(new Date(year, month, 0));
@@ -58,36 +59,70 @@ function getCalendar(year, month){
 	return result;
 }
 
-function displayCalendar(year, n){
+function displayCalendar(n, year, month){
 
+	month = parseInt(month);
+	year = parseInt(year);
 	let displays = [];
 	for(let j=0; j<n; j++) {
-		if(j == 0) {
-			let display = "<table class=\"firstTable\"><thead><tr><th colspan=\"5\">" + year + "</th><th colspan=\"2\">" + (year+1) + "</th></tr></thead><tbody><tr>";
+		// peut etre changer la valeur de month en fonction de j
 
-			for (var i = 8; i < 13; i++) { display += "<td>" + getCalendar(year, i) + "</td>"; }
-			for (var i = 1; i < 3; i++)  { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
-
-			display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=\"7\">" + (year+1) + "</th></tr></thead><tbody><tr>";
-
-			for (var i = 3; i < 10; i++) { display += "<td>" + getCalendar(year+1, i) + "</td>"; }
-
-			display += "</tr></tbody></table>";
-
-			displays.push(display);
+		let display = "<table class=\"firstTable\"><thead><tr><th colspan=\"";
+		if(~~((12-month)/7) >= 1) display += "7";
+		else display += "" + (13-month);
+		display += "\">" + (year) + "</th>";
+		if(~~((12-month)/7) < 1 && (7-(13-month)) > 0) display += "<th colspan=\"" + (7-(13-month)) + "\">" + (year+1) + "</th>";
+		display += "</tr></thead><tbody><tr>";
+		console.log("year:"+year+" month:"+month);
+		if(~~((12-month)/7) >= 1) {
+			for(let i = month; i < month+7; i++) {
+				console.log("ici boucle 1");
+				display += "<td>" + getCalendar(year, i) + "</td>";
+			}
 		} else {
-			let display = "<table class=\"firstTable\"><thead><tr><th colspan=\"3\">" + (year+j) + "</th><th colspan=\"4\">" + (year+1+j) + "</th></tr></thead><tbody><tr>";
-
-			for (var i = 10; i < 13; i++) { display += "<td>" + getCalendar(year+j, i) + "</td>"; }
-			for (var i = 1; i < 5; i++)  { display += "<td>" + getCalendar(year+1+j, i) + "</td>"; }
-
-			display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=\"7\">" + (year+1+j) + "</th></tr></thead><tbody><tr>";
-
-			for (var i = 4; i < 10; i++) { display += "<td>" + getCalendar(year+1+j, i) + "</td>"; }
-
-			display += "</tr></tbody></table>";
-			displays.push(display);
+			for(let i = month; i < 13; i++) {
+				console.log("ici boucle 2");
+				display += "<td>" + getCalendar(year, i) + "</td>";
+			}
 		}
+		if(~~((12-month)/7) < 1) {
+			for (var i = 1; i < 8 -(13 - month); i++)  {
+				console.log("ici boucle 3");
+				display += "<td>" + getCalendar((year+1), i) + "</td>";
+			}
+		}
+
+		display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=\"";
+		if(12-month >= 7) display += "" + (13-month-7) + "\">" + (year) + "</th><th colspan=\"" + ((14-(13-month-7))%7) + "\">" + (year+1) + "</th>";
+		else display += "" + (13-((month+7)%12)) + "\">" + (year+1) + "</th>";
+		if(12-month == 0) display += "<th colspan=\"1\">" + (year+2) + "</th>";
+		display += "</tr></thead><tbody><tr>";
+		if(12-month >= 7) {
+			for (let i = (month+7); i < 13; i++) {
+				console.log("ici boucle 4");
+				display += "<td>" + getCalendar((year), i) + "</td>";
+			}
+			for (let i = 1; i < ((14-(13-month-7))%7)+1; i++) {
+				console.log("ici boucle 4 bis");
+				display += "<td>" + getCalendar((year+1), i) + "</td>";
+			}
+		} else {
+			for (let i = (month+7)%12; i < 7+(month+7)%12; i++) {
+				console.log("ici boucle 5 i " + i);
+				display += "<td>" + getCalendar((year+1), i) + "</td>";
+			}
+		}
+		if(12-month == 0) {
+			console.log("ici janvier annee 2");
+			display += "<td>" + getCalendar((year+2), 1) + "</td>";
+		}
+
+		display += "</tr></tbody></table>";
+
+		displays.push(display);
+
+		year = year+1;
+		month = (month+14)%12;
 	}
 
 	let calendar = document.getElementById("calendar");

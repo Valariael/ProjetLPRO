@@ -5,7 +5,7 @@ var currentDate = new Date();
 var currentYear = currentDate.getFullYear();
 var calendars = new Array();
 
-// Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][schedulesRecap][hoursRecap][dataRecap],nbAnnees, contratPro, anneeDebut]
+// Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][semainesRecap],nbAnnees, contratPro, anneeDebut]
 
 var started = true;
 /*-------------------------------- import/export --------------------------------------*/
@@ -206,21 +206,54 @@ function displayPopup(start) {
   let fermer = document.getElementById("fermer_popup");
   let importer = document.getElementById("drop_zone");
   let contratPro = document.getElementById("contrat_pro");
+  let selectAnnee = document.getElementById("selectAnnee");
+  let selectMois = document.getElementById("selectMois");
+  let labelStart = document.getElementById("label_start");
+  let labelAnnee = document.getElementById("label_annee");
+  let labelMois = document.getElementById("label_mois");
+
   if($("#dropdownAdvanced").hasClass("show")) {
     $("#dropdownAdvanced").removeClass("show");
   }
 
   if(start) {
+    selectAnnee.innerHTML = "";
+    let option;
+    for(let i = currentYear; i<currentYear+10; i++) {
+      option = new Option(i, i);
+      selectAnnee.appendChild(option);
+    }
+
+    selectMois.innerHTML = "";
+    for(let i = 0; i<months.length; i++) {
+      option = new Option(months[i], i+1);
+      selectMois.appendChild(option);
+    }
+
+    selectAnnee.style.display = "inherit";
+    selectMois.style.display = "inherit";
+    labelAnnee.style.display = "inherit";
+    labelMois.style.display = "inherit";
+    labelStart.style.display = "inherit";
+
     document.getElementById("titre_popup").innerHTML = "Quelques informations avant de commencer :";
-    fermer.style.display = "none"; //QUICK FIX
+    fermer.style.display = "none";
     importer.style.display = "none";
     labelDates.style.display = "inherit";
     champAnnees.style.display = "block";
     contratPro.style.display = "block";
     document.getElementById("radio_pro").checked = false;
     document.getElementById("radio_nonpro").checked = false;
+
+    document.getElementById("titreInput").value = "";
     champAnnees.value = "";
   } else {
+    selectAnnee.style.display = "none";
+    selectMois.style.display = "none";
+    labelAnnee.style.display = "none";
+    labelMois.style.display = "none";
+    labelStart.style.display = "none";
+
     document.getElementById("titre_popup").innerHTML = "Paramètres";
     document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
     fermer.style.display = "inline-block";
@@ -240,12 +273,14 @@ function displayPopup(start) {
   popup.style.display = "block";
 }
 
-function validatePopup() {
+function validatePopup() { // TODO BUG ? erreur sur titre ne s'enleve pas
   let nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
   let popup = document.getElementById("more_popup");
   let select = document.getElementById('selectCal');
   let choice = select.selectedIndex;
   let radios = document.getElementsByName("contratInput");
+  let selectAnnee = document.getElementById("selectAnnee");
+  let selectMois = document.getElementById("selectMois");
   let contratPro = null;
   for(let r of radios) {
     if(r.checked) {
@@ -261,12 +296,12 @@ function validatePopup() {
   }
 
   if(isNaN(nbAnnees)) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5]);
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value));
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
   } else {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5]);
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value));
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
@@ -278,7 +313,9 @@ function validatePopup() {
     save();
     display(select.options[choice].value);
   } else {
-    displayCalendar(currentYear, nbAnnees);
+    let selectAnnee = document.getElementById("selectAnnee");
+    let selectMois = document.getElementById("selectMois");
+    displayCalendar(nbAnnees, selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value);
     started = true;
     save();
     let infosPro = document.getElementsByClassName("contrat_pro_info");
@@ -338,6 +375,7 @@ function validateForm() {
       if(r.checked) divContrat = null;
     }
     if(divContrat != null) errors.push(divContrat);
+    else document.getElementById("contrat_pro").style.backgroundColor = "inherit";
     if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
     // if(dateDebut == "" || !dateDebut.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateDebut);
     // if(dateFin == "" || !dateFin.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateFin);
@@ -505,7 +543,7 @@ $( document ).ready(function() {
       }
     }
 
-    displayCalendar(currentYear, calendars[parseInt(select.options[select.options.length-1].value, 10)][4]);
+    displayCalendar(calendars[parseInt(select.options[select.options.length-1].value, 10)][4], calendars[parseInt(select.options[select.options.length-1].value, 10)][6][0], calendars[parseInt(select.options[select.options.length-1].value, 10)][6][1]);
     // refresh the display
 
     select.selectedIndex = select.options.length-1;
@@ -551,7 +589,7 @@ function save(){
     document.getElementById("semaineExamen").value,
     document.getElementById("semaineDate").value,
     document.getElementById("semaineEntrepriseProjet").value
-  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5]);
+  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -582,7 +620,8 @@ function addCalendarBtn() {
   addCalendarToArray(title);
 
   // Display the new calendar.
-  displayCalendar(currentYear, 1);
+  console.log(calendars[0][6]);
+  displayCalendar(1, currentYear, 1);
 
   updateResume();
   document.getElementById("semaineCours").value = "0";
@@ -633,12 +672,12 @@ function saveCalendarBtn(){
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null);
+  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null, new Array(today.getFullYear(),1));
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro) {
+function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro);
+  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts);
 }
 
 function delCalendarOfArray(id) {
@@ -686,25 +725,25 @@ function updateResume() {
 }
 
 function setDataCategories(dataCategories){
-$("#heureCours").val('0');
-$("#heureCoursProjet").val('0');
-$("#heureExamen").val('0');
-$("#heureEntrepriseProjet").val('0');
-$("#heureVacance").val('0');
-let nCours = 0, nCoursP = 0, nExamen = 0, nEtsP = 0, nVac = 0;
+  $("#heureCours").val('0');
+  $("#heureCoursProjet").val('0');
+  $("#heureExamen").val('0');
+  $("#heureEntrepriseProjet").val('0');
+  $("#heureVacance").val('0');
+  let nCours = 0, nCoursP = 0, nExamen = 0, nEtsP = 0, nVac = 0;
 
-for(let r of document.getElementsByClassName("recapCours")) {
-  r.innerHTML = "0";
-}
-for(let r of document.getElementsByClassName("recapProjetTutUniv")) {
-  r.innerHTML = "0";
-}
-for(let r of document.getElementsByClassName("recapEntreprise")) {
-  r.innerHTML = "0";
-}
-for(let r of document.getElementsByClassName("recapProjetTutEts")) {
-  r.innerHTML = "0";
-}
+  for(let r of document.getElementsByClassName("recapCours")) {
+    r.innerHTML = "0";
+  }
+  for(let r of document.getElementsByClassName("recapProjetTutUniv")) {
+    r.innerHTML = "0";
+  }
+  for(let r of document.getElementsByClassName("recapEntreprise")) {
+    r.innerHTML = "0";
+  }
+  for(let r of document.getElementsByClassName("recapProjetTutEts")) {
+    r.innerHTML = "0";
+  }
 
   $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
@@ -859,9 +898,9 @@ function display(value){
   }
 
   if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
-    displayCalendar(currentYear, calendars[value][4]);
+    displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);
   }else{
-    displayCalendar(currentYear, calendars[value][4]);
+    displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);
     // The table of categories is duplicated to avoid modifying the orginial table.
     let duplicatedCalendar1 = calendars[value][2].slice(0);
     setDataCategories(duplicatedCalendar1);

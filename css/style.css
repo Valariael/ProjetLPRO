@@ -37,6 +37,7 @@ label {
     text-align:center;
     top:0;
     width:100%;
+		max-height: 100%;
     z-index:10000;
 }
 #more_popup .to_center{
@@ -96,7 +97,7 @@ label {
 	position: relative;
 	left: 23%;
 }
-#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances, #label_contrat {
+#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances, #label_contrat, #label_start, #divStart {
 	margin-top: 20px;
 }
 #champ_annees {
