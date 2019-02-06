@@ -273,7 +273,7 @@ function displayPopup(start) {
   popup.style.display = "block";
 }
 
-function validatePopup() { // TODO BUG ? erreur sur titre ne s'enleve pas
+function validatePopup() {
   let nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
   let popup = document.getElementById("more_popup");
   let select = document.getElementById('selectCal');
@@ -293,15 +293,19 @@ function validatePopup() { // TODO BUG ? erreur sur titre ne s'enleve pas
         break;
       }
     }
+  }//TODO changer editCalendarArray pour des sets ciblés
+
+  if(!started) {
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value));
   }
 
   if(isNaN(nbAnnees)) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value));
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
   } else {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value));
+    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
@@ -457,12 +461,13 @@ function putVacances() {
 }
 
 function addVacancesColor(years, day, month, year) {
-  let monthTABLE = document.querySelectorAll("#calendar table tbody tr td table");
+  let monthTABLE = document.querySelectorAll("#calendar table tbody tr td table:not(.recap)");
   let currentMonth, index = -1;
   for(let y of years) {
     for(let i=0; i<y.n; i++) {
       index++;
       if(y.y != year) continue;
+      console.log(monthTABLE[index]);
       currentMonth = monthTABLE[index].querySelector("thead tr td").textContent;
       switch(currentMonth) {
         case "Janvier":
@@ -509,6 +514,7 @@ function addVacancesColor(years, day, month, year) {
       let days = monthTABLE[index].querySelectorAll("tbody tr");
       let cells = days[day].querySelectorAll("td");
       cells[2].className = "day vacanceCat";
+      cells[3].className = "day vacanceCat";
     }
   }
 }

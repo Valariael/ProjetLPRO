@@ -329,7 +329,7 @@ label {
 }
 
 #labelJVacances{
-  background: #ff751a;
+  background: #ff8533;
 }
 
 #calendar{
@@ -430,7 +430,7 @@ table table td {
 }
 
 .vacanceCat{
-  background: #ff751a;
+  background: #ff8533;
 }
 
 .ferieCat{
@@ -570,7 +570,7 @@ table table td {
 .dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #8b67e4;}
 
 /* Vacances*/
-.c6{background: #ff751a;}
+.c6{background: #ff8533;}
 .dropdown-menu>li>a.c6:focus, .dropdown-menu>li>a.c6:hover{background-color: #e65c00;}
 
 /* Ferie */
