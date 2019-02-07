@@ -219,6 +219,7 @@ function displayPopup(start) {
   let labelAnnee = document.getElementById("label_annee");
   let labelMois = document.getElementById("label_mois");
   let champHoraire = document.getElementById("horaireDemiJournee");
+  let boutonAddVac = document.getElementById("btn_add_vacances");
 
   if($("#dropdownAdvanced").hasClass("show")) {
     $("#dropdownAdvanced").removeClass("show");
@@ -273,6 +274,7 @@ function displayPopup(start) {
   }
 
   champHoraire.value = calendars[parseInt(select.options[choice].value, 10)][7];
+  boutonAddVac.style.display = "";
 
   let list = document.getElementById("liste_vacances");
   list.innerHTML = "";
@@ -366,6 +368,10 @@ function addVacancesItem() {
   li.className = "list-group-item vacances";
   li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\">suppr</a>";/*TODO improve*/
   list.appendChild(li);
+  if(list.children.length) {
+    let boutonAddVac = document.getElementById("btn_add_vacances");
+    boutonAddVac.style.display = "none";
+  }
 }
 
 function deleteVacancesItem(idItem) {
@@ -761,22 +767,22 @@ function setDataCategories(dataCategories){
 
     switch (element) {
       case 0: $(this).addClass('coursCat');
-      $(this).closest('table').next('table').find('.recapCours').html(""+(parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]));
+      $(this).closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]) * 10) / 10));
       nCours += calendars[choice][7];
       break;
       case 1: $(this).addClass('projetTutCoursCat');
-      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseFloat($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][7]));
+      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][7]) * 10) / 10));
       nCoursP += calendars[choice][7];
       break;
       case 2: $(this).addClass('examenCat');
       nExamen += calendars[choice][7];
       break;
       case 3: $(this).addClass('entrepriseCat');
-      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]));
+      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]) * 10) / 10));
       nEtsP += calendars[choice][7];
       break;
       case 4: $(this).addClass('projetTutEntrepriseCat');
-      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]));
+      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]) * 10) / 10));
       nEtsP += calendars[choice][7];
       break;
       case 5:$(this).addClass('vacanceCat');
@@ -787,11 +793,11 @@ function setDataCategories(dataCategories){
     }
   });
 
-  $("#heureCours").val(nCours);
-  $("#heureCoursProjet").val(nCoursP);
-  $("#heureExamen").val(nExamen);
-  $("#heureEntrepriseProjet").val(nEtsP);
-  $("#heureVacance").val(nVac);
+  $("#heureCours").val(Math.round((nCours * 10) / 10));
+  $("#heureCoursProjet").val(Math.round((nCoursP * 10) / 10));
+  $("#heureExamen").val(Math.round((nExamen * 10) / 10));
+  $("#heureEntrepriseProjet").val(Math.round((nEtsP * 10) / 10));
+  $("#heureVacance").val(Math.round((nVac * 10) / 10));
 
   $("#semaineCours").val(calendars[choice][3][0]);
   $("#semaineCoursProjet").val(calendars[choice][3][1]);
