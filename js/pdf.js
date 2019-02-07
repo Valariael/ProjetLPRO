@@ -254,7 +254,7 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
 
               //Ajout des éléments au PDF
               doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
-              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
+              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-15, 35, 15);
 
               //appliquer le remplacement des cars TODO x2
               doc.output("save", "Calendrier_"+title+".pdf");
