@@ -146,7 +146,7 @@ function importAll(override, data) {
   }
 
   index--;
-  $("#selectCal").val(index); // chanegr dates en années et creer les calendriers
+  $("#selectCal").val(index);
 
   display(index);
   save();
@@ -303,7 +303,7 @@ function validatePopup() {
         break;
       }
     }
-  }//TODO changer editCalendarArray pour des sets ciblés
+  }
 
   if(!started) {
     calendars[parseInt(select.options[choice].value, 10)][6] = new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value);
@@ -381,9 +381,6 @@ function validateForm() {
   let champAnnees = document.getElementById("champ_annees").value;
   let champTitre = document.getElementById("titreInput");
   let radios = document.getElementsByName("contratInput");
-  // let dateDebut = document.getElementById("dateDebut").value;
-  // let dateFin = document.getElementById("dateFin").value;
-  //console.log(champAnnees);
 
   if(!started) {
     let divContrat = "contrat_pro";
@@ -393,13 +390,11 @@ function validateForm() {
     if(divContrat != null) errors.push(divContrat);
     else document.getElementById("contrat_pro").style.backgroundColor = "inherit";
     if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
-    // if(dateDebut == "" || !dateDebut.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateDebut);
-    // if(dateFin == "" || !dateFin.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(dateFin);
   }
 
   if(champTitre.value==null || champTitre.value=="") errors.push("titreInput");
 
-  for (let vac of vacances) { //traiter cas premiere date inferieure a seconde TODO
+  for (let vac of vacances) {
     let inputs = document.querySelectorAll(".vacances input");
     for (let input of inputs) {
       id = input.id;
@@ -596,15 +591,6 @@ function save(){
   // Create the data categories.
   let dataCategories = createDataCategories();
 
-  // Get the data schedules.
-  let dataSchedules = createDataSchedules(); //to delete TODO
-
-  // Get the hour schedules.
-  let hourSchedules = createHourSchedules();
-
-  // Get the week schedules.
-  let weekSchedules = createWeekSchedules();
-
   // Edit the global table "calendars".
   editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, new Array(
     document.getElementById("semaineCours").value,
@@ -686,7 +672,6 @@ function delCalendarBtn(){
 }
 
 function saveCalendarBtn(){
-
   save();
 }
 
@@ -695,7 +680,7 @@ function saveCalendarBtn(){
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null, new Array(today.getFullYear(),1), 3.5);
+  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"], 1, null, new Array(today.getFullYear(),1), 3.5);
 }
 
 function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee) {
@@ -704,7 +689,6 @@ function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSem
 }
 
 function delCalendarOfArray(id) {
-  //console.log(calendars[id], id);
   calendars.splice(id, 1);
 }
 
@@ -816,82 +800,6 @@ function setDataCategories(dataCategories){
   $("#semaineEntrerpise").val(calendars[choice][3][4]);
 }
 
-/*-------------------------------- Schedules functions ------------------------------------*/
-
-function schedulesEvent(event) {
-  //setDataSchedules(createDataSchedules(), createHourSchedules(), createWeekSchedules());
-}
-
-function createDataSchedules(){
-
-  let ComptCours = 0;
-  let ComptProjCours = 0;
-  let ComptExam = 0;
-  let ComptEntrep = 0;
-  let ComptProjEntrep = 0;
-  let ComptVac = 0;
-
-  $('.day').each(function() {
-    if($(this).hasClass('coursCat')){
-      ComptCours++;
-    }else if($(this).hasClass('projetTutCoursCat')){
-      ComptProjCours++;
-    }else if($(this).hasClass('examenCat')){
-      ComptExam++;
-    }else if($(this).hasClass('entrepriseCat')){
-      ComptEntrep++;
-    }else if($(this).hasClass('projetTutEntrepriseCat')){
-      ComptProjEntrep++;
-    }else if($(this).hasClass('vacanceCat')){
-      ComptVac++;
-    }
-  });
-
-  return dataSchedules = new Array(ComptCours, ComptProjCours, ComptExam, ComptEntrep+ComptProjEntrep, ComptVac);
-}
-
-function createHourSchedules(){
-
-  let heureCours = document.getElementById('heureCours').value;
-  let heureCoursProjet = document.getElementById('heureCoursProjet').value;
-  let heureExamen = document.getElementById('heureExamen').value;
-  let heureEntrepriseProjet = document.getElementById('heureEntrepriseProjet').value;
-  let heureVacance = document.getElementById('heureVacance').value;
-
-  return new Array(heureCoursProjet, heureExamen, heureEntrepriseProjet, heureVacance);
-}
-
-function createWeekSchedules(){
-
-  let semaineCours = document.getElementById('semaineCours').value;
-  let semaineCoursProjet = document.getElementById('semaineCoursProjet').value;
-  let semaineExamen = document.getElementById('semaineExamen').value;
-  let semaineDate = document.getElementById('semaineDate').value;
-  let semaineEntrepriseProjet = document.getElementById('semaineEntrepriseProjet').value;
-
-  return new Array(semaineCours, semaineCoursProjet, semaineExamen, semaineDate, semaineEntrepriseProjet);
-}
-
-function setDataSchedules(daySchedules, hourSchedules, weekSchedules){
-  /*document.getElementById('journeeCoursProjet').value = daySchedules[0];
-  document.getElementById('journeeExamen').value = daySchedules[1];
-  document.getElementById('journeeEntrepriseProjet').value = daySchedules[2];
-  document.getElementById('journeeVacance').value = daySchedules[3];*/ //unused
-
-  document.getElementById('heureCours').value = hourSchedules[0];
-  document.getElementById('heureCoursProjet').value = hourSchedules[0];
-  document.getElementById('heureExamen').value = hourSchedules[1];
-  document.getElementById('heureEntrepriseProjet').value = hourSchedules[2];
-  document.getElementById('heureVacance').value = hourSchedules[3];
-
-  document.getElementById('semaineCours').value = weekSchedules[0];
-  document.getElementById('semaineCoursProjet').value = weekSchedules[1];
-  document.getElementById('semaineExamen').value = weekSchedules[2];
-  document.getElementById('semaineDate').value = weekSchedules[3];
-  document.getElementById('semaineEntrepriseProjet').value = weekSchedules[4];
-
-}
-
 /*-------------------------------- Display functions ------------------------------------*/
 
 // From the select
@@ -899,7 +807,6 @@ function displayData(){
   let select = document.getElementById('selectCal');
   let index = select.selectedIndex;
   display(parseInt(select.options[index].value));
-  schedulesEvent();
 }
 
 function display(value){
@@ -910,16 +817,6 @@ function display(value){
 
   // The component and the place
   $("#compoAndPlace").val(calendars[value][1]);
-
-  // The categories
-  //$('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
-
-  // The recap of schedules
-  if(calendars[value][3] == null || calendars[value][4] == null || calendars[value][5] == null){
-    // code here ..
-  }else{
-    //setDataSchedules(calendars[value][3], calendars[value][4], calendars[value][5]);
-  }
 
   if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
     displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);

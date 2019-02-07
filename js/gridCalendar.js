@@ -73,21 +73,17 @@ function displayCalendar(n, year, month){
 		display += "\">" + (year) + "</th>";
 		if(~~((12-month)/7) < 1 && (7-(13-month)) > 0) display += "<th colspan=\"" + (7-(13-month)) + "\">" + (year+1) + "</th>";
 		display += "</tr></thead><tbody><tr>";
-		console.log("year:"+year+" month:"+month);
 		if(~~((12-month)/7) >= 1) {
 			for(let i = month; i < month+7; i++) {
-				console.log("ici boucle 1");
 				display += "<td>" + getCalendar(year, i) + "</td>";
 			}
 		} else {
 			for(let i = month; i < 13; i++) {
-				console.log("ici boucle 2");
 				display += "<td>" + getCalendar(year, i) + "</td>";
 			}
 		}
 		if(~~((12-month)/7) < 1) {
 			for (var i = 1; i < 8 -(13 - month); i++)  {
-				console.log("ici boucle 3");
 				display += "<td>" + getCalendar((year+1), i) + "</td>";
 			}
 		}
@@ -99,21 +95,17 @@ function displayCalendar(n, year, month){
 		display += "</tr></thead><tbody><tr>";
 		if(12-month >= 7) {
 			for (let i = (month+7); i < 13; i++) {
-				console.log("ici boucle 4");
 				display += "<td>" + getCalendar((year), i) + "</td>";
 			}
 			for (let i = 1; i < ((14-(13-month-7))%7)+1; i++) {
-				console.log("ici boucle 4 bis");
 				display += "<td>" + getCalendar((year+1), i) + "</td>";
 			}
 		} else {
 			for (let i = (month+7)%12; i < 7+(month+7)%12; i++) {
-				console.log("ici boucle 5 i " + i);
 				display += "<td>" + getCalendar((year+1), i) + "</td>";
 			}
 		}
 		if(12-month == 0) {
-			console.log("ici janvier annee 2");
 			display += "<td>" + getCalendar((year+2), 1) + "</td>";
 		}
 

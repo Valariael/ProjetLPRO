@@ -76,6 +76,5 @@ function eventCategories(){
     	if( (down && colorClass == "libreCat") || (down && $(this).hasClass("libreCat") ) ){
     		fillCat(this);
     	}
-    	//schedulesEvent();
 	});
 }
