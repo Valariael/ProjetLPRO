@@ -8,6 +8,13 @@ var calendars = new Array();
 // Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][semainesRecap],nbAnnees, contratPro, anneeDebut]
 
 var started = true;
+
+
+function resizeInput(el) {
+  let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
+  let fontSize = parseFloat(style)-2;
+  el.style.width = ((el.value.length) * fontSize) + 'px';
+}
 /*-------------------------------- import/export --------------------------------------*/
 
 function exportThis() {
@@ -415,8 +422,8 @@ function validateForm() {
       document.getElementById(error).style.backgroundColor = "#ffcccc";
     }
   } else {
-    putVacances();
     validatePopup();
+    putVacances();
   }
 }
 
@@ -428,6 +435,11 @@ function putVacances() {
   for(let v of vacances) { // TODO:improve
     debut = new Date($("#debutVac"+nVac).val());
     fin = new Date($("#finVac"+nVac).val());
+    if(debut > fin) {
+      let tmp = fin;
+      fin = debut;
+      debut = temp;
+    }
     nVac++;
 
     anneeDebut = debut.getFullYear();

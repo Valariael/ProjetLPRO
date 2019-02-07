@@ -264,6 +264,9 @@ label {
 .nomFormation{
 	margin-top:5px;
 	padding:10px;
+	min-width: 300px;
+	max-width: 102%;
+	font-size: 13pt;
 }
 
 .MsgPrecaution{
