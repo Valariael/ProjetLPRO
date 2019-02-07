@@ -67,7 +67,7 @@ function displayCalendar(n, year, month){
 	for(let j=0; j<n; j++) {
 		// peut etre changer la valeur de month en fonction de j
 
-		let display = "<table class=\"firstTable\"><thead><tr><th colspan=\"";
+		let display = "<div id=\"calendar" + j + "\"><table class=\"firstTable\"><thead><tr><th colspan=\"";
 		if(~~((12-month)/7) >= 1) display += "7";
 		else display += "" + (13-month);
 		display += "\">" + (year) + "</th>";
@@ -117,7 +117,7 @@ function displayCalendar(n, year, month){
 			display += "<td>" + getCalendar((year+2), 1) + "</td>";
 		}
 
-		display += "</tr></tbody></table>";
+		display += "</tr></tbody></table></div>";
 
 		displays.push(display);
 
