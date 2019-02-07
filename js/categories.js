@@ -23,27 +23,29 @@ $(document).mousedown(function() {
 /*----------------------------------- Fill Categories ----------------------------*/
 
 function fillCat (element){
+  let select = document.getElementById("selectCal");
+  let choice = select.selectedIndex;
   if($(element).hasClass("ferieCat") && colorClass == "libreCat") {
       if($(element).siblings("td.day").hasClass("coursCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapCours').html(""+(parseInt($(element).siblings("td.day").closest('table').next('table').find('.recapCours').html())-4));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapCours').html(""+(parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapCours').html())-calendars[choice][7]));
       } else if($(element).siblings("td.day").hasClass("projetTutCoursCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html())-4));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html())-calendars[choice][7]));
       } else if($(element).siblings("td.day").hasClass("projetTutEntrepriseCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html())-4));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html(""+(parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html())-calendars[choice][7]));
       } else if($(element).siblings("td.day").hasClass("entrepriseCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html())-4));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html(""+(parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html())-calendars[choice][7]));
       }
       $(element).siblings("td.day").removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
       $(element).siblings("td.day").addClass(colorClass);
   }
   if($(element).hasClass("coursCat")) {
-    $(element).closest('table').next('table').find('.recapCours').html(""+(parseInt($(element).closest('table').next('table').find('.recapCours').html())-4));
+    $(element).closest('table').next('table').find('.recapCours').html(""+(parseFloat($(element).closest('table').next('table').find('.recapCours').html())-calendars[choice][7]));
   } else if($(element).hasClass("projetTutCoursCat")) {
-    $(element).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(element).closest('table').next('table').find('.recapProjetTutUniv').html())-4));
+    $(element).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseFloat($(element).closest('table').next('table').find('.recapProjetTutUniv').html())-calendars[choice][7]));
   } else if($(element).hasClass("projetTutEntrepriseCat")) {
-    $(element).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(element).closest('table').next('table').find('.recapProjetTutEts').html())-4));
+    $(element).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseFloat($(element).closest('table').next('table').find('.recapProjetTutEts').html())-calendars[choice][7]));
   } else if($(element).hasClass("entrepriseCat")) {
-    $(element).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(element).closest('table').next('table').find('.recapEntreprise').html())-4));
+    $(element).closest('table').next('table').find('.recapEntreprise').html(""+(parseFloat($(element).closest('table').next('table').find('.recapEntreprise').html())-calendars[choice][7]));
   }
 	$(element).removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
   if(colorClass == "ferieCat") {
@@ -52,13 +54,13 @@ function fillCat (element){
   }
 
   if(colorClass == "coursCat") {
-    $(element).closest('table').next('table').find('.recapCours').html(""+(parseInt($(element).closest('table').next('table').find('.recapCours').html())+4));
+    $(element).closest('table').next('table').find('.recapCours').html(""+(parseFloat($(element).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]));
   } else if(colorClass == "projetTutCoursCat") {
-    $(element).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(element).closest('table').next('table').find('.recapProjetTutUniv').html())+4));
+    $(element).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseFloat($(element).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][7]));
   } else if(colorClass == "projetTutEntrepriseCat") {
-    $(element).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(element).closest('table').next('table').find('.recapProjetTutEts').html())+4));
+    $(element).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseFloat($(element).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]));
   } else if(colorClass == "entrepriseCat") {
-    $(element).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(element).closest('table').next('table').find('.recapEntreprise').html())+4));
+    $(element).closest('table').next('table').find('.recapEntreprise').html(""+(parseFloat($(element).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]));
   }
   $(element).addClass(colorClass);
 }

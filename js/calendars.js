@@ -218,6 +218,7 @@ function displayPopup(start) {
   let labelStart = document.getElementById("label_start");
   let labelAnnee = document.getElementById("label_annee");
   let labelMois = document.getElementById("label_mois");
+  let champHoraire = document.getElementById("horaireDemiJournee");
 
   if($("#dropdownAdvanced").hasClass("show")) {
     $("#dropdownAdvanced").removeClass("show");
@@ -271,6 +272,8 @@ function displayPopup(start) {
     champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][4];
   }
 
+  champHoraire.value = calendars[parseInt(select.options[choice].value, 10)][7];
+
   let list = document.getElementById("liste_vacances");
   list.innerHTML = "";
   if(start) {
@@ -303,16 +306,18 @@ function validatePopup() {
   }//TODO changer editCalendarArray pour des sets ciblés
 
   if(!started) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value));
+    calendars[parseInt(select.options[choice].value, 10)][6] = new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value);
   }
 
   if(isNaN(nbAnnees)) {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], 1, calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
+    calendars[parseInt(select.options[choice].value, 10)][0] = document.getElementById("titreInput").value;
+    calendars[parseInt(select.options[choice].value, 10)][4] = 1;
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
   } else {
-    editCalendarArray(parseInt(select.options[choice].value, 10), document.getElementById("titreInput").value, calendars[parseInt(select.options[choice].value, 10)][1], calendars[parseInt(select.options[choice].value, 10)][2], calendars[parseInt(select.options[choice].value, 10)][3], nbAnnees, calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
+    calendars[parseInt(select.options[choice].value, 10)][0] = document.getElementById("titreInput").value;
+    calendars[parseInt(select.options[choice].value, 10)][4] = nbAnnees;
     if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
       calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
     }
@@ -607,7 +612,7 @@ function save(){
     document.getElementById("semaineExamen").value,
     document.getElementById("semaineDate").value,
     document.getElementById("semaineEntrepriseProjet").value
-  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6]);
+  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6], parseFloat(document.getElementById("horaireDemiJournee").value));
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -690,12 +695,12 @@ function saveCalendarBtn(){
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null, new Array(today.getFullYear(),1));
+  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"]/*, today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate(), today.getFullYear()+2 + "-" + today.getMonth() + "-" + today.getDate()*/, 1, null, new Array(today.getFullYear(),1), 3.5);
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts) {
+function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts);
+  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee);
 }
 
 function delCalendarOfArray(id) {
@@ -763,28 +768,31 @@ function setDataCategories(dataCategories){
     r.innerHTML = "0";
   }
 
+  let select = document.getElementById("selectCal");
+  let choice = select.selectedIndex;
+
   $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
     let element = dataCategories.shift();
 
     switch (element) {
       case 0: $(this).addClass('coursCat');
-      $(this).closest('table').next('table').find('.recapCours').html(""+(parseInt($(this).closest('table').next('table').find('.recapCours').html())+4));
+      $(this).closest('table').next('table').find('.recapCours').html(""+(parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]));
       nCours += 4;
       break;
       case 1: $(this).addClass('projetTutCoursCat');
-      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+4));
+      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(parseFloat($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][7]));
       nCoursP += 4;
       break;
       case 2: $(this).addClass('examenCat');
       nExamen += 4;
       break;
       case 3: $(this).addClass('entrepriseCat');
-      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseInt($(this).closest('table').next('table').find('.recapEntreprise').html())+4));
+      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]));
       nEtsP += 4;
       break;
       case 4: $(this).addClass('projetTutEntrepriseCat');
-      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseInt($(this).closest('table').next('table').find('.recapProjetTutEts').html())+4));
+      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]));
       nEtsP += 4;
       break;
       case 5:$(this).addClass('vacanceCat');
@@ -801,13 +809,11 @@ function setDataCategories(dataCategories){
   $("#heureEntrepriseProjet").val(nEtsP);
   $("#heureVacance").val(nVac);
 
-  let select = document.getElementById("selectCal")
-  let index = select.selectedIndex;
-  $("#semaineCours").val(calendars[index][3][0]);
-  $("#semaineCoursProjet").val(calendars[index][3][1]);
-  $("#semaineExamen").val(calendars[index][3][2]);
-  $("#semaineDate").val(calendars[index][3][3]);
-  $("#semaineEntrerpise").val(calendars[index][3][4]);
+  $("#semaineCours").val(calendars[choice][3][0]);
+  $("#semaineCoursProjet").val(calendars[choice][3][1]);
+  $("#semaineExamen").val(calendars[choice][3][2]);
+  $("#semaineDate").val(calendars[choice][3][3]);
+  $("#semaineEntrerpise").val(calendars[choice][3][4]);
 }
 
 /*-------------------------------- Schedules functions ------------------------------------*/

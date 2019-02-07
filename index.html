@@ -228,6 +228,14 @@
 					<a id="btn_add_vacances" class="btn btn-info" onclick="addVacancesItem();">Ajouter une période</a>
 				</div>
 			</div>
+			<div class="row" id="divHoraire">
+				<div class="col">
+					<label id="label_horaire" for="horaireDemiJournee" class="text-nowrap">Nombre d'heures par demi-journée : </label>
+				</div>
+				<div class="col">
+					<input type="number" id="horaireDemiJournee" value="3.5" min="1" step="0.1" class="form-control"/>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col">
 					<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
