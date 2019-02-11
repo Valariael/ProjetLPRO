@@ -258,6 +258,11 @@ label {
 
 /*------------------------------------ titre ------------------------------------*/
 
+#ruler {
+	visibility: hidden;
+	white-space: nowrap;
+}
+
 .nomCalendrier{
     margin-top: 180px;
 }

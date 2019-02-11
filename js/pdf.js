@@ -130,11 +130,11 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
           logoFC.src = dataLogoFC;
 
           //Ajout des éléments au PDF
-          doc.addImage(imgTop, 'PNG', 25, 4, widthTop, heightTop);
+          doc.addImage(imgTop, 'PNG', 10, 4, widthTop, heightTop);
           doc.addImage(img, 'PNG', 5, 20, width-10, height);
           doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
           doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
-          doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 4, 36, 18);
+          doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+25, 4, 36, 18);
 
 
           //appliquer le remplacement des cars TODO x2
@@ -229,9 +229,9 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
 
 
 
-          doc.addImage(imgTop, 'PNG', 25, 3, widthTop+5, heightTop);
+          doc.addImage(imgTop, 'PNG', 10, 3, widthTop+5, heightTop);
           doc.addImage(img, 'PNG', 5, 20, width-10, height);
-          doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+15, 2, 36, 17);
+          doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+25, 2, 36, 17);
           console.log("count:" + i + " annees:"+nbAnnees);
           if(i+1 == nbAnnees) {
             console.log("last page");

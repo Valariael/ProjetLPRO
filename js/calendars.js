@@ -9,12 +9,19 @@ var calendars = new Array();
 
 var started = true;
 
+String.prototype.visualLength = function()
+{
+  let ruler = document.getElementById("ruler");
+  ruler.innerHTML = this;
+  return ruler.offsetWidth;
+}
 
 function resizeInput(el) {
-  let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-  let fontSize = parseFloat(style)-2;
-  el.style.width = ((el.value.length) * fontSize) + 'px';
+  let text = el.value;
+  let len = text.visualLength();
+  el.style.width = (len*2) + 'px';
 }
+
 /*-------------------------------- import/export --------------------------------------*/
 
 function exportThis() {
@@ -368,7 +375,7 @@ function addVacancesItem() {
   li.className = "list-group-item vacances";
   li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\">suppr</a>";/*TODO improve*/
   list.appendChild(li);
-  if(list.children.length) {
+  if(list.children.length > 5) {
     let boutonAddVac = document.getElementById("btn_add_vacances");
     boutonAddVac.style.display = "none";
   }
@@ -820,9 +827,11 @@ function display(value){
 
   // The name
   $("#nomForm").val(calendars[value][0]);
+  resizeInput(document.getElementById("nomForm"));
 
   // The component and the place
   $("#compoAndPlace").val(calendars[value][1]);
+  resizeInput(document.getElementById("compoAndPlace"));
 
   if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
     displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);

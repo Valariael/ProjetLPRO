@@ -25,12 +25,12 @@
 					<label class="text-nowrap lblCat"> Sélectionner, créer ou supprimer un calendrier</label>
 					<div class="CalendarParam">
 						<div class="styled-select">
-							<select id="selectCal" onchange="displayData()"></select>
+							<select id="selectCal" onchange="displayData()" title="Cliquer pour afficher la liste des calendriers."></select>
 						</div>
-						<a onclick="addCalendarBtn();" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter le calendrier"></a> &nbsp;
-						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer le calendrier"></a>
-						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier"></a>
-						<a href="javascript:exportThis()" ><img src="content/download.png" alt="Exporter"  id="expCal" class="btnCal" title="Télécharger les données du calendrier"></a>
+						<a onclick="addCalendarBtn();" ><img src="content/file.png" alt="Ajouter" id="addCal" class="btnCal" title="Ajouter un nouveau calendrier."></a> &nbsp;
+						<a href="javascript:saveCalendarBtn()" ><img src="content/save.png" alt="Sauvegarder"  id="saveCal" class="btnCal" title="Enregistrer les changements du calendrier."></a>
+						<a href="javascript:delCalendarBtn()" ><img src="content/dustbin.png" alt="Supprimer"  id="delCal" class="btnCal" title="Supprimer le calendrier courant."></a>
+						<a href="javascript:exportThis()" ><img src="content/download.png" alt="Exporter"  id="expCal" class="btnCal" title="Télécharger les données du calendrier."></a>
 					</div>
 				</div>
 				<div class="col-sm-4 col-12 categories">
@@ -47,15 +47,15 @@
 					</select>
 				</div>
 				<div class="col-sm-1 col-12 categories">
-					<a class="btn btn-info btn-lg btnSettings" onclick="displayPopup(false);"><img src="content/settings.png" alt="Réglages"  id="regCal" title="Réglages du calendrier"></a>
+					<a class="btn btn-info btn-lg btnSettings" onclick="displayPopup(false);"><img src="content/settings.png" alt="Réglages"  id="regCal" title="Réglages du calendrier."></a>
 				</div>
 				<div class="col-sm-2 col-12 categories">
 					<label class="text-nowrap lblCat"> Génération du calendrier en PDF</label>
-					<a class="btn btn-danger btn-lg btnCategorie" onclick="genPDF();" >PDF</a>
+					<a class="btn btn-danger btn-lg btnCategorie" onclick="genPDF();" title="Produire un PDF du calendrier.">PDF</a>
 				</div>
 				<div class="col-sm-1 col-12 categories">
 					<label class="lblCat"> Résumé</label>
-					<a class="btn btn-info btn-lg btnCategorie" href="#calculPart"><img class="arrow-down" src="content/warrow_down.png"/></a>
+					<a class="btn btn-info btn-lg btnCategorie" href="#calculPart" title="Descendre vers le résumé."><img class="arrow-down" src="content/warrow_down.png"/></a>
 				</div>
 			</div>
 		</div>
@@ -72,10 +72,10 @@
 				<div id="top_pdf">
 					<h2> Calendrier prévisionnel</h2>
 					<div class="col-sm-12 col-12">
-						<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" value="" maxlength="90" onkeypress="resizeInput(this);"/>
+						<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" value="" maxlength="90" onkeyup="resizeInput(this);"/>
 					</div>
 					<div class="col-sm-12 col-12">
-						<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" maxlength="90" onkeypress="resizeInput(this);"/>
+						<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" maxlength="90" onkeyup="resizeInput(this);"/>
 					</div>
 				</div>
 			</center>
@@ -110,7 +110,7 @@
 					<tr>
 						<td class="tdLabel c3"><label>Examen </label></td>
 						<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
-						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="date" id="semaineDate" size="15"/> ou selon la date de fin du contrat.</p></td>
+						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="date" id="semaineDate" size="15" title="Date au format jj/mm/aaaa."/> ou selon la date de fin du contrat.</p></td>
 					</tr>
 					<tr>
 						<td class="tdLabel c4"><label>Entreprise</label></td>
@@ -120,7 +120,7 @@
 					<tr>
 						<td class="tdLabel c6"><label>Vacances universitaires</label></td>
 						<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
-						<td class="tdDesc"><p class="contrat_pro_info">Les salariés en <strong>contrat de professionnalisation </strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
+						<td class="tdDesc"><p class="contrat_pro_info">Les salariés en <strong>alternance</strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
 					</tr>
 				</table>
 			</div>
@@ -142,12 +142,12 @@
 	<div id="more_popup" class="container-fluid" style="display: none;">
 		<span class="to_center"></span>
 		<div>
-			<div id="fermer_popup" onclick="closePopup();">X</div>
+			<div id="fermer_popup" onclick="closePopup();" title="Fermer la fenêtre de réglages sans tenir compte des changements.">X</div>
 			<div class="dropdownAdvanced">
 				<a onclick="switchAdvancedMenu()" class="btn btn-info">Avancé</a>
 				<div id="dropdownAdvanced" class="dropdownAdvanced-content">
-					<a onclick="exportAll()">Tout exporter</a>
-					<a id="fullImportButton">Tout importer</a><input type="file" id="full_import_input" onchange="importFullFile();"/>
+					<a onclick="exportAll()" title="Télécharger les données de tous les calendriers en un fichier.">Tout exporter</a>
+					<a id="fullImportButton" title="Utiliser un fichier d'export de tous les calendriers pour importer ces derniers dans l'application.">Tout importer</a><input type="file" id="full_import_input" onchange="importFullFile();"/>
 				</div>
 			</div>
 			<div class="row">
@@ -162,7 +162,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<input type="text" id="titreInput" class="text-nowrap form-control" placeholder="Votre titre">
+					<input type="text" id="titreInput" class="text-nowrap form-control" placeholder="Votre titre" title="Le titre du calendrier/le nom de la formation.">
 				</div>
 			</div>
 			<div class="row">
@@ -191,7 +191,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<input type="number" id="champ_annees" min="1" class="form-control"/>
+					<input type="number" id="champ_annees" min="1" class="form-control" title="Nombre d'années sur lesquelles s'étend le calendrier."/>
 				</div>
 			</div>
 			<div id="contrat_pro">
@@ -225,7 +225,7 @@
 					<ul class="list-group" id="liste_vacances">
 						<li class="list-group-item vacances">Du <input type="date" id="debutVac0" min="2018-01-01" class="form-control dateInput"/> au <input type="date" id="finVac0" min="2018-01-01" class="form-control dateInput"/>. <a class="btn btn-danger" onclick="deleteVacancesItem('debutVac0');">suppr</a></li>
 					</ul>
-					<a id="btn_add_vacances" class="btn btn-info" onclick="addVacancesItem();">Ajouter une période</a>
+					<a id="btn_add_vacances" class="btn btn-info" onclick="addVacancesItem();" title="Ajouter une nouvelle période de vacances.">Ajouter une période</a>
 				</div>
 			</div>
 			<div class="row" id="divHoraire">
@@ -239,23 +239,25 @@
 			<div class="row">
 				<div class="col">
 					<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
-						<a id="btn_import" class="btn btn-info"><img src="content/upload.png" alt="Importer" id="uploadCal" title="Importer un calendrier"></a><input type="file" id="file_input" onchange="importFile();"/>
+						<a id="btn_import" class="btn btn-info"><img src="content/upload.png" alt="Importer" id="uploadCal" title="Rechercher le fichier d'export d'un calendrier dans vos documents."></a><input type="file" id="file_input" onchange="importFile();"/>
 						<p>Faites glisser ici le fichier du calendrier à importer ...</p>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					<a id="btn_form_valid" class="btn btn-success" onclick="validateForm();">Valider</a>
+					<a id="btn_form_valid" class="btn btn-success" onclick="validateForm();" title="Valider les changements.">Valider</a>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					<p id="erreur_form" class="text-nowrap" style="display: none;">Champ manquant.</p>
+					<p id="erreur_form" class="text-nowrap" style="display: none;" title="Une valeur du champ est incorrecte.">Champ manquant.</p>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<span id="ruler"></span>
 
 	<!-- ***** SCRIPS ***** -->
 
