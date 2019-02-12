@@ -22,7 +22,7 @@ $(document).mousedown(function() {
 
 /*----------------------------------- Fill Categories ----------------------------*/
 
-function fillCat (element){
+function fillCat (element){ //TODO define jquery function to replace the long lines
   let select = document.getElementById("selectCal");
   let choice = select.selectedIndex;
   if($(element).hasClass("ferieCat") && colorClass == "libreCat") {
@@ -69,7 +69,6 @@ function eventCategories(){
 
 	$('.day').click(function() {
 		fillCat(this);
-		//schedulesEvent();
  	});
 
 	$('.day').hover(function() {

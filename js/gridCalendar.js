@@ -122,7 +122,7 @@ function displayCalendar(n, year, month){
 	displays.forEach(function(element) {
 		calendar.innerHTML += element;
 	});
-	// Call the categories script TODO remove, fonction inexistante
+	// Call the categories script TODO remove, fonction inutile, sortir les listeners
 	eventCategories();
 }
 

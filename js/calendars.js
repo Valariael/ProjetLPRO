@@ -22,6 +22,37 @@ function resizeInput(el) {
   el.style.width = (len*2) + 'px';
 }
 
+function sortCalendars() {
+  calendars.sort(function(a,b) {
+    if (a[0] > b[0]) return 1;
+    if (a[0] < b[0]) return -1;
+    return 0; //TODO peut etre utiliser localeCompare pour prendre en compte les accents ?
+  });
+}
+
+function compareArrays(array1, array2) {
+  // if the other array is a falsy value, return
+  if (!array2)
+    return false;
+
+  // compare lengths - can save a lot of time
+  if (array1.length != array2.length)
+    return false;
+
+  for (var i = 0; i < array1.length; i++) {
+    // Check if we have nested arrays
+    if (array1[i] instanceof Array && array2[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!compareArrays(array1[i], array2[i]))
+        return false;
+    } else if (array1[i] != array2[i]) {
+      // Warning - two different object instances will never be equal: {x:20} != {x:20}
+      return false;
+    }
+  }
+  return true;
+}
+
 /*-------------------------------- import/export --------------------------------------*/
 
 function exportThis() {
@@ -562,9 +593,11 @@ $( document ).ready(function() {
       }
     }
 
+    sortCalendars();
+
     let select = document.getElementById('selectCal');
 
-    // Add the option to the select.
+    // Add the options to the select.
     for (let i = 0; i < calendars.length; i++) {
       if(calendars[i] != null){
         let newOption = new Option (calendars[i][0], i);
@@ -638,7 +671,7 @@ function addCalendarBtn() {
   // Switch to the new calendar
   $("#selectCal").val(idCalendar); // chanegr dates en années et creer les calendriers
 
-  // Add the option to the global table "calendars".
+  // Add the new calendar to the global table "calendars".
   addCalendarToArray(title);
 
   // Display the new calendar.
@@ -686,6 +719,29 @@ function delCalendarBtn(){
 
 function saveCalendarBtn(){
   save();
+  let select = document.getElementById("selectCal");
+
+  let currentCal = calendars[select.selectedIndex];
+
+  sortCalendars();
+  // Add the option to the select.
+  select.innerHTML = "";
+  for (let i = 0; i < calendars.length; i++) {
+    if(calendars[i] != null){//TODO remove condition ?
+      let newOption = new Option (calendars[i][0], i);
+      select.options.add(newOption);
+    }else{
+      continue;
+    }
+  }
+
+  for(let i=0; i<calendars.length; i++) {
+    if(compareArrays(currentCal, calendars[i])){
+      select.selectedIndex = i;
+      return;
+    }
+  }
+  console.log("lost comparing arrays");
 }
 
 /*-------------------------------- Calendars[] functions ------------------------------------*/
