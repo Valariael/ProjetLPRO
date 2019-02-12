@@ -215,10 +215,12 @@ function genPDF() {
       let heightTop;// = doc.internal.pageSize.height/8
       heightTop = ratio * widthTop;
       for(let i=0; i<nbAnnees; i++) {
-
+        let divTopHeight = $('#top_pdf').height();
+        let divTopWidth = $('#top_pdf').width();
+        ratio = divTopHeight / divTopWidth;
         optionsCal = {
-          height: $("#calendar"+i).height(),
-          width: $("#calendar"+i).width(),
+          height: divHeight/2,
+          width: divWidth,
         };
 
         html2canvas(document.getElementById("calendar"+i), optionsCal)
@@ -229,7 +231,7 @@ function genPDF() {
           imgDataCalendrier = canvas.toDataURL('image/png', 1.0);
           img.src = imgDataCalendrier;
           let width = doc.internal.pageSize.width;
-          let height = doc.internal.pageSize.height-10;
+          let height = doc.internal.pageSize.height;
           height = ratio * width;
 
 
@@ -258,9 +260,10 @@ function genPDF() {
 
 
               //Ajout des éléments au PDF
-              doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
+              //doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
+              doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
               doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, height+2);
-              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-15, 35, 15);
+              doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
 
               //appliquer le remplacement des cars TODO x2
               doc.output("save", "Calendrier_"+title+".pdf");
