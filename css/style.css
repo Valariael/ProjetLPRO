@@ -305,10 +305,14 @@ label {
 /*------------------------------------ Calendrier ------------------------------------*/
 
 #btnResume {
+	display: flex;
+  justify-content: center;
+  flex-direction: column;
 	margin-left: 10px;
 	height: 60px;
-	width: 120px;
+	width: 130px;
 	position: absolute;
+	text-align: center;
 }
 
 #resume {
@@ -323,23 +327,23 @@ label {
 }
 
 #labelJCours{
-  background: #4FC1E9;
+  background: #168bb6;
 }
 
 #labelJProjetTutUniv{
-  background: #37BC9B;
+  background: #a4dff4;
 }
 
 #labelJExamen{
-  background: #FFC266;
-}
-
-#labelJEntreprise{
   background: #cc9966;
 }
 
+#labelJEntreprise{
+  background: #f600f6;
+}
+
 #labelJProjetTutEts{
-  background: #AC92EC;
+  background: #ff99ff;
 }
 
 #labelJVacances{
@@ -424,23 +428,23 @@ table table td {
 /* colors */
 
 .coursCat{
-  background: #4FC1E9;
+  background: #168bb6;
 }
 
 .projetTutCoursCat{
-  background: #37BC9B;
+  background: #a4dff4;
 }
 
 .examenCat{
-  background: #FFC266;
-}
-
-.entrepriseCat{
   background: #cc9966;
 }
 
+.entrepriseCat{
+  background: #f600f6;
+}
+
 .projetTutEntrepriseCat{
-  background: #AC92EC;
+  background: #ff99ff;
 }
 
 .vacanceCat{
@@ -456,23 +460,23 @@ table table td {
 }
 
 .coursCat:hover{
-  background: #199dcc;
+  background: #49bee9;
 }
 
 .projetTutCoursCat:hover{
-  background: #2e9e82;
+  background: #d2eff9;
 }
 
 .examenCat:hover{
-  background: #f5af24;
-}
-
-.entrepriseCat:hover{
   background: #bf8040;
 }
 
+.entrepriseCat:hover{
+  background: #ff4dff;
+}
+
 .projetTutEntrepriseCat:hover{
-  background: #8b67e4;
+  background: #ffccff;
 }
 
 .vacanceCat:hover{
@@ -564,24 +568,24 @@ table table td {
 }
 
 /* Cours*/
-.c1{background: #4FC1E9;}
-.dropdown-menu>li>a.c1:focus, .dropdown-menu>li>a.c1:hover{background-color: #199dcc;}
+.c1{background: #168bb6;}
+.dropdown-menu>li>a.c1:focus, .dropdown-menu>li>a.c1:hover{background-color: #49bee9;}
 
 /* Projets tut. Cours*/
-.c2{background: #37BC9B;}
-.dropdown-menu>li>a.c2:focus, .dropdown-menu>li>a.c2:hover{background-color: #2e9e82;}
+.c2{background: #a4dff4;}
+.dropdown-menu>li>a.c2:focus, .dropdown-menu>li>a.c2:hover{background-color: #d2eff9;}
 
 /* Examen */
-.c3{background: #FFC266;}
-.dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #f5af24;}
+.c3{background: #cc9966;}
+.dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #bf8040;}
 
 /* Entreprise*/
-.c4{background: #cc9966;}
- .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #bf8040;}
+.c4{background: #f600f6;}
+ .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #ff4dff;}
 
 /* Projet tut Entreprise */
-.c5{background: #AC92EC;}
-.dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #8b67e4;}
+.c5{background: #ff99ff;}
+.dropdown-menu>li>a.c5:focus, .dropdown-menu>li>a.c5:hover{background-color: #ffccff;}
 
 /* Vacances*/
 .c6{background: #ff8533;}
@@ -660,16 +664,16 @@ table table td {
 /*-------------------------------------- Calcul --------------------------------------*/
 
 .recapCours {
-	background: #4FC1E9;
+	background: #168bb6;
 }
 .recapProjetTutUniv {
-	background: #37BC9B;
+	background: #a4dff4;
 }
 .recapProjetTutEts {
-	background: #AC92EC;
+	background: #ff99ff;
 }
 .recapEntreprise {
-	background: #cc9966;
+	background: #f600f6;
 }
 
 .resume{
