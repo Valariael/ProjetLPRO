@@ -37,10 +37,10 @@
 					<label class="text-nowrap lblCat"> Sélectionner une catégorie</label>
 					<select id="selectid" class="selectpicker">
 						<option class="c1" value="1" id="1">Cours</option><!--TODO inconsistent id-->
-						<option class="c2" value="2" id="2">Projet tut. Université</option>
-						<option class="c3" value="3" id="3">Examen</option>
-						<option class="c4" value="4" id="4">Entreprise</option>
-						<option class="c5" value="5" id="5">Projet tut. Entreprise</option>
+						<option class="c2" value="2" id="2">Projet tuteuré à l'UFC</option>
+						<option class="c3" value="3" id="3">Examens</option>
+						<option class="c4" value="4" id="4">En milieu professionnel</option>
+						<option class="c5" value="5" id="5">Projet tuteuré en milieu pro.</option>
 						<option class="c6" value="6" id="6">Vacances</option>
 						<option class="c7" value="7" id="7">Férié</option>
 						<option class="c8" value="8" id="8">Libre</option>
@@ -90,7 +90,7 @@
 	<div id="bottom_pdf">
 		<div id="calculPart">
 			<div class="row">
-				<a id="btnResume" class="btn btn-warning" onclick="updateResume()">Mettre à jour<br/>le récapitulatif</a>
+				<a id="btnResume" class="btn btn-warning" onclick="updateResume()">Mettre à jour le récapitulatif</a>
 				<table class="resume">
 					<tr>
 						<td class="tdLabel"><label>Catégories</label></td>
@@ -103,19 +103,24 @@
 						<td class="tdDesc"><p>Cours répartis sur <input type="text" id="semaineCours" size="3" value="0"/> semaines.</p></td>
 					</tr>
 					<tr>
-						<td class="tdLabel c2"><label>Projet tutoré</label></td>
+						<td class="tdLabel c2"><label>Projet tuteuré à l'UFC</label></td>
 						<td class="tdInput"><input type="text" id="heureCoursProjet" size="3" value="0"/></td>
-						<td class="tdDesc"><p>Projets tutorés répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
+						<td class="tdDesc"><p>Projets tuteurés à l'Université répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
 					</tr>
 					<tr>
-						<td class="tdLabel c3"><label>Examen </label></td>
+						<td class="tdLabel c3"><label>Examens</label></td>
 						<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
 						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="date" id="semaineDate" size="15" title="Date au format jj/mm/aaaa."/> ou selon la date de fin du contrat.</p></td>
 					</tr>
 					<tr>
-						<td class="tdLabel c4"><label>Entreprise</label></td>
+						<td class="tdLabel c4"><label>En milieu professionnel</label></td>
+						<td class="tdInput"><input type="text" id="heureEntreprise" size="3" value="0"/></td>
+						<td class="tdDesc"><p class="contrat_pro_info">Le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Période pratique répartie sur <input type="text" id="semaineEntreprise" size="3" value="0"/> semaines.</p></td>
+					</tr>
+					<tr>
+						<td class="tdLabel c5"><label>Projet tuteuré en milieu pro.</label></td>
 						<td class="tdInput"><input type="text" id="heureEntrepriseProjet" size="3" value="0"/></td>
-						<td class="tdDesc"><p class="contrat_pro_info">Le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Projet tutorés répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
+						<td class="tdDesc"><p>Projets tuteurés en milieu professionnel répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
 					</tr>
 					<tr>
 						<td class="tdLabel c6"><label>Vacances universitaires</label></td>

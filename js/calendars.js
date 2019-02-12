@@ -135,7 +135,7 @@ function exportAll() {
 
   let date = new Date();
   let blob = JSON.stringify(calendars);
-  let filename = "export_complet_"+date.toLocaleDateString('fr-FR');
+  let filename = "export_complet_" + date.toLocaleDateString('fr-FR');
   filename = filename.replace("/", "_");
   let elem = window.document.createElement('a');
   elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
@@ -643,6 +643,7 @@ function save(){
     document.getElementById("semaineCoursProjet").value,
     document.getElementById("semaineExamen").value,
     document.getElementById("semaineDate").value,
+    document.getElementById("semaineEntreprise").value,
     document.getElementById("semaineEntrepriseProjet").value
   ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6], parseFloat(document.getElementById("horaireDemiJournee").value));
 
@@ -675,7 +676,6 @@ function addCalendarBtn() {
   addCalendarToArray(title);
 
   // Display the new calendar.
-  console.log(calendars[0][6]);
   displayCalendar(1, currentYear, 1);
 
   updateResume();
@@ -684,6 +684,7 @@ function addCalendarBtn() {
   document.getElementById("semaineExamen").value = "0";
   document.getElementById("semaineDate").value = "";
   document.getElementById("semaineEntrepriseProjet").value = "0";
+  document.getElementById("semaineEntreprise").value = "0";
 
   save(); // add displayAddedCalendar
 
@@ -804,9 +805,10 @@ function setDataCategories(dataCategories){
   $("#heureCours").val('0');
   $("#heureCoursProjet").val('0');
   $("#heureExamen").val('0');
+  $("#heureEntreprise").val('0');
   $("#heureEntrepriseProjet").val('0');
   $("#heureVacance").val('0');
-  let nCours = 0, nCoursP = 0, nExamen = 0, nEtsP = 0, nVac = 0;
+  let nCours = 0, nCoursP = 0, nExamen = 0, nEts = 0, nEtsP = 0, nVac = 0;
 
   for(let r of document.getElementsByClassName("recapCours")) {
     r.innerHTML = "0";
@@ -827,7 +829,7 @@ function setDataCategories(dataCategories){
   $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
     let element = dataCategories.shift();
-
+//TODO replace long lines
     switch (element) {
       case 0: $(this).addClass('coursCat');
       $(this).closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]) * 10) / 10));
@@ -842,7 +844,7 @@ function setDataCategories(dataCategories){
       break;
       case 3: $(this).addClass('entrepriseCat');
       $(this).closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]) * 10) / 10));
-      nEtsP += calendars[choice][7];
+      nEts += calendars[choice][7];
       break;
       case 4: $(this).addClass('projetTutEntrepriseCat');
       $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]) * 10) / 10));
@@ -856,17 +858,19 @@ function setDataCategories(dataCategories){
     }
   });
 
-  $("#heureCours").val(Math.round((nCours * 10) / 10));
-  $("#heureCoursProjet").val(Math.round((nCoursP * 10) / 10));
-  $("#heureExamen").val(Math.round((nExamen * 10) / 10));
-  $("#heureEntrepriseProjet").val(Math.round((nEtsP * 10) / 10));
-  $("#heureVacance").val(Math.round((nVac * 10) / 10));
+  $("#heureCours").val(Math.round(nCours * 10) / 10);
+  $("#heureCoursProjet").val(Math.round(nCoursP * 10) / 10);
+  $("#heureExamen").val(Math.round(nExamen * 10) / 10);
+  $("#heureEntreprise").val(Math.round(nEts * 10) / 10);
+  $("#heureEntrepriseProjet").val(Math.round(nEtsP * 10) / 10);
+  $("#heureVacance").val(Math.round(nVac * 10) / 10);
 
-  $("#semaineCours").val(calendars[choice][3][0]);
+  $("#semaineCours").val(calendars[choice][3][0]); //TODO calcul auto semaines
   $("#semaineCoursProjet").val(calendars[choice][3][1]);
   $("#semaineExamen").val(calendars[choice][3][2]);
   $("#semaineDate").val(calendars[choice][3][3]);
-  $("#semaineEntrerpise").val(calendars[choice][3][4]);
+  $("#semaineEntreprise").val(calendars[choice][3][4]);
+  $("#semaineEntrepriseProjet").val(calendars[choice][3][5]);
 }
 
 /*-------------------------------- Display functions ------------------------------------*/
