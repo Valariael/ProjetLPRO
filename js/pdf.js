@@ -3,8 +3,7 @@
 
 var imgParts = [];
 
-function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
-  // Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.
+function genPDF() {
   var spinner = document.createElement("div");
   spinner.innerHTML = "<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>";
   spinner.className = "lds-roller";
@@ -87,6 +86,9 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
       imgDataCalendrier = canvas.toDataURL('image/png', 1.0);
       img.src = imgDataCalendrier;
       var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+      doc.setTextColor("#FF0000");
+      doc.setFontSize(9);
+
       let width = doc.internal.pageSize.width;
       let height = doc.internal.pageSize.height;
       height = ratio * width;
@@ -133,6 +135,7 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
           doc.addImage(imgTop, 'PNG', 10, 4, widthTop, heightTop);
           doc.addImage(img, 'PNG', 5, 20, width-10, height);
           doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
+          doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, height+2)
           doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
           doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width/2+25, 4, 36, 18);
 
@@ -201,6 +204,8 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
     };
 
     var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+    doc.setTextColor("#FF0000");
+    doc.setFontSize(9);
 
     html2canvas(document.getElementById('top_pdf'), optionsTop).then(function(canvasTop) {
       let imgTop = new Image();
@@ -254,6 +259,7 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
 
               //Ajout des éléments au PDF
               doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
+              doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, height+2);
               doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-15, 35, 15);
 
               //appliquer le remplacement des cars TODO x2
@@ -304,6 +310,7 @@ function genPDF() { // TODO ajout phrase en rouge au dessus calendrier :
               anim.parentElement.removeChild(anim);
             });
           } else {
+            doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, height+2);
             doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
             doc.addPage();
           }

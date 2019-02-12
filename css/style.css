@@ -339,7 +339,7 @@ label {
 }
 
 #labelJEntreprise{
-  background: #f600f6;
+  background: #f53df5;
 }
 
 #labelJProjetTutEts{
@@ -440,7 +440,7 @@ table table td {
 }
 
 .entrepriseCat{
-  background: #f600f6;
+  background: #f53df5;
 }
 
 .projetTutEntrepriseCat{
@@ -580,7 +580,7 @@ table table td {
 .dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #bf8040;}
 
 /* Entreprise*/
-.c4{background: #f600f6;}
+.c4{background: #f53df5;}
  .dropdown-menu>li>a.c4:focus, .dropdown-menu>li>a.c4:hover{background-color: #ff4dff;}
 
 /* Projet tut Entreprise */
@@ -673,7 +673,7 @@ table table td {
 	background: #ff99ff;
 }
 .recapEntreprise {
-	background: #f600f6;
+	background: #f53df5;
 }
 
 .resume{
