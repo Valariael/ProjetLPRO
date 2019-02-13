@@ -259,6 +259,10 @@ function displayPopup(start) {
   let champHoraire = document.getElementById("horaireDemiJournee");
   let boutonAddVac = document.getElementById("btn_add_vacances");
 
+  for(let el of document.getElementsByClassName("wrong")) {
+    el.classList.remove("wrong");
+  }
+
   if($("#dropdownAdvanced").hasClass("show")) {
     $("#dropdownAdvanced").removeClass("show");
   }
@@ -431,8 +435,7 @@ function validateForm() {
     for(let r of radios) {
       if(r.checked) divContrat = null;
     }
-    if(divContrat != null) errors.push(divContrat);
-    else document.getElementById("contrat_pro").style.backgroundColor = "inherit";
+    if(divContrat != null) errors.push("label_contrat");
     if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
   }
 
@@ -453,17 +456,12 @@ function validateForm() {
     }
   }
 
-  let inputs = document.querySelectorAll(".vacances input");
-  for (let input of inputs) {
-    document.getElementById(input.id).style.backgroundColor = "inherit";
-  }
-
   document.getElementById("erreur_form").style.display = "none";
   if(errors.length > 0){
     document.getElementById("erreur_form").style.display = "block";
     for (let error of errors) {
       console.log(error);
-      document.getElementById(error).style.backgroundColor = "#ffcccc";
+      document.getElementById(error).classList.add('wrong');
     }
   } else {
     validatePopup();

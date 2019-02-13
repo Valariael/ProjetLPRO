@@ -102,6 +102,7 @@ function displayCalendar(n, year, month){
 			}
 		} else {
 			for (let i = (month+7)%12; i < 7+(month+7)%12; i++) {
+				if(i>12) break; //FIX
 				display += "<td>" + getCalendar((year+1), i) + "</td>";
 			}
 		}
@@ -114,6 +115,7 @@ function displayCalendar(n, year, month){
 		displays.push(display);
 
 		year = year+1;
+		if(month+14 > 24) year++; //FIX
 		month = (month+14)%12;
 	}
 

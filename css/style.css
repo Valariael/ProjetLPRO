@@ -85,6 +85,9 @@ label {
 	position: relative;
 	left: 30%;
 }
+.wrong {
+	background-color: #ffcccc;
+}
 .dateInput {
 	max-width: 200px;
 	display: inline;
@@ -305,14 +308,16 @@ label {
 /*------------------------------------ Calendrier ------------------------------------*/
 
 #btnResume {
-	display: flex;
-  justify-content: center;
-  flex-direction: column;
 	margin-left: 10px;
 	height: 60px;
-	width: 130px;
+	width: 140px;
 	position: absolute;
+	cursor: pointer;
+}
+#btnResume label {
+	width: 130px;
 	text-align: center;
+	cursor: pointer;
 }
 
 #resume {
@@ -634,6 +639,7 @@ table table td {
 
 .btnCal{
 	margin-bottom: 25px;
+	cursor: pointer;
 }
 
 #expCal, #regCal{
