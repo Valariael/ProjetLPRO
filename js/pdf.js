@@ -16,9 +16,9 @@ function genPDF() {
   document.body.appendChild(spinner);
 
   let select = document.getElementById("selectCal");
-  let nbAnnees = calendars[select.selectedIndex][4];
-  let isPro = calendars[select.selectedIndex][5];
-  let anneeDebut = parseInt(calendars[select.selectedIndex][6][0]);
+  let nbAnnees = calendars[select.selectedIndex][5];
+  let isPro = calendars[select.selectedIndex][6];
+  let anneeDebut = parseInt(calendars[select.selectedIndex][7][0]);
   let strCal = "Calendrier prévisionnel " + anneeDebut + "-" + (anneeDebut+nbAnnees);
 
   var countPage;

@@ -92,15 +92,7 @@ label {
 	max-width: 200px;
 	display: inline;
 }
-#titreInput {
-	margin-top: 10px;
-	width: 300px;
-	max-width: 400px;
-	display: block;
-	position: relative;
-	left: 23%;
-}
-#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_titre, #label_dates, #btn_add_vacances, #label_contrat, #label_start, #divStart, #divHoraire {
+#liste_vacances, #label_vacances, #more_popup h4, #btn_form_valid, #label_dates, #btn_add_vacances, #label_contrat, #label_start, #divStart, #divHoraire {
 	margin-top: 20px;
 }
 #champ_annees {
@@ -308,23 +300,37 @@ label {
 /*------------------------------------ Calendrier ------------------------------------*/
 
 #btnResume {
-	margin-left: 10px;
-	height: 60px;
-	width: 140px;
+	margin-left: 5px;
+	height: 55px;
+	max-width: 135px;
 	position: absolute;
 	cursor: pointer;
 }
 #btnResume label {
-	width: 130px;
 	text-align: center;
+	font-size: 11pt;
 	cursor: pointer;
+}
+
+#btnDateExamen {
+	margin-top: 100px;
+	margin-left: 5px;
+	height: 55px;
+	max-width: 125px;
+	position: absolute;
+	left: 5px;
+	cursor: pointer;
+}
+#btnDateExamen label {
+	text-align: center;
+	font-size: 11pt;
+	cursor: pointer;
+	color: white;
 }
 
 #resume {
 	margin-top: 40px;
-	margin-right: 100px;
 	position: relative;
-	right: 50px;
 }
 
 #resume td {
@@ -340,7 +346,7 @@ label {
 }
 
 #labelJExamen{
-  background: #cc9966;
+  background: #5cd65c;
 }
 
 #labelJEntreprise{
@@ -441,7 +447,7 @@ table table td {
 }
 
 .examenCat{
-  background: #cc9966;
+  background: #5cd65c;
 }
 
 .entrepriseCat{
@@ -473,7 +479,7 @@ table table td {
 }
 
 .examenCat:hover{
-  background: #bf8040;
+  background: #84e184;
 }
 
 .entrepriseCat:hover{
@@ -581,8 +587,8 @@ table table td {
 .dropdown-menu>li>a.c2:focus, .dropdown-menu>li>a.c2:hover{background-color: #d2eff9;}
 
 /* Examen */
-.c3{background: #cc9966;}
-.dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #bf8040;}
+.c3{background: #5cd65c;}
+.dropdown-menu>li>a.c3:focus, .dropdown-menu>li>a.c3:hover{background-color: #84e184;}
 
 /* Entreprise*/
 .c4{background: #f53df5;}

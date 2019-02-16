@@ -5,7 +5,7 @@ var currentDate = new Date();
 var currentYear = currentDate.getFullYear();
 var calendars = new Array();
 
-// Format : calendars[calendar[title][compoAndPlace][arrayOfCategories][semainesRecap],nbAnnees, contratPro, anneeDebut]
+// Format : calendars[title, complement, compoAndPlace, [arrayOfCategories], [semainesRecap], nbAnnees, contratPro, [anneeDebut, moisDebut], tauxHoraire]
 
 var started = true;
 
@@ -27,24 +27,24 @@ function sortCalendars() {
     if (a[0] > b[0]) return 1;
     if (a[0] < b[0]) return -1;
     return 0; //TODO peut etre utiliser localeCompare pour prendre en compte les accents ?
-  });
+  }); // TODO comparer suivant complement aussi
 }
 
 function compareArrays(array1, array2) {
   // if the other array is a falsy value, return
   if (!array2)
-    return false;
+  return false;
 
   // compare lengths - can save a lot of time
   if (array1.length != array2.length)
-    return false;
+  return false;
 
   for (var i = 0; i < array1.length; i++) {
     // Check if we have nested arrays
     if (array1[i] instanceof Array && array2[i] instanceof Array) {
       // recurse into the nested arrays
       if (!compareArrays(array1[i], array2[i]))
-        return false;
+      return false;
     } else if (array1[i] != array2[i]) {
       // Warning - two different object instances will never be equal: {x:20} != {x:20}
       return false;
@@ -296,7 +296,6 @@ function displayPopup(start) {
     document.getElementById("radio_pro").checked = false;
     document.getElementById("radio_nonpro").checked = false;
 
-    document.getElementById("titreInput").value = "";
     champAnnees.value = "";
   } else {
     selectAnnee.style.display = "none";
@@ -305,17 +304,16 @@ function displayPopup(start) {
     labelMois.style.display = "none";
     labelStart.style.display = "none";
 
-    document.getElementById("titre_popup").innerHTML = "Paramètres";
-    document.getElementById("titreInput").value = calendars[parseInt(select.options[choice].value, 10)][0];
+    document.getElementById("titre_popup").innerHTML = "Options";
     fermer.style.display = "inline-block";
     importer.style.display = "block";
     labelDates.style.display = "none";
     champAnnees.style.display = "none";
     contratPro.style.display = "none";
-    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][4];
+    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][5];
   }
 
-  champHoraire.value = calendars[parseInt(select.options[choice].value, 10)][7];
+  champHoraire.value = calendars[parseInt(select.options[choice].value, 10)][8];
   boutonAddVac.style.display = "";
 
   let list = document.getElementById("liste_vacances");
@@ -350,24 +348,20 @@ function validatePopup() {
   }
 
   if(!started) {
-    calendars[parseInt(select.options[choice].value, 10)][6] = new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value);
+    calendars[parseInt(select.options[choice].value, 10)][7] = new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value);
   }
 
   if(isNaN(nbAnnees)) {
-    calendars[parseInt(select.options[choice].value, 10)][0] = document.getElementById("titreInput").value;
-    calendars[parseInt(select.options[choice].value, 10)][4] = 1;
-    if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
+    calendars[parseInt(select.options[choice].value, 10)][5] = 1;
+    if(calendars[parseInt(select.options[choice].value, 10)][6] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][6] = contratPro;
     }
   } else {
-    calendars[parseInt(select.options[choice].value, 10)][0] = document.getElementById("titreInput").value;
-    calendars[parseInt(select.options[choice].value, 10)][4] = nbAnnees;
-    if(calendars[parseInt(select.options[choice].value, 10)][5] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][5] = contratPro;
+    calendars[parseInt(select.options[choice].value, 10)][5] = nbAnnees;
+    if(calendars[parseInt(select.options[choice].value, 10)][6] == null) {
+      calendars[parseInt(select.options[choice].value, 10)][6] = contratPro;
     }
   }
-
-  if(document.getElementById("titreInput").value != document.getElementById("nomForm").value) document.getElementById("nomForm").value = document.getElementById("titreInput").value;
 
   if(started) {
     save();
@@ -427,7 +421,6 @@ function validateForm() {
   let id;
   let finVac = "", debutVac = "";
   let champAnnees = document.getElementById("champ_annees").value;
-  let champTitre = document.getElementById("titreInput");
   let radios = document.getElementsByName("contratInput");
 
   if(!started) {
@@ -438,8 +431,6 @@ function validateForm() {
     if(divContrat != null) errors.push("label_contrat");
     if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
   }
-
-  if(champTitre.value==null || champTitre.value=="") errors.push("titreInput");
 
   for (let vac of vacances) {
     let inputs = document.querySelectorAll(".vacances input");
@@ -605,7 +596,7 @@ $( document ).ready(function() {
       }
     }
 
-    displayCalendar(calendars[parseInt(select.options[select.options.length-1].value, 10)][4], calendars[parseInt(select.options[select.options.length-1].value, 10)][6][0], calendars[parseInt(select.options[select.options.length-1].value, 10)][6][1]);
+    displayCalendar(calendars[parseInt(select.options[select.options.length-1].value, 10)][5], calendars[parseInt(select.options[select.options.length-1].value, 10)][7][0], calendars[parseInt(select.options[select.options.length-1].value, 10)][7][1]);
     // refresh the display
 
     select.selectedIndex = select.options.length-1;
@@ -632,18 +623,20 @@ function save(){
   // Get the component and the place.
   let compoAndPlace = document.getElementById('compoAndPlace').value;
 
+  let complement = document.getElementById("compForm").value;
+
   // Create the data categories.
   let dataCategories = createDataCategories();
 
   // Edit the global table "calendars".
-  editCalendarArray(parseInt(select.options[choice].value, 10), title, compoAndPlace, dataCategories, new Array(
+  editCalendarArray(parseInt(select.options[choice].value, 10), title, complement, compoAndPlace, dataCategories, new Array(
     document.getElementById("semaineCours").value,
     document.getElementById("semaineCoursProjet").value,
     document.getElementById("semaineExamen").value,
     document.getElementById("semaineDate").value,
     document.getElementById("semaineEntreprise").value,
     document.getElementById("semaineEntrepriseProjet").value
-  ), calendars[parseInt(select.options[choice].value, 10)][4], calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6], parseFloat(document.getElementById("horaireDemiJournee").value));
+  ), calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6], calendars[parseInt(select.options[choice].value, 10)][7], parseFloat(document.getElementById("horaireDemiJournee").value));
 
   // change select.
   select.children[select.selectedIndex].innerHTML = title;
@@ -659,6 +652,11 @@ function addCalendarBtn() {
 
   let title = "Calendrier vierge " + currentYear;
   document.getElementById("nomForm").value = title;
+  resizeInput(document.getElementById("nomForm"));
+  document.getElementById("compForm").value = "";
+  resizeInput(document.getElementById("compForm"));
+  document.getElementById("compoAndPlace").value = "";
+  resizeInput(document.getElementById("compoAndPlace"));
   // Set the id calendar
   idCalendar = calendars.length;
 
@@ -748,19 +746,19 @@ function saveCalendarBtn(){
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
-  calendars[calendars.length] = new Array(title, "", null, ["0","0","0","00 / 00 / 0000","0", "0"], 1, null, new Array(today.getFullYear(),1), 3.5);
+  calendars[calendars.length] = new Array(title, "", "", null, ["0","0","0","00 / 00 / 0000","0", "0"], 1, null, new Array(today.getFullYear(),1), 3.5);
 }
 
-function editCalendarArray(id, title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee) {
+function editCalendarArray(id, title, complement, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee) {
 
-  calendars[id] = new Array(title, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee);
+  calendars[id] = new Array(title, complement, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee);
 }
 
 function delCalendarOfArray(id) {
   calendars.splice(id, 1);
 }
 
-/*-------------------------------- Categories functions  ------------------------------------*/
+/*-------------------------------- Categories/Résumé functions  ------------------------------------*/
 
 function createDataCategories(){
 
@@ -796,7 +794,31 @@ function updateResume() {
   let select = document.getElementById("selectCal");
   let index = select.selectedIndex;
   save();
-  setDataCategories(calendars[parseInt(select.options[index].value)][2].slice(0));
+  setDataCategories(calendars[parseInt(select.options[index].value)][3].slice(0));
+}
+
+function toggleDateExamen() {
+  let btnDateExamen = document.getElementById("btnDateExamen");
+  let labelDateExamen = document.querySelector("#btnDateExamen label");
+  let dateExamenContainer = document.getElementById("dateExamenContainer");
+
+  if(labelDateExamen.classList.contains("dateADefinir")) {
+    labelDateExamen.innerHTML = "Date examen<br>à définir";
+    labelDateExamen.style.color = "";
+    btnDateExamen.style.backgroundColor = "";
+
+    dateExamenContainer.innerHTML = "<input type=\"date\" id=\"semaineDate\" size=\"15\" title=\"Date au format jj/mm/aaaa.\"/>";
+
+    labelDateExamen.classList.remove("dateADefinir");
+  } else {
+    labelDateExamen.innerHTML = "Date examen<br>connue";
+    labelDateExamen.style.color = "black";
+    btnDateExamen.style.backgroundColor = "#d9d9d9";
+
+    dateExamenContainer.innerHTML = "'à définir'";
+
+    labelDateExamen.classList.add("dateADefinir");
+  }
 }
 
 function setDataCategories(dataCategories){
@@ -827,29 +849,29 @@ function setDataCategories(dataCategories){
   $('.day').removeClass('coursCat projetTutCoursCat examenCat entrepriseCat ferieCat  projetTutEntrepriseCat vacanceCat libreCat');
   $('.day').each(function() {
     let element = dataCategories.shift();
-//TODO replace long lines
+    //TODO replace long lines
     switch (element) {
       case 0: $(this).addClass('coursCat');
-      $(this).closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][7]) * 10) / 10));
-      nCours += calendars[choice][7];
+      $(this).closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapCours').html())+calendars[choice][8]) * 10) / 10));
+      nCours += calendars[choice][8];
       break;
       case 1: $(this).addClass('projetTutCoursCat');
-      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][7]) * 10) / 10));
-      nCoursP += calendars[choice][7];
+      $(this).closest('table').next('table').find('.recapProjetTutUniv').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutUniv').html())+calendars[choice][8]) * 10) / 10));
+      nCoursP += calendars[choice][8];
       break;
       case 2: $(this).addClass('examenCat');
-      nExamen += calendars[choice][7];
+      nExamen += calendars[choice][8];
       break;
       case 3: $(this).addClass('entrepriseCat');
-      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][7]) * 10) / 10));
-      nEts += calendars[choice][7];
+      $(this).closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapEntreprise').html())+calendars[choice][8]) * 10) / 10));
+      nEts += calendars[choice][8];
       break;
       case 4: $(this).addClass('projetTutEntrepriseCat');
-      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][7]) * 10) / 10));
-      nEtsP += calendars[choice][7];
+      $(this).closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(this).closest('table').next('table').find('.recapProjetTutEts').html())+calendars[choice][8]) * 10) / 10));
+      nEtsP += calendars[choice][8];
       break;
       case 5:$(this).addClass('vacanceCat');
-      nVac += calendars[choice][7];
+      nVac += calendars[choice][8];
       break;
       case 6:$(this).addClass('ferieCat');break;
       default:$(this).addClass('libreCat');break;
@@ -863,12 +885,12 @@ function setDataCategories(dataCategories){
   $("#heureEntrepriseProjet").val(Math.round(nEtsP * 10) / 10);
   $("#heureVacance").val(Math.round(nVac * 10) / 10);
 
-  $("#semaineCours").val(calendars[choice][3][0]); //TODO calcul auto semaines
-  $("#semaineCoursProjet").val(calendars[choice][3][1]);
-  $("#semaineExamen").val(calendars[choice][3][2]);
-  $("#semaineDate").val(calendars[choice][3][3]);
-  $("#semaineEntreprise").val(calendars[choice][3][4]);
-  $("#semaineEntrepriseProjet").val(calendars[choice][3][5]);
+  $("#semaineCours").val(calendars[choice][4][0]); //TODO calcul auto semaines
+  $("#semaineCoursProjet").val(calendars[choice][4][1]);
+  $("#semaineExamen").val(calendars[choice][4][2]);
+  $("#semaineDate").val(calendars[choice][4][3]);
+  $("#semaineEntreprise").val(calendars[choice][4][4]);
+  $("#semaineEntrepriseProjet").val(calendars[choice][4][5]);
 }
 
 /*-------------------------------- Display functions ------------------------------------*/
@@ -878,6 +900,8 @@ function displayData(){
   let select = document.getElementById('selectCal');
   let index = select.selectedIndex;
   display(parseInt(select.options[index].value));
+
+
 }
 
 function display(value){
@@ -887,22 +911,26 @@ function display(value){
   $("#nomForm").val(calendars[value][0]);
   resizeInput(document.getElementById("nomForm"));
 
+  // Ligne complémentaire
+  $("#compForm").val(calendars[value][1]);
+  resizeInput(document.getElementById("compForm"));
+
   // The component and the place
-  $("#compoAndPlace").val(calendars[value][1]);
+  $("#compoAndPlace").val(calendars[value][2]);
   resizeInput(document.getElementById("compoAndPlace"));
 
-  if(calendars[value][2] == null || calendars[value][2] == "" || calendars[value][2] == undefined){
-    displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);
+  if(calendars[value][3] == null || calendars[value][3] == "" || calendars[value][3] == undefined){
+    displayCalendar(calendars[value][5], calendars[value][7][0], calendars[value][7][1]);
   }else{
-    displayCalendar(calendars[value][4], calendars[value][6][0], calendars[value][6][1]);
+    displayCalendar(calendars[value][5], calendars[value][7][0], calendars[value][7][1]);
     // The table of categories is duplicated to avoid modifying the orginial table.
-    let duplicatedCalendar1 = calendars[value][2].slice(0);
+    let duplicatedCalendar1 = calendars[value][3].slice(0);
     setDataCategories(duplicatedCalendar1);
   }
 
   let infosPro = document.getElementsByClassName("contrat_pro_info");
   for(let i of infosPro) {
-    if(calendars[value][5]) {
+    if(calendars[value][6]) {
       i.style.display = "block";
     } else {
       i.style.display = "none";

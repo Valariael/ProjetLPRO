@@ -47,7 +47,7 @@
 					</select>
 				</div>
 				<div class="col-sm-1 col-12 categories">
-					<a class="btn btn-info btn-lg btnSettings" onclick="displayPopup(false);"><img src="content/settings.png" alt="Réglages"  id="regCal" title="Réglages du calendrier."></a>
+					<a class="btn btn-info btn-lg btnSettings" onclick="displayPopup(false);"><img src="content/settings.png" alt="Options"  id="regCal" title="Ouvre le volet des options."></a>
 				</div>
 				<div class="col-sm-2 col-12 categories">
 					<label class="text-nowrap lblCat"> Génération du calendrier en PDF</label>
@@ -69,14 +69,15 @@
 		</div>
 		<div class="col-sm-6 col-6">
 			<center>
-				<div id="top_pdf">
-					<h2> Calendrier prévisionnel</h2>
-					<div class="col-sm-12 col-12">
-						<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" value="" maxlength="90" onkeyup="resizeInput(this);"/>
-					</div>
-					<div class="col-sm-12 col-12">
-						<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" maxlength="90" onkeyup="resizeInput(this);"/>
-					</div>
+				<h2> Calendrier prévisionnel</h2>
+				<div class="col-sm-12 col-12">
+					<input type="text" id="nomForm" class="nomFormation" placeholder="Nom de la formation" value="" maxlength="90" onkeyup="resizeInput(this);"/>
+				</div>
+				<div class="col-sm-12 col-12">
+					<input type="text" id="compForm" class="nomFormation" placeholder="Ligne complémentaire" value="" maxlength="90" onkeyup="resizeInput(this);"/>
+				</div>
+				<div class="col-sm-12 col-12">
+					<input type="text" id="compoAndPlace" class="nomFormation" placeholder="Composante et lieu de formation" value="" maxlength="90" onkeyup="resizeInput(this);"/>
 				</div>
 			</center>
 		</div>
@@ -108,11 +109,6 @@
 						<td class="tdDesc"><p>Projets tuteurés à l'Université répartis sur <input type="text" id="semaineCoursProjet" size="3" value="0"/> semaines.</p></td>
 					</tr>
 					<tr>
-						<td class="tdLabel c3"><label>Examens</label></td>
-						<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
-						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <input type="date" id="semaineDate" size="15" title="Date au format jj/mm/aaaa."/> ou selon la date de fin du contrat.</p></td>
-					</tr>
-					<tr>
 						<td class="tdLabel c4"><label>En milieu professionnel</label></td>
 						<td class="tdInput"><input type="text" id="heureEntreprise" size="3" value="0"/></td>
 						<td class="tdDesc"><p class="contrat_pro_info">Le contrat de travail peut démarrer au plus tôt 2 mois avant le début de la formation et prendre fin au plus tard 2 mois après le dernier jour en centre (cours ou examen).</p><p>Période pratique répartie sur <input type="text" id="semaineEntreprise" size="3" value="0"/> semaines.</p></td>
@@ -123,11 +119,17 @@
 						<td class="tdDesc"><p>Projets tuteurés en milieu professionnel répartis sur <input type="text" id="semaineEntrepriseProjet" size="3" value="0"/> semaines.</p></td>
 					</tr>
 					<tr>
+						<td class="tdLabel c3"><label>Examens</label></td>
+						<td class="tdInput"><input type="text" id="heureExamen" size="3" value="0"/></td>
+						<td class="tdDesc"><p>Contrôle continu de formation et/ou examens ponctuels répartis sur <input type="text" id="semaineExamen" size="3" value="0"/> semaines.</p><p>La soutenance de validation de l'UE "Stage" aura lieu le <span id="dateExamenContainer"><input type="date" id="semaineDate" size="15" title="Date au format jj/mm/aaaa."/></span>.</p></td>
+					</tr>
+					<tr>
 						<td class="tdLabel c6"><label>Vacances universitaires</label></td>
 						<td class="tdInput"><input type="text" id="heureVacance" size="3" value="0"/></td>
 						<td class="tdDesc"><p class="contrat_pro_info">Les salariés en <strong>alternance</strong> sont en entreprise ou en congés payés durant ces périodes (à définir avec l'employeur).</p></td>
 					</tr>
 				</table>
+				<a id="btnDateExamen" class="btn btn-secondary" onclick="toggleDateExamen()"><label>Date examen<br>à définir</label></a>
 			</div>
 		</div>
 
@@ -158,16 +160,6 @@
 			<div class="row">
 				<div class="col">
 					<h4 id="titre_popup" class="text-nowrap">Quelques informations avant de commencer :</h4>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<label id="label_titre" for="titreInput" class="text-nowrap">Titre : </label>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<input type="text" id="titreInput" class="text-nowrap form-control" placeholder="Votre titre" title="Le titre du calendrier/le nom de la formation.">
 				</div>
 			</div>
 			<div class="row">
