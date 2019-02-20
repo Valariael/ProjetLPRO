@@ -1,28 +1,46 @@
 
 // Manage the calendars.
 
-var currentDate = new Date();
+let currentDate = new Date();
 var currentYear = currentDate.getFullYear();
 var calendars = new Array();
 
-// Format : calendars[title, complement, compoAndPlace, [arrayOfCategories], [semainesRecap], nbAnnees, contratPro, [anneeDebut, moisDebut], tauxHoraire]
+// Format des données stockées : calendars[title, complement, compoAndPlace, [arrayOfCategories], [semainesRecap], nbAnnees, contratPro, [anneeDebut, moisDebut], tauxHoraire]
 
 var started = true;
 
+/*-------------------------------- utilitaires --------------------------------------*/
+
+/**
+ * Extension de la classe String.
+ *
+ * Renvoie la longueur réelle d'une chaine de caractères dans un input text.
+ */
 String.prototype.visualLength = function()
 {
   let ruler = document.getElementById("ruler");
+
+  // On écrit la chaine de caractères dans un input non formatté.
   ruler.innerHTML = this;
+  // Puis on récupère sa largeur réelle avec l'attribut offsetWidth.
   return ruler.offsetWidth;
 }
 
+/**
+ * Adapte la taille de l'input text <el> à son contenu.
+ * Nécessite une taille max en CSS.
+ */
 function resizeInput(el) {
   let text = el.value;
   let len = text.visualLength();
   el.style.width = (len*2) + 'px';
 }
 
+/**
+ * Classe les calendriers dans le tableau 'calendars' en ordre alphabétique suivant leur titre.
+ */
 function sortCalendars() {
+  // La fonction sort d'Array accepte un paramètre qui est une redéfinition de la fonction de rangement.
   calendars.sort(function(a,b) {
     if (a[0] > b[0]) return 1;
     if (a[0] < b[0]) return -1;
@@ -30,549 +48,46 @@ function sortCalendars() {
   }); // TODO comparer suivant complement aussi
 }
 
+/**
+ * Compare les tableaux <array1> et <array2>.
+ *
+ * Renvoie vrai si identiques, faux sinon.
+ */
 function compareArrays(array1, array2) {
-  // if the other array is a falsy value, return
+  // D'abord on vérifie que le second tableau ne soit pas faux.
   if (!array2)
   return false;
 
-  // compare lengths - can save a lot of time
+  // On compare les tailles avant de continuer.
   if (array1.length != array2.length)
   return false;
 
   for (var i = 0; i < array1.length; i++) {
-    // Check if we have nested arrays
+    // S'il y a des tableaux imbriqués, on fait du récursif.
     if (array1[i] instanceof Array && array2[i] instanceof Array) {
-      // recurse into the nested arrays
       if (!compareArrays(array1[i], array2[i]))
       return false;
+    // Sinon on compare les objets.
     } else if (array1[i] != array2[i]) {
-      // Warning - two different object instances will never be equal: {x:20} != {x:20}
       return false;
     }
   }
   return true;
 }
 
-/*-------------------------------- import/export --------------------------------------*/
-
-function exportThis() {
-  let select = document.getElementById("selectCal");
-  exportCalendar(select.selectedIndex);
-}
-
-function exportCalendar(id) {
-  let blob = JSON.stringify(calendars[id]);
-  let filename = "export_"+calendars[id][0];
-  //On remplace tous les caractères interdits dans les noms de fichiers
-  filename = filename.replace(/[`\s~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "_");
-  let elem = window.document.createElement('a');
-  elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
-  elem.download = filename;
-  document.body.appendChild(elem);
-  elem.click();
-  document.body.removeChild(elem);
-}
-
-function importFile() {
-  let file = document.getElementById("file_input").files[0];
-  if (file) {
-    let r = new FileReader();
-    r.onload = function(e) {
-      let contents = e.target.result;
-      importCalendar(contents);
-    }
-    r.readAsText(file);
-    alert("Calendrier importé.");
-  } else {
-    alert("Échec de l'importation.");
-  }
-  document.getElementById("file_input").value = "";
-}
-
-function importCalendar(data) {
-  let cal = JSON.parse(decodeURIComponent(data));
-  calendars.push(cal);
-  let index = calendars.indexOf(cal);
-
-  // Set the id calendar
-  idCalendar = calendars.length;
-
-  // Add the option to the select.
-  let select = document.getElementById('selectCal');
-  let newOption = new Option (cal[0], index);
-  select.options.add(newOption);
-
-  // Switch to the new calendar
-  $("#selectCal").val(index); // chanegr dates en années et creer les calendriers
-
-  // Display the imported calendar.
-  display(index);
-  save();
-
-  started = true;
-}
-
-function switchAdvancedMenu() {
-  if($("#dropdownAdvanced").hasClass("show")) {
-    $("#dropdownAdvanced").removeClass("show");
-  } else {
-    $("#dropdownAdvanced").addClass("show");
-  }
-}
-
-$("#fullImportButton").click(function(e){
-  e.preventDefault();
-  $("#full_import_input").trigger('click');
-});
-
-function exportAll() {
-  // Suppression des éventuels null apparut dans la liste des calendriers (BUGFIX)
-  for (let i = calendars.length - 1; i >= 0; i--) {
-    if(calendars[i] == null) {
-      calendars.splice(i, 1);
-    }
-  }
-
-  let date = new Date();
-  let blob = JSON.stringify(calendars);
-  let filename = "export_complet_" + date.toLocaleDateString('fr-FR');
-  filename = filename.replace("/", "_");
-  let elem = window.document.createElement('a');
-  elem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(blob));
-  elem.download = filename;
-  document.body.appendChild(elem);
-  elem.click();
-  document.body.removeChild(elem);
-}
-
-function importFullFile() {
-  let file = document.getElementById("full_import_input").files[0];
-  if (file) {
-    let r = new FileReader();
-    r.onload = function(e) {
-      let contents = e.target.result;
-      if(confirm("Voulez-vous remplacer les calendriers existants ?\n(Cette opération est irréversible)")) {
-        importAll(true, contents);
-      } else {
-        importAll(false, contents);
-      }
-    }
-    r.readAsText(file);
-  } else {
-    alert("Échec de l'importation.");
-  }
-  document.getElementById("full_import_input").value = "";
-}
-
-function importAll(override, data) {
-  let cal = JSON.parse(decodeURIComponent(data));
-  let index;
-  if(override) {
-    index = 0;
-    calendars = cal;
-  } else {
-    index = calendars.length;
-    calendars = calendars.concat(cal);
-  }
-
-  let select = document.getElementById('selectCal');
-  let newOption;
-  for(let c of cal) {
-    newOption = new Option (c[0], index);
-    select.options.add(newOption);
-    index++;
-  }
-
-  index--;
-  $("#selectCal").val(index);
-
-  display(index);
-  save();
-
-  started = true;
-}
-
-/*---------------------------------- drag n drop --------------------------------------*/
-
-function dropHandler(ev) {
-  // Prevent default behavior (Prevent file from being opened)
-  ev.preventDefault();
-
-  let fr = new FileReader();
-
-  if (ev.dataTransfer.items) {
-    // Use DataTransferItemList interface to access the file(s)
-    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
-      // If dropped items aren't files, reject them
-      if (ev.dataTransfer.items[i].kind === 'file') {
-
-        let file = ev.dataTransfer.items[i].getAsFile();
-        if (file) {
-          let r = new FileReader();
-          r.onload = function(e) {
-            let contents = e.target.result;
-            importCalendar(contents);
-          }
-          r.readAsText(file);
-          alert("Calendrier importé.");
-        }
-      } else {
-        alert("Échec de l'import du calendrier.");
-      }
-    }
-  } else {
-    // Use DataTransfer interface to access the file(s)
-    for (var i = 0; i < ev.dataTransfer.files.length; i++) {
-      console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
-      console.log("LOST datatransfer");
-    }
-  }
-}
-
-function dragOverHandler(ev) {
-  // Prevent default behavior (Prevent file from being opened)
-  ev.preventDefault();
-}
-
-$("#btn_import").click(function(e){
-  e.preventDefault();
-  $("#file_input").trigger('click');
-});
-
-/*-------------------------------- personalization ------------------------------------*/
-
-function displayPopup(start) {
-  document.getElementById("erreur_form").style.display = "none";
-  let select = document.getElementById('selectCal');
-  let choice = select.selectedIndex;
-  let popup = document.getElementById("more_popup");
-  let labelDates = document.getElementById("label_dates");
-  let champAnnees = document.getElementById("champ_annees");
-  let fermer = document.getElementById("fermer_popup");
-  let importer = document.getElementById("drop_zone");
-  let contratPro = document.getElementById("contrat_pro");
-  let selectAnnee = document.getElementById("selectAnnee");
-  let selectMois = document.getElementById("selectMois");
-  let labelStart = document.getElementById("label_start");
-  let labelAnnee = document.getElementById("label_annee");
-  let labelMois = document.getElementById("label_mois");
-  let champHoraire = document.getElementById("horaireDemiJournee");
-  let boutonAddVac = document.getElementById("btn_add_vacances");
-
-  for(let el of document.getElementsByClassName("wrong")) {
-    el.classList.remove("wrong");
-  }
-
-  if($("#dropdownAdvanced").hasClass("show")) {
-    $("#dropdownAdvanced").removeClass("show");
-  }
-
-  if(start) {
-    selectAnnee.innerHTML = "";
-    let option;
-    for(let i = currentYear; i<currentYear+10; i++) {
-      option = new Option(i, i);
-      selectAnnee.appendChild(option);
-    }
-
-    selectMois.innerHTML = "";
-    for(let i = 0; i<months.length; i++) {
-      option = new Option(months[i], i+1);
-      selectMois.appendChild(option);
-    }
-
-    selectAnnee.style.display = "inherit";
-    selectMois.style.display = "inherit";
-    labelAnnee.style.display = "inherit";
-    labelMois.style.display = "inherit";
-    labelStart.style.display = "inherit";
-
-    document.getElementById("titre_popup").innerHTML = "Quelques informations avant de commencer :";
-    fermer.style.display = "none";
-    importer.style.display = "none";
-    labelDates.style.display = "inherit";
-    champAnnees.style.display = "block";
-    contratPro.style.display = "block";
-    document.getElementById("radio_pro").checked = false;
-    document.getElementById("radio_nonpro").checked = false;
-
-    champAnnees.value = "";
-  } else {
-    selectAnnee.style.display = "none";
-    selectMois.style.display = "none";
-    labelAnnee.style.display = "none";
-    labelMois.style.display = "none";
-    labelStart.style.display = "none";
-
-    document.getElementById("titre_popup").innerHTML = "Options";
-    fermer.style.display = "inline-block";
-    importer.style.display = "block";
-    labelDates.style.display = "none";
-    champAnnees.style.display = "none";
-    contratPro.style.display = "none";
-    champAnnees.value = calendars[parseInt(select.options[choice].value, 10)][5];
-  }
-
-  champHoraire.value = calendars[parseInt(select.options[choice].value, 10)][8];
-  boutonAddVac.style.display = "";
-
-  let list = document.getElementById("liste_vacances");
-  list.innerHTML = "";
-  if(start) {
-    addVacancesItem();
-  }
-
-  popup.style.display = "block";
-}
-
-function validatePopup() {
-  let nbAnnees = parseInt(document.getElementById("champ_annees").value, 10);
-  let popup = document.getElementById("more_popup");
-  let select = document.getElementById('selectCal');
-  let choice = select.selectedIndex;
-  let radios = document.getElementsByName("contratInput");
-  let selectAnnee = document.getElementById("selectAnnee");
-  let selectMois = document.getElementById("selectMois");
-  let contratPro = null;
-  for(let r of radios) {
-    if(r.checked) {
-      switch(r.value) {
-        case "oui":
-        contratPro = true;
-        break;
-        case "non":
-        contratPro = false;
-        break;
-      }
-    }
-  }
-
-  if(!started) {
-    calendars[parseInt(select.options[choice].value, 10)][7] = new Array(selectAnnee.options[selectAnnee.selectedIndex].value, selectMois.options[selectMois.selectedIndex].value);
-  }
-
-  if(isNaN(nbAnnees)) {
-    calendars[parseInt(select.options[choice].value, 10)][5] = 1;
-    if(calendars[parseInt(select.options[choice].value, 10)][6] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][6] = contratPro;
-    }
-  } else {
-    calendars[parseInt(select.options[choice].value, 10)][5] = nbAnnees;
-    if(calendars[parseInt(select.options[choice].value, 10)][6] == null) {
-      calendars[parseInt(select.options[choice].value, 10)][6] = contratPro;
-    }
-  }
-
-  if(started) {
-    save();
-    display(select.options[choice].value);
-  } else {
-    let selectAnnee = document.getElementById("selectAnnee");
-    let selectMois = document.getElementById("selectMois");
-    displayCalendar(nbAnnees, selectAnnee[selectAnnee.selectedIndex].value, selectMois[selectMois.selectedIndex].value);
-    started = true;
-    save();
-    let infosPro = document.getElementsByClassName("contrat_pro_info");
-    for(let i of infosPro) {
-      if(contratPro) {
-        i.style.display = "block";
-      } else {
-        i.style.display = "none";
-      }
-    }
-  }
-  popup.style.display = "none";
-}
-
-function closePopup() {
-  let popup = document.getElementById("more_popup");
-  popup.style.display = "none";
-}
-
-function addVacancesItem() {
-  let list = document.getElementById("liste_vacances");
-  let vacances = list.getElementsByClassName("vacances");
-  let idVac;
-  if(vacances.length == 0) {
-    idVac = 0;
-  } else {
-    let inputs = vacances[vacances.length - 1].getElementsByTagName("input");
-    let id = inputs[0].id;
-    idVac = parseInt(id.substr(8,id.length), 10);
-  }
-  let li = document.createElement("li");
-  li.className = "list-group-item vacances";
-  li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\">suppr</a>";/*TODO improve*/
-  list.appendChild(li);
-  if(list.children.length > 5) {
-    let boutonAddVac = document.getElementById("btn_add_vacances");
-    boutonAddVac.style.display = "none";
-  }
-}
-
-function deleteVacancesItem(idItem) {
-  document.getElementById(idItem).parentNode.remove();
-}
-
-function validateForm() {
-  let list = document.getElementById("liste_vacances");
-  let vacances = list.getElementsByClassName("vacances");
-  let errors = [];
-  let id;
-  let finVac = "", debutVac = "";
-  let champAnnees = document.getElementById("champ_annees").value;
-  let radios = document.getElementsByName("contratInput");
-
-  if(!started) {
-    let divContrat = "contrat_pro";
-    for(let r of radios) {
-      if(r.checked) divContrat = null;
-    }
-    if(divContrat != null) errors.push("label_contrat");
-    if(champAnnees == "" || !champAnnees.match(/(\d+)/)) errors.push("champ_annees");
-  }
-
-  for (let vac of vacances) {
-    let inputs = document.querySelectorAll(".vacances input");
-    for (let input of inputs) {
-      id = input.id;
-      if(id.includes("debutVac")) {
-        debutVac = document.getElementById(id).value;
-        if(debutVac == "" || !debutVac.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(id);
-      }
-      if(id.includes("finVac")) {
-        finVac = document.getElementById(id).value;
-        if(finVac == "" || !finVac.match(/(\d+)(-|\/)(\d+)(?:-|\/)(?:(\d+)\s+(\d+):(\d+)(?::(\d+))?(?:\.(\d+))?)?/)) errors.push(id);
-      }
-    }
-  }
-
-  document.getElementById("erreur_form").style.display = "none";
-  if(errors.length > 0){
-    document.getElementById("erreur_form").style.display = "block";
-    for (let error of errors) {
-      console.log(error);
-      document.getElementById(error).classList.add('wrong');
-    }
-  } else {
-    validatePopup();
-    putVacances();
-  }
-}
-
-function putVacances() {
-
-  let vacances = document.querySelectorAll(".vacances");
-  let nVac = 1;
-  let debut, fin, anneeDebut, anneeFin;
-  for(let v of vacances) { // TODO:improve
-    debut = new Date($("#debutVac"+nVac).val());
-    fin = new Date($("#finVac"+nVac).val());
-    if(debut > fin) {
-      let tmp = fin;
-      fin = debut;
-      debut = temp;
-    }
-    nVac++;
-
-    anneeDebut = debut.getFullYear();
-    anneeFin = fin.getFullYear();
-    let anneesVacances = [];
-    for(let i=anneeDebut; i<=anneeFin; i++) anneesVacances.push(i);
-
-    let calendar = document.getElementById("calendar");
-    let tables = calendar.childNodes;
-    let yearsTH, years = [];
-    yearsTH = document.querySelectorAll("#calendar table thead th");
-
-    for(let y of yearsTH) {
-      let o = {
-        y: parseInt(y.innerHTML, 10),
-        n: parseInt(y.colSpan, 10)
-      };
-      years.push(o);
-    }
-
-    let yBool = false;
-    for(let y of years) {
-      if(anneesVacances.includes(y.y)) yBool = true;
-    }
-    if(!yBool) return;
-
-    for(let d = debut; debut<=fin; d.setDate(d.getDate()+1)) {
-      addVacancesColor(years, d.getDate(), d.getMonth()+1, d.getFullYear());
-    }
-  }
-}
-
-function addVacancesColor(years, day, month, year) {
-  let monthTABLE = document.querySelectorAll("#calendar table tbody tr td table:not(.recap)");
-  let currentMonth, index = -1;
-  for(let y of years) {
-    for(let i=0; i<y.n; i++) {
-      index++;
-      if(y.y != year) continue;
-      console.log(monthTABLE[index]);
-      currentMonth = monthTABLE[index].querySelector("thead tr td").textContent;
-      switch(currentMonth) {
-        case "Janvier":
-        if(month != 1) continue;
-        break;
-        case "Février":
-        if(month != 2) continue;
-        break;
-        case "Mars":
-        if(month != 3) continue;
-        break;
-        case "Avril":
-        if(month != 4) continue;
-        break;
-        case "Mai":
-        if(month != 5) continue;
-        break;
-        case "Juin":
-        if(month != 6) continue;
-        break;
-        case "Juillet":
-        if(month != 7) continue;
-        break;
-        case "Août":
-        if(month != 8) continue;
-        break;
-        case "Septembre":
-        if(month != 9) continue;
-        break;
-        case "Octobre":
-        if(month != 10) continue;
-        break;
-        case "Novembre":
-        if(month != 11) continue;
-        break;
-        case "Décembre":
-        if(month != 12) continue;
-        break;
-        default:
-        console.log("lost month : " + currentMonth);
-        break;
-      }
-
-      let days = monthTABLE[index].querySelectorAll("tbody tr");
-      let cells = days[day].querySelectorAll("td");
-      cells[2].className = "day vacanceCat";
-      cells[3].className = "day vacanceCat";
-    }
-  }
-}
-
 /*-------------------------------- initialization ------------------------------------*/
 
+/**
+ * Initialise l'application.
+ */
 $( document ).ready(function() {
-
+  // Récupération des données stockées dans le cache de type localStorage.
   let data = window.localStorage.getItem("calendars");
+  // S'il n'y a pas de données, on ajoute un nouveau calendrier.
   if(data == null  || data == undefined || data == "" || data.length < 2 || data == "null"){
     addCalendarBtn();
   }else{
-    console.log(data);
+    // Sinon on converti la chaine de caractères stockées au format JSON en tableau de calendriers.
     calendars = JSON.parse(data);
 
     // Suppression des éventuels null apparut dans la liste des calendriers (BUGFIX)
@@ -582,23 +97,17 @@ $( document ).ready(function() {
       }
     }
 
+    // On classe les calendriers avant toute modification.
     sortCalendars();
 
     let select = document.getElementById('selectCal');
-
-    // Add the options to the select.
+    // Ajoute les options correspondantes au select.
     for (let i = 0; i < calendars.length; i++) {
-      if(calendars[i] != null){
-        let newOption = new Option (calendars[i][0], i);
-        select.options.add(newOption);
-      }else{
-        continue;
-      }
+      let newOption = new Option (calendars[i][0], i);
+      select.options.add(newOption);
     }
 
-    displayCalendar(calendars[parseInt(select.options[select.options.length-1].value, 10)][5], calendars[parseInt(select.options[select.options.length-1].value, 10)][7][0], calendars[parseInt(select.options[select.options.length-1].value, 10)][7][1]);
-    // refresh the display
-
+    // Affichage du calendrier.
     select.selectedIndex = select.options.length-1;
     let choice = select.selectedIndex;
     display(select.options[choice].value);
@@ -608,48 +117,63 @@ $( document ).ready(function() {
 
 /*-------------------------------- Saves ------------------------------------*/
 
+/**
+ * Sauvegarde le calendrier avant d'en changer.
+ */
 $('#selectCal').click(function() {
   started = true;
   save();
 });
 
+/**
+ * Sauvegarde tous les changements du calendrier courant.
+ */
 function save(){
   let select = document.getElementById('selectCal');
   let choice = select.selectedIndex;
-  console.log(calendars);
-  // Get the name.
+
+  // Récupération des composants du titre.
   let title = document.getElementById('nomForm').value;
-
-  // Get the component and the place.
   let compoAndPlace = document.getElementById('compoAndPlace').value;
-
   let complement = document.getElementById("compForm").value;
 
-  // Create the data categories.
+  // Création du tableau de données représentant les cellules.
   let dataCategories = createDataCategories();
 
-  // Edit the global table "calendars".
+  // Vérification du champ date dans le résumé pour éviter NPE si 'à définir'.
+  let dateInput = document.getElementById("semaineDate");
+  let date;
+  if(dateInput == null) date = null;
+  else date = dateInput.value;
+
+  // Réécriture du tableau représentant le calendrier.
   editCalendarArray(parseInt(select.options[choice].value, 10), title, complement, compoAndPlace, dataCategories, new Array(
     document.getElementById("semaineCours").value,
     document.getElementById("semaineCoursProjet").value,
     document.getElementById("semaineExamen").value,
-    document.getElementById("semaineDate").value,
+    date,
     document.getElementById("semaineEntreprise").value,
     document.getElementById("semaineEntrepriseProjet").value
   ), calendars[parseInt(select.options[choice].value, 10)][5], calendars[parseInt(select.options[choice].value, 10)][6], calendars[parseInt(select.options[choice].value, 10)][7], parseFloat(document.getElementById("horaireDemiJournee").value));
 
-  // change select.
+  // Mise à jour de l'option correspondante dans le select.
   select.children[select.selectedIndex].innerHTML = title;
 
+  // On enlève l'item correspondant aux données des calendriers avant de l'écrire pour assurer la consistence des données.
   window.localStorage.removeItem('calendars');
+  // L'écriture se fait sous forme de chaine de caractères au format JSON.
   window.localStorage.setItem("calendars",JSON.stringify(calendars));
 
 }
 
 /*-------------------------------- Buttons functions -----------------------------------*/
 
+/**
+ * Déclenche l'ajout d'un nouveau calendrier et l'affiche.
+ * Affiche le popup en mode ajout.
+ */
 function addCalendarBtn() {
-
+  // Réinitialisation des valeurs et de la taille des champs de titre.
   let title = "Calendrier vierge " + currentYear;
   document.getElementById("nomForm").value = title;
   resizeInput(document.getElementById("nomForm"));
@@ -657,53 +181,56 @@ function addCalendarBtn() {
   resizeInput(document.getElementById("compForm"));
   document.getElementById("compoAndPlace").value = "";
   resizeInput(document.getElementById("compoAndPlace"));
-  // Set the id calendar
-  idCalendar = calendars.length;
+  let idCalendar = calendars.length;
 
-  // Add the option to the select.
+  // Ajout de la nouvelle option au select.
   let select = document.getElementById('selectCal');
   let newOption = new Option (title, idCalendar);
   select.options.add(newOption);
 
-  // Switch to the new calendar
-  $("#selectCal").val(idCalendar); // chanegr dates en années et creer les calendriers
+  // On sélectionne l'option dernièrement ajoutée.
+  $("#selectCal").val(idCalendar);
 
-  // Add the new calendar to the global table "calendars".
+  // Ajout du calendrier au tableau de données.
   addCalendarToArray(title);
 
-  // Display the new calendar.
+  // Affichage du calendrier vierge par défaut.
   displayCalendar(1, currentYear, 1);
 
+  // Réinitialisation du récapitulatif.
   updateResume();
   document.getElementById("semaineCours").value = "0";
   document.getElementById("semaineCoursProjet").value = "0";
   document.getElementById("semaineExamen").value = "0";
-  document.getElementById("semaineDate").value = "";
+  let dateInput = document.getElementById("semaineDate");
+  if(dateInput != null) dateInput.value = "";
   document.getElementById("semaineEntrepriseProjet").value = "0";
   document.getElementById("semaineEntreprise").value = "0";
 
-  save(); // add displayAddedCalendar
-
+  save();
   started = false;
   displayPopup(true);
 }
 
+/**
+ * Déclenche la suppression du calendrier courant.
+ */
 function delCalendarBtn(){
-
+  // Récupération de l'index du calendrier à supprimer.
   let select = document.getElementById('selectCal');
   let index = select.selectedIndex;
   let valueToDelete = parseInt(select.options[index].value, 10);
 
-  // Delete the option of the global table "calendars".
+  // Suppresion du calendrier dans les données stockées.
   delCalendarOfArray(valueToDelete);
 
-  // Delete the option of the select.
+  // Suppression de l'option correspondante dans le select.
   select.remove(index);
   for(let o of select.options) {
     if(o.value > valueToDelete) o.value = parseInt(o.value)-1;
   }
 
-  // Display the precedent calendar (if it exist).
+  // Sauvegarde des changements et affichage du premier calendrier ou ajout automatique s'il n'y a plus de calendrier.
   if($("#selectCal option").length == 0 ){
     addCalendarBtn();
     save();
@@ -714,17 +241,23 @@ function delCalendarBtn(){
   select.selectedIndex = 0;
 }
 
+/**
+ * Déclenche la sauvegarde du calendrier courant.
+ */
 function saveCalendarBtn(){
+  // Écrasement des données sauvegardées.
   save();
-  let select = document.getElementById("selectCal");
 
+  let select = document.getElementById("selectCal");
   let currentCal = calendars[select.selectedIndex];
 
+  // Rangement des calendriers par ordre alphabétique.
   sortCalendars();
-  // Add the option to the select.
+
+  // Rafraichissement des valeurs liant les options du select aux calendriers.
   select.innerHTML = "";
   for (let i = 0; i < calendars.length; i++) {
-    if(calendars[i] != null){//TODO remove condition ?
+    if(calendars[i] != null){ // bugfix null pas forcément nécessaire
       let newOption = new Option (calendars[i][0], i);
       select.options.add(newOption);
     }else{
@@ -732,6 +265,7 @@ function saveCalendarBtn(){
     }
   }
 
+  // Comme l'ordre des options a changé il faut rechercher celle qui correspond au calendrier courant et la resélectionner.
   for(let i=0; i<calendars.length; i++) {
     if(compareArrays(currentCal, calendars[i])){
       select.selectedIndex = i;
@@ -743,28 +277,41 @@ function saveCalendarBtn(){
 
 /*-------------------------------- Calendars[] functions ------------------------------------*/
 
+/**
+ * Ajoute un nouveau calendrier avec des valeurs par défaut et comme titre <title>.
+ */
 function addCalendarToArray(title) {
   let today = new Date(Date.now());
 
+  // Ajout d'un tableau de calendrier avec des valeurs par défaut.
   calendars[calendars.length] = new Array(title, "", "", null, ["0","0","0","00 / 00 / 0000","0", "0"], 1, null, new Array(today.getFullYear(),1), 3.5);
 }
 
+/**
+ * Remplace les valeurs du calendrier à l'index <id> avec les valeurs correspondantes.
+ */
 function editCalendarArray(id, title, complement, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee) {
 
   calendars[id] = new Array(title, complement, compoAndPlace, arrayOfCategories, infosSemaines, nAnnees, contratPro, starts, horaireDemiJournee);
 }
 
+/**
+ * Supprime le calendrier à l'index <id>.
+ */
 function delCalendarOfArray(id) {
   calendars.splice(id, 1);
 }
 
 /*-------------------------------- Categories/Résumé functions  ------------------------------------*/
 
+/**
+ * Crée et retourne le tableau des données des cases du calendrier.
+ */
 function createDataCategories(){
-
   let dataCategories = new Array();
   let codeCat;
 
+  // Pour chaque cellule du calendrier on récupère une valeur correspondant à sa couleur.
   $('.day').each(function() {
     if($(this).hasClass('coursCat')){
       codeCat = 0;
@@ -790,13 +337,21 @@ function createDataCategories(){
   return dataCategories;
 }
 
+/**
+ * Met à jour le résumé en utilisant 'setDataCategories'.
+ */
 function updateResume() {
   let select = document.getElementById("selectCal");
   let index = select.selectedIndex;
   save();
+
   setDataCategories(calendars[parseInt(select.options[index].value)][3].slice(0));
 }
 
+/**
+ * Modifie le bouton de changement de la date d'examen.
+ * Change la date d'examen en 'à définir' et inversement.
+ */
 function toggleDateExamen() {
   let btnDateExamen = document.getElementById("btnDateExamen");
   let labelDateExamen = document.querySelector("#btnDateExamen label");
@@ -821,15 +376,19 @@ function toggleDateExamen() {
   }
 }
 
+/**
+ * Utilise les données du tableau <dataCategories> pour colorer le calendrier.
+ * Totalise les heures pour chaque catégorie et remplis le récapitulatif.
+ * Remplis également les valeurs des nombres de semaines.
+ */
 function setDataCategories(dataCategories){
+  // Réinitialisation des valeurs des totaux d'heures.
   $("#heureCours").val('0');
   $("#heureCoursProjet").val('0');
   $("#heureExamen").val('0');
   $("#heureEntreprise").val('0');
   $("#heureEntrepriseProjet").val('0');
   $("#heureVacance").val('0');
-  let nCours = 0, nCoursP = 0, nExamen = 0, nEts = 0, nEtsP = 0, nVac = 0;
-
   for(let r of document.getElementsByClassName("recapCours")) {
     r.innerHTML = "0";
   }
@@ -843,6 +402,7 @@ function setDataCategories(dataCategories){
     r.innerHTML = "0";
   }
 
+  let nCours = 0, nCoursP = 0, nExamen = 0, nEts = 0, nEtsP = 0, nVac = 0;
   let select = document.getElementById("selectCal");
   let choice = select.selectedIndex;
 
@@ -878,6 +438,7 @@ function setDataCategories(dataCategories){
     }
   });
 
+  // Arrondi au premier chiffre après la virgule.
   $("#heureCours").val(Math.round(nCours * 10) / 10);
   $("#heureCoursProjet").val(Math.round(nCoursP * 10) / 10);
   $("#heureExamen").val(Math.round(nExamen * 10) / 10);
@@ -888,46 +449,47 @@ function setDataCategories(dataCategories){
   $("#semaineCours").val(calendars[choice][4][0]); //TODO calcul auto semaines
   $("#semaineCoursProjet").val(calendars[choice][4][1]);
   $("#semaineExamen").val(calendars[choice][4][2]);
-  $("#semaineDate").val(calendars[choice][4][3]);
+  let dateInput = document.getElementById("semaineDate");
+  if(dateInput != null) dateInput.value = calendars[choice][4][3];
   $("#semaineEntreprise").val(calendars[choice][4][4]);
   $("#semaineEntrepriseProjet").val(calendars[choice][4][5]);
 }
 
 /*-------------------------------- Display functions ------------------------------------*/
 
-// From the select
+/**
+ * Lance l'affichage du calendrier sélectionné.
+ */
 function displayData(){
   let select = document.getElementById('selectCal');
   let index = select.selectedIndex;
+
   display(parseInt(select.options[index].value));
-
-
 }
 
+/**
+ * Affiche le calendrier d'index <id>.
+ */
 function display(value){
-  console.log("display id : " + value);
-
-  // The name
+  // Affichage des valeurs déjà stockées.
   $("#nomForm").val(calendars[value][0]);
   resizeInput(document.getElementById("nomForm"));
-
-  // Ligne complémentaire
   $("#compForm").val(calendars[value][1]);
   resizeInput(document.getElementById("compForm"));
-
-  // The component and the place
   $("#compoAndPlace").val(calendars[value][2]);
   resizeInput(document.getElementById("compoAndPlace"));
 
+  // Affichage du calendrier vierge correspondant
   if(calendars[value][3] == null || calendars[value][3] == "" || calendars[value][3] == undefined){
     displayCalendar(calendars[value][5], calendars[value][7][0], calendars[value][7][1]);
   }else{
     displayCalendar(calendars[value][5], calendars[value][7][0], calendars[value][7][1]);
-    // The table of categories is duplicated to avoid modifying the orginial table.
+    // Remplissage des cellules.
     let duplicatedCalendar1 = calendars[value][3].slice(0);
     setDataCategories(duplicatedCalendar1);
   }
 
+  // Mise à jour de l'affichage des éléments propres au contrat pro.
   let infosPro = document.getElementsByClassName("contrat_pro_info");
   for(let i of infosPro) {
     if(calendars[value][6]) {

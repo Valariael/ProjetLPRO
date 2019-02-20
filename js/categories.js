@@ -1,9 +1,13 @@
 
-// Manage the catégories.
+// FONCTIONS POUR LE COLORIAGE DES CASES.
 
 /*-------------------------------- Detect MouseDown ------------------------------------*/
 
 var down = false;
+
+/**
+ * Définit les listeners pour la fonction de coloriage.
+ */
 $(document).mousedown(function() {
     down = true;
 
@@ -22,9 +26,15 @@ $(document).mousedown(function() {
 
 /*----------------------------------- Fill Categories ----------------------------*/
 
+/**
+ * Remplis la case <element> avec la couleur sélectionnée.
+ * Ajoute une demi-journée au total du récapitulatif mensuel concerné.
+ */
 function fillCat (element){ //TODO define jquery function to replace the long lines
   let select = document.getElementById("selectCal");
   let choice = select.selectedIndex;
+
+  // Mise à jour du récapitulatif mensuel correspondant.
   if($(element).hasClass("ferieCat") && colorClass == "libreCat") {
       if($(element).siblings("td.day").hasClass("coursCat")) {
         $(element).siblings("td.day").closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapCours').html())-calendars[choice][8]) * 10) / 10));
@@ -65,8 +75,10 @@ function fillCat (element){ //TODO define jquery function to replace the long li
   $(element).addClass(colorClass);
 }
 
+/**
+ * Affecte les listeners pour le coloriage aux cases du calendrier.
+ */
 function eventCategories(){
-
 	$('.day').click(function() {
 		fillCat(this);
  	});

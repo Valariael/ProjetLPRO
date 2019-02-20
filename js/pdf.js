@@ -1,8 +1,11 @@
 
-// Generate a PDF.
+// FONCTIONS POUR LA GÉNÉRATION DE PDF.
 
 var imgParts = [];
 
+/**
+ * Génère un PDF avec le calendrier courant et le sauvegarde sur machine.
+ */
 function genPDF() {
   var spinner = document.createElement("div");
   spinner.innerHTML = "<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>";
@@ -309,10 +312,13 @@ function genPDF() {
   }
 }
 
+/**
+ * Renvoie une abscisse en millimètres pour positionner les éléments titre du PDF.
+ */
 function getTitlePosition(str, pdf) {
   let fontSize = pdf.internal.getFontSize();
   let pageWidth = pdf.internal.pageSize.width;
   let txtWidth = pdf.getStringUnitWidth(str)*fontSize/pdf.internal.scaleFactor;
-  console.log("fontS: " + fontSize + " pageW: " + pageWidth + " txtW: " + txtWidth);
+  console.log("fontS: " + fontSize + " pageW: " + pageWidth + " txtW: " + txtWidth);// TODO : improve
   return ( pageWidth - txtWidth ) / 4;
 }
