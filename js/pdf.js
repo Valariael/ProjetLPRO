@@ -133,7 +133,8 @@ function genPDF() {
         }
 
         doc.setTextColor("#FF0000");
-        doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, height+2);
+        doc.setFontSize(7);
+        doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
         doc.text(strCal, getTitlePosition(strCal, doc), 5);
 
         doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
@@ -233,28 +234,31 @@ function genPDF() {
         doc.text(strCal, getTitlePosition(strCal, doc), 5);
 
         doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width-40, 4, 36, 18);
-        if(i+1 == nbAnnees) {
-          let divBottomHeight = $('#bottom_pdf').height();
-          let divBottomWidth = $('#bottom_pdf').width();
-          ratio = divBottomHeight / divBottomWidth;
-          let optionsBottom = {
-            height: divBottomHeight,
-            width: divBottomWidth,
-          };
 
+        let divBottomHeight = $('#bottom_pdf').height();
+        let divBottomWidth = $('#bottom_pdf').width();
+        let ratioBottom = divBottomHeight / divBottomWidth;
+        let optionsBottom = {
+          height: divBottomHeight,
+          width: divBottomWidth,
+        };
+
+        let widthBottom = doc.internal.pageSize.width+20;
+        let heightBottom;// = doc.internal.pageSize.height
+        heightBottom = ratioBottom * widthBottom;
+
+        if(i+1 == nbAnnees) {
           html2canvas(document.getElementById("bottom_pdf"), optionsBottom).then(function(canvasBottom) {
             let imgBottom = new Image();
             imgDataBottom = canvasBottom.toDataURL('image/png', 1.0);
             imgBottom.src = imgDataBottom;
-            let widthBottom = doc.internal.pageSize.width+20;
-            let heightBottom;// = doc.internal.pageSize.height
-            heightBottom = ratio * widthBottom;
-
 
             //Ajout des éléments au PDF
             //doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
             doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
-            doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, doc.internal.pageSize.height-85);
+            doc.setFontSize(7);
+            doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
+            doc.setFontSize(9);
             doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
 
             //appliquer le remplacement des cars TODO x2
@@ -302,7 +306,9 @@ function genPDF() {
           });
         } else {
           doc.setTextColor("#FF0000");
-          doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 53, doc.internal.pageSize.height-85);
+          doc.setFontSize(7);
+          doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
+          doc.setFontSize(9);
           doc.setTextColor("#000000");
           doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
           doc.addPage();
