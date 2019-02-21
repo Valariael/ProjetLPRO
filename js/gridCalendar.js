@@ -94,6 +94,9 @@ function displayCalendar(n, year, month){
 
 		display += "</tr></tbody></table><table class=\"secondTable\"><thead><tr><th colspan=\"";
 		if(12-month >= 7) display += "" + (13-month-7) + "\">" + (year) + "</th><th colspan=\"" + ((14-(13-month-7))%7) + "\">" + (year+1) + "</th>";
+		else if(month <= 10 && month >= 6) {
+			display += "7\">" + (year+1) + "</th>";
+		}
 		else display += "" + (13-((month+7)%12)) + "\">" + (year+1) + "</th>";
 		if(12-month == 0) display += "<th colspan=\"1\">" + (year+2) + "</th>";
 		display += "</tr></thead><tbody><tr>";
@@ -121,6 +124,7 @@ function displayCalendar(n, year, month){
 		year = year+1;
 		if(month+14 > 24) year++; //FIX
 		month = (month+14)%12;
+		console.log(year + "y , m" + month);
 	}
 
 	let calendar = document.getElementById("calendar");
