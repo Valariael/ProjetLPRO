@@ -54,6 +54,9 @@ function genPDF() {
   var btnDateExamen = document.getElementById("btnDateExamen");
   btnDateExamen.style.display = "none";
 
+  var labelPrev = document.getElementById("labelPrevisionnel");
+  labelPrev.style.display = "block";
+
   var calendar = document.getElementById('calendar');
   calendar.style.height = (nbAnnees*2000)+"px";
   calendar.style.width = "2000px";
@@ -134,7 +137,6 @@ function genPDF() {
 
         doc.setTextColor("#FF0000");
         doc.setFontSize(7);
-        doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
         doc.text(strCal, getTitlePosition(strCal, doc), 5);
 
         doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
@@ -181,6 +183,7 @@ function genPDF() {
 
         titleBis.style.fontSize = "";
         compoBis.style.fontSize = "";
+        labelPrev.style.display = "";
 
         document.body.removeChild(spinner);
 
@@ -231,6 +234,7 @@ function genPDF() {
         }
 
         doc.setTextColor("#FF0000");
+        doc.setFontSize(7);
         doc.text(strCal, getTitlePosition(strCal, doc), 5);
 
         doc.addImage(logoFC, 'PNG', doc.internal.pageSize.width-40, 4, 36, 18);
@@ -256,9 +260,6 @@ function genPDF() {
             //Ajout des éléments au PDF
             //doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+50, widthBottom, heightBottom-5);
             doc.addImage(imgBottom, 'PNG', -10, doc.internal.pageSize.height-heightBottom+35, widthBottom, heightBottom);
-            doc.setFontSize(7);
-            doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
-            doc.setFontSize(9);
             doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
 
             //appliquer le remplacement des cars TODO x2
@@ -301,15 +302,13 @@ function genPDF() {
 
             titleBis.style.fontSize = "";
             compoBis.style.fontSize = "";
+            labelPrev.style.display = "";
 
             document.body.removeChild(spinner);
           });
         } else {
-          doc.setTextColor("#FF0000");
-          doc.setFontSize(7);
-          doc.text("Attention: Ce calendrier est prévisionnel, les dates sont susceptibles de varier.", 62, doc.internal.pageSize.height-heightBottom+34);
-          doc.setFontSize(9);
           doc.setTextColor("#000000");
+          doc.setFontSize(9);
           doc.addImage(logosQualite, 'PNG', doc.internal.pageSize.width-40, doc.internal.pageSize.height-20, 35, 15);
           doc.addPage();
         }

@@ -708,6 +708,10 @@ table table td {
 	text-align:center;
 }
 
+#labelPrevisionnel {
+	display: none;
+}
+
 .tdLabel{
 	width:175px;
 	text-align:center;
