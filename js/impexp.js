@@ -62,7 +62,8 @@ function importFile() {
  * Puis sélectionne et affiche le calendrier créé.
  */
 function importCalendar(data) {
-  // Recréation du tableau représentant le calendrier après décodage de la chaine de caractères.
+  // Recréation du tableau représentant le calendrier
+  // après décodage de la chaine de caractères.
   let cal = JSON.parse(decodeURIComponent(data));
 
   // Ajout aux autres calendriers.
@@ -205,10 +206,9 @@ function importAll(override, data) {
  * Récupère les données du fichier déposé avec l'interface 'DataTransferItemList' et lance l'importation.
  */
 function dropHandler(ev) {
-  // Empêche le comportement par défaut de l'évènement (ouverture du fichier dans le navigateur).
+  // Empêche le comportement par défaut de l'évènement
+  // (ouverture du fichier dans le navigateur).
   ev.preventDefault();
-
-  let fr = new FileReader();
 
   if (ev.dataTransfer.items) {
     // Utilisation de l'interface DataTransferItemList pour accéder au fichier.

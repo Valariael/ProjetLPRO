@@ -124,7 +124,6 @@ function displayCalendar(n, year, month){
 		year = year+1;
 		if(month+14 > 24) year++; //FIX
 		month = (month+14)%12;
-		console.log(year + "y , m" + month);
 	}
 
 	let calendar = document.getElementById("calendar");

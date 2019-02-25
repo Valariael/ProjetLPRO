@@ -1,4 +1,6 @@
 
+// MAIN MODULE
+
 // Manage the calendars.
 
 let currentDate = new Date();
