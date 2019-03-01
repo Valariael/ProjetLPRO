@@ -120,7 +120,7 @@ function addVacancesItem() {
   // Création et ajout de l'item de vacances.
   let li = document.createElement("li");
   li.className = "list-group-item vacances";
-  li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\">suppr</a>";/*TODO improve*/
+  li.innerHTML = "Du <input type=\"date\" id=\"debutVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/> au <input type=\"date\" id=\"finVac" + (idVac+1) + "\" min=\"2018-01-01\" class=\"form-control dateInput\"/>. <a class=\"btn btn-danger\" onclick=\"deleteVacancesItem('debutVac" + (idVac+1) + "');\"><img src=\"content/dustbin.png\" alt=\"Suppr\" class=\"btnPopupDel\" title=\"Supprimer le calendrier courant.\"></a>";/*TODO improve*/
   list.appendChild(li);
 
   // Si la taille de la liste excède 5 il y a des risques que le popup soit trop grand pour la fenêtre.

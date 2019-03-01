@@ -648,6 +648,13 @@ table table td {
 	cursor: pointer;
 }
 
+.btnPopupDel {
+	height: 20px;
+	width: 20px;
+	margin: auto;
+	cursor: pointer;
+}
+
 #expCal, #regCal{
 	width: 35px;
 	height: 35px;

@@ -37,13 +37,13 @@ function fillCat (element){ //TODO define jquery function to replace the long li
   // Mise à jour du récapitulatif mensuel correspondant.
   if($(element).hasClass("ferieCat") && colorClass == "libreCat") {
       if($(element).siblings("td.day").hasClass("coursCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapCours').html())-calendars[choice][8]) * 10) / 10));
+        $(element).closest('table').next('table').find('.recapCours').html(""+(Math.round((parseFloat($(element).closest('table').next('table').find('.recapCours').html())-calendars[choice][8]*2) * 10) / 10));
       } else if($(element).siblings("td.day").hasClass("projetTutCoursCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutUniv').html())-calendars[choice][8]) * 10) / 10));
+        $(element).closest('table').next('table').find('.recapProjetTutUniv').html(""+(Math.round((parseFloat($(element).closest('table').next('table').find('.recapProjetTutUniv').html())-calendars[choice][8]*2) * 10) / 10));
       } else if($(element).siblings("td.day").hasClass("projetTutEntrepriseCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html())-calendars[choice][8]) * 10) / 10));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapProjetTutEts').html())-calendars[choice][8]*2) * 10) / 10));
       } else if($(element).siblings("td.day").hasClass("entrepriseCat")) {
-        $(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html())-calendars[choice][8]) * 10) / 10));
+        $(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html(""+(Math.round((parseFloat($(element).siblings("td.day").closest('table').next('table').find('.recapEntreprise').html())-calendars[choice][8]*2) * 10) / 10));
       }
       $(element).siblings("td.day").removeClass('coursCat projetTutCoursCat examenCat entrepriseCat projetTutEntrepriseCat vacanceCat ferieCat libreCat');
       $(element).siblings("td.day").addClass(colorClass);
